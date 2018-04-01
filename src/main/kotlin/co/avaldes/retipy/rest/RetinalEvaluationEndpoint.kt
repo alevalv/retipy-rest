@@ -18,7 +18,7 @@ class RetinalEvaluationEndpoint(
     {
         val evaluation = evaluationRepository.findById(id)
         if (evaluation.isPresent)
-            return evaluation.get()
+            return RetinalEvaluationDTO.fromDomain(evaluation.get())
         throw NotFoundException("$id is not a valid evaluation")
     }
 
@@ -26,6 +26,7 @@ class RetinalEvaluationEndpoint(
     fun saveEvaluation(@Valid @RequestBody evaluationDTO: RetinalEvaluationDTO): Any
     {
         evaluationDTO.id = null
-        return evaluationRepository.save(RetinalEvaluationDTO.toDomain(evaluationDTO))
+        val evaluation = evaluationRepository.save(RetinalEvaluationDTO.toDomain(evaluationDTO))
+        return RetinalEvaluationDTO.fromDomain(evaluation)
     }
 }
