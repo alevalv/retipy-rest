@@ -15,11 +15,12 @@ import javax.persistence.TemporalType
 @Entity
 @Table(name="RetinalEvaluation")
 data class RetinalEvaluation(
-        @Id @GeneratedValue(strategy = GenerationType.AUTO) @Column(name = "RE_ID")
+        @Id @GeneratedValue(strategy = GenerationType.AUTO)
         val id: Long,
         val uri: String,
         @Temporal(TemporalType.TIMESTAMP) var timestamp: Date,
-        @Lob val data: String)
+        @Lob val data: String,
+        @Lob val image: String)
 {
     @PrePersist
     internal fun onCreate() {

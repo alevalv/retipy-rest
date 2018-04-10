@@ -10,7 +10,8 @@ data class RetinalEvaluationDTO(
         var id: Long?,
         val uri: String,
         val timestamp: Date?,
-        var data: RoiDTO)
+        var data: RoiDTO,
+        val image: String)
 {
     companion object
     {
@@ -18,12 +19,14 @@ data class RetinalEvaluationDTO(
                 id = retinalEvaluation.id,
                 uri = retinalEvaluation.uri,
                 timestamp = retinalEvaluation.timestamp,
-                data = RoiDTO(retinalEvaluation.data))
+                data = RoiDTO(retinalEvaluation.data),
+                image = retinalEvaluation.image)
 
         fun toDomain(retinalEvaluationDTO: RetinalEvaluationDTO) = RetinalEvaluation(
-                    id = retinalEvaluationDTO.id ?: 0,
-                    uri = retinalEvaluationDTO.uri,
-                    timestamp = retinalEvaluationDTO.timestamp ?: Date(),
-                    data = retinalEvaluationDTO.data.data)
+                id = retinalEvaluationDTO.id ?: 0,
+                uri = retinalEvaluationDTO.uri,
+                timestamp = retinalEvaluationDTO.timestamp ?: Date(),
+                data = retinalEvaluationDTO.data.data,
+                image = retinalEvaluationDTO.image)
     }
 }
