@@ -1,4 +1,4 @@
-package co.avaldes.retipy.rest.dto
+package co.avaldes.retipy.util
 
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.core.JsonParser
@@ -10,26 +10,29 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.databind.ser.std.StdSerializer
 
+/**
+ * Simple container to avoid deserialization of json data.
+ * @property blob the data of the json property.
+ */
 @JsonDeserialize(using = RoiDeserializer::class)
 @JsonSerialize(using = RoiSerializer::class)
-data class RoiDTO(
-        val data: String)
+data class JsonBlob(val blob: String)
 
-private class RoiDeserializer : StdDeserializer<RoiDTO>(RoiDTO::class.java)
+private class RoiDeserializer : StdDeserializer<JsonBlob>(JsonBlob::class.java)
 {
-    override fun deserialize(p: JsonParser?, ctxt: DeserializationContext?): RoiDTO
+    override fun deserialize(p: JsonParser?, ctxt: DeserializationContext?): JsonBlob
     {
-        return RoiDTO(p?.codec!!.readTree<TreeNode>(p).toString())
+        return JsonBlob(p?.codec!!.readTree<TreeNode>(p).toString())
     }
 }
 
-private class RoiSerializer : StdSerializer<RoiDTO>(RoiDTO::class.java)
+private class RoiSerializer : StdSerializer<JsonBlob>(JsonBlob::class.java)
 {
-    override fun serialize(value: RoiDTO?, gen: JsonGenerator?, provider: SerializerProvider?)
+    override fun serialize(value: JsonBlob?, gen: JsonGenerator?, provider: SerializerProvider?)
     {
         if (value == null)
             gen?.writeNull()
         else
-            gen?.writeRawValue(value.data)
+            gen?.writeRawValue(value.blob)
     }
 }

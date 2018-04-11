@@ -1,6 +1,9 @@
 package co.avaldes.retipy.rest.dto
 
+import co.avaldes.retipy.domain.EvaluationStatus
 import co.avaldes.retipy.domain.RetinalEvaluation
+import co.avaldes.retipy.util.JsonBlob
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonRootName
 import java.util.Date
 
@@ -10,8 +13,10 @@ data class RetinalEvaluationDTO(
         var id: Long?,
         val uri: String,
         val timestamp: Date?,
-        var data: RoiDTO,
-        val image: String)
+        var data: JsonBlob,
+        val image: String,
+        @JsonIgnore
+        val status: EvaluationStatus)
 {
     companion object
     {
@@ -19,14 +24,16 @@ data class RetinalEvaluationDTO(
                 id = retinalEvaluation.id,
                 uri = retinalEvaluation.uri,
                 timestamp = retinalEvaluation.timestamp,
-                data = RoiDTO(retinalEvaluation.data),
-                image = retinalEvaluation.image)
+                data = JsonBlob(retinalEvaluation.data),
+                image = retinalEvaluation.image,
+                status = retinalEvaluation.status)
 
         fun toDomain(retinalEvaluationDTO: RetinalEvaluationDTO) = RetinalEvaluation(
                 id = retinalEvaluationDTO.id ?: 0,
                 uri = retinalEvaluationDTO.uri,
                 timestamp = retinalEvaluationDTO.timestamp ?: Date(),
-                data = retinalEvaluationDTO.data.data,
-                image = retinalEvaluationDTO.image)
+                data = retinalEvaluationDTO.data.blob,
+                image = retinalEvaluationDTO.image,
+                status = retinalEvaluationDTO.status)
     }
 }

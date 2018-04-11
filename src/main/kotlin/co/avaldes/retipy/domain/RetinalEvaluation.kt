@@ -12,19 +12,26 @@ import javax.persistence.Table
 import javax.persistence.Temporal
 import javax.persistence.TemporalType
 
+enum class EvaluationStatus
+{
+    PENDING, COMPLETE, ERROR
+}
+
 @Entity
 @Table(name="RetinalEvaluation")
 data class RetinalEvaluation(
         @Id @GeneratedValue(strategy = GenerationType.AUTO)
         val id: Long,
-        val uri: String,
+        var uri: String,
         @Temporal(TemporalType.TIMESTAMP) var timestamp: Date,
-        @Lob val data: String,
-        @Lob val image: String)
+        @Lob var data: String,
+        @Lob val image: String,
+        var status: EvaluationStatus)
 {
     @PrePersist
     internal fun onCreate() {
         timestamp = Date()
+        status = EvaluationStatus.PENDING
     }
 
     override fun toString(): String = "Evaluation($id, $uri)"
