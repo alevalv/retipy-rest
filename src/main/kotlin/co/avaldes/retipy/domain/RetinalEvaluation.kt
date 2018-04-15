@@ -1,39 +1,45 @@
 package co.avaldes.retipy.domain
 
+import co.avaldes.retipy.persistence.RetinalEvaluationBean
 import java.util.*
-import javax.persistence.Column
+import javax.persistence.Embedded
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
-import javax.persistence.Lob
 import javax.persistence.PrePersist
 import javax.persistence.Table
 import javax.persistence.Temporal
 import javax.persistence.TemporalType
 
-enum class EvaluationStatus
-{
-    PENDING, COMPLETE, ERROR
-}
-
-@Entity
-@Table(name="RetinalEvaluation")
 data class RetinalEvaluation(
-        @Id @GeneratedValue(strategy = GenerationType.AUTO)
         val id: Long,
         var uri: String,
-        @Temporal(TemporalType.TIMESTAMP) var timestamp: Date,
-        @Lob var data: String,
-        @Lob val image: String,
+        var timestamp: Date,
+        val results: Results,
         var status: EvaluationStatus)
 {
-    @PrePersist
-    internal fun onCreate() {
-        timestamp = Date()
-        status = EvaluationStatus.PENDING
+    enum class EvaluationStatus
+    {
+        PENDING, COMPLETE, ERROR
     }
 
     override fun toString(): String = "Evaluation($id, $uri)"
-}
 
+    companion object
+    {
+        fun toPersistence(retinalEvaluation: RetinalEvaluation) = RetinalEvaluationBean(
+                retinalEvaluation.id,
+                retinalEvaluation.uri,
+                retinalEvaluation.timestamp,
+                retinalEvaluation.results.getResults(),
+                retinalEvaluation.status)
+
+        fun fromPersistence(retinalEvaluationBean: RetinalEvaluationBean) = RetinalEvaluation(
+                retinalEvaluationBean.id,
+                retinalEvaluationBean.uri,
+                retinalEvaluationBean.timestamp,
+                Results(retinalEvaluationBean.results),
+                retinalEvaluationBean.status)
+    }
+}

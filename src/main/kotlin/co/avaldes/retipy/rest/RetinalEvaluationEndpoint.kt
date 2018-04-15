@@ -1,9 +1,10 @@
 package co.avaldes.retipy.rest
 
-import co.avaldes.retipy.domain.EvaluationStatus
+import co.avaldes.retipy.domain.Results
 import co.avaldes.retipy.domain.RetinalEvaluation
+import co.avaldes.retipy.domain.RetinalEvaluationService
 import co.avaldes.retipy.domain.TortuosityService
-import co.avaldes.retipy.domain.repository.RetinalEvaluationRepository
+import co.avaldes.retipy.persistence.repository.RetinalEvaluationRepository
 import co.avaldes.retipy.rest.dto.RetinalEvaluationDTO
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
@@ -18,39 +19,32 @@ import javax.validation.Valid
 @CrossOrigin
 @RestController
 class RetinalEvaluationEndpoint(
-        private val evaluationRepository: RetinalEvaluationRepository,
-        private val tortuosityService: TortuosityService)
+        private val retinalEvaluationService: RetinalEvaluationService)
 {
     @GetMapping("/retipy/evaluation/{id}")
     fun getEvaluation(@PathVariable id: Long): RetinalEvaluationDTO
     {
-        val evaluation = evaluationRepository.findById(id)
-        if (evaluation.isPresent)
-            return RetinalEvaluationDTO.fromDomain(evaluation.get())
+        val evaluation = retinalEvaluationService.findById(id)
+        if (evaluation != null)
+            return RetinalEvaluationDTO.fromDomain(evaluation)
         throw NotFoundException("$id is not a valid evaluation")
     }
 
     @PutMapping("/retipy/evaluation")
     fun evaluateImage(@RequestBody image: String): Any
     {
-        var requestedEvaluation = RetinalEvaluation(0, "", Date(), "[]", image, EvaluationStatus.PENDING)
-        requestedEvaluation = evaluationRepository.save(requestedEvaluation)
-        val processedEvaluation = tortuosityService.getDensity(requestedEvaluation)
-
-        if (processedEvaluation.status == EvaluationStatus.ERROR)
-        {
-            evaluationRepository.delete(processedEvaluation)
-            throw BadRequestException("Given image cannot be processed")
-        }
-        evaluationRepository.save(processedEvaluation)
-        return RetinalEvaluationDTO.fromDomain(processedEvaluation)
+        val evaluation = retinalEvaluationService.processImage(image)
+                ?: throw BadRequestException("Given image cannot be processed")
+        return RetinalEvaluationDTO.fromDomain(evaluation)
     }
 
     @PostMapping("/retipy/evaluation")
     fun saveEvaluation(@Valid @RequestBody evaluationDTO: RetinalEvaluationDTO): RetinalEvaluationDTO
     {
         evaluationDTO.id = null
-        val evaluation = evaluationRepository.save(RetinalEvaluationDTO.toDomain(evaluationDTO))
+        evaluationDTO.status = RetinalEvaluation.EvaluationStatus.COMPLETE
+        var evaluation = RetinalEvaluationDTO.toDomain(evaluationDTO)
+        evaluation = retinalEvaluationService.save(evaluation)
         return RetinalEvaluationDTO.fromDomain(evaluation)
     }
 }

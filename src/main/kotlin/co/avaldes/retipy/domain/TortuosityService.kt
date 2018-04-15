@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.postForObject
-import java.util.*
 
 @Service
 class TortuosityService(@Value("\${retipy.python.backend.url}") private val retipyUrl: String) {
@@ -16,18 +15,18 @@ class TortuosityService(@Value("\${retipy.python.backend.url}") private val reti
 
     fun getDensity(evaluation: RetinalEvaluation): RetinalEvaluation
     {
+        val inputImage = evaluation.results.getResult("original")!!.image
         val template = RestTemplate()
         val density: Density? = template.postForObject(
-                endpoint + "density", TortuosityRequest(evaluation.image), TortuosityRequest::class)
+                endpoint + "density", TortuosityRequest(inputImage), TortuosityRequest::class)
         if (density != null)
         {
-            evaluation.uri = density.uri
-            evaluation.data = density.data.blob
-            evaluation.status = EvaluationStatus.COMPLETE
+            evaluation.results.addResult(Results.Result(density.uri, density.data.blob, inputImage))
+            evaluation.status = RetinalEvaluation.EvaluationStatus.COMPLETE
         }
         else
         {
-            evaluation.status = EvaluationStatus.ERROR
+            evaluation.status = RetinalEvaluation.EvaluationStatus.ERROR
         }
         return evaluation
     }
