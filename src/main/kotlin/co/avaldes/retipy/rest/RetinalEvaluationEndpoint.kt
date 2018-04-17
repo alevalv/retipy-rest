@@ -30,10 +30,12 @@ class RetinalEvaluationEndpoint(
         throw NotFoundException("$id is not a valid evaluation")
     }
 
-    @PutMapping("/retipy/evaluation")
-    fun evaluateImage(@RequestBody image: String): Any
+    @PutMapping("/retipy/evaluation/{algorithm}")
+    fun evaluateImage(@RequestBody image: String, @PathVariable algorithm: String): Any
     {
-        val evaluation = retinalEvaluationService.processImage(image)
+        val algorithmWithDefault = if (algorithm.isBlank()) "density" else algorithm
+
+        val evaluation = retinalEvaluationService.processImage(image, algorithmWithDefault)
                 ?: throw BadRequestException("Given image cannot be processed")
         return RetinalEvaluationDTO.fromDomain(evaluation)
     }

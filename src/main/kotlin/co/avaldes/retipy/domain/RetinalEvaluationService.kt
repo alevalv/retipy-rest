@@ -29,23 +29,29 @@ class RetinalEvaluationService(val retinalEvaluationRepository: RetinalEvaluatio
         retinalEvaluationRepository.delete(RetinalEvaluation.toPersistence(retinalEvaluation))
     }
 
-    fun processImage(image: String): RetinalEvaluation?
+    fun processImage(image: String, algorithm: String): RetinalEvaluation?
     {
         val result = Results.Result(Results.ORIGINAL, "[]", image)
         var requestedEvaluation = RetinalEvaluation(
                 0, "", Date(), Results(listOf(result)), RetinalEvaluation.EvaluationStatus.PENDING)
         requestedEvaluation = save(requestedEvaluation)
-        val processedEvaluation = tortuosityService.getDensity(requestedEvaluation)
-        var outputEvaluation: RetinalEvaluation? = null
 
-        if (processedEvaluation.status == RetinalEvaluation.EvaluationStatus.ERROR)
+        var processedEvaluation:RetinalEvaluation? =
+                when(algorithm)
+                {
+                    "density" -> tortuosityService.getDensity(requestedEvaluation)
+                    "fractal" -> tortuosityService.getFractal(requestedEvaluation)
+                    else -> null
+                }
+        if (processedEvaluation == null || processedEvaluation.status == RetinalEvaluation.EvaluationStatus.ERROR)
         {
-            delete(processedEvaluation)
+            delete(requestedEvaluation)
         }
         else
         {
-            outputEvaluation = save(processedEvaluation)
+            processedEvaluation = save(processedEvaluation)
         }
-        return outputEvaluation
+
+        return processedEvaluation
     }
 }

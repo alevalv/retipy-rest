@@ -30,4 +30,22 @@ class TortuosityService(@Value("\${retipy.python.backend.url}") private val reti
         }
         return evaluation
     }
+
+    fun getFractal(evaluation: RetinalEvaluation): RetinalEvaluation
+    {
+        val inputImage = evaluation.results.getResult("original")!!.image
+        val template = RestTemplate()
+        val density: Density? = template.postForObject(
+                endpoint + "fractal", TortuosityRequest(inputImage), TortuosityRequest::class)
+        if (density != null)
+        {
+            evaluation.results.addResult(Results.Result(density.uri, density.data.blob, inputImage))
+            evaluation.status = RetinalEvaluation.EvaluationStatus.COMPLETE
+        }
+        else
+        {
+            evaluation.status = RetinalEvaluation.EvaluationStatus.ERROR
+        }
+        return evaluation
+    }
 }
