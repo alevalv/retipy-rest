@@ -4,7 +4,6 @@ import co.avaldes.retipy.domain.Results
 import co.avaldes.retipy.domain.RetinalEvaluation
 import java.util.*
 import javax.persistence.ElementCollection
-import javax.persistence.Embedded
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType

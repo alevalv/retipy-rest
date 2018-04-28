@@ -3,7 +3,7 @@ package co.avaldes.retipy.rest.dto
 import co.avaldes.retipy.domain.RetinalEvaluation
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonRootName
-import java.util.Date
+import java.util.*
 
 
 @JsonRootName("evaluation")
