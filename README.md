@@ -1,5 +1,8 @@
 retipy-rest
 ===========
+[![Build Status](https://travis-ci.org/alevalv/retipy-rest.svg?branch=master)](https://travis-ci.org/alevalv/retipy-rest)
+[![Coverage Status](https://codecov.io/gh/alevalv/retipy-rest/branch/master/graph/badge.svg)](https://codecov.io/gh/alevalv/retipy-rest)
+
 A REST API for a simple transactional system to store retinal evaluations that have been tagged using [retipy](https://github.com/alevalv/retipy).
 
 How to run the project
