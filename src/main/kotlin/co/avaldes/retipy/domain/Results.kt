@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonValue
 import javax.persistence.Embeddable
 import javax.persistence.Lob
 
-
 class Results(results:List<Result>)
 {
     @Embeddable
