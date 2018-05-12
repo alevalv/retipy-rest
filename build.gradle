@@ -78,8 +78,8 @@ dependencies {
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('org.springframework.restdocs:spring-restdocs-mockmvc')
     testCompile('org.springframework.security:spring-security-test')
-    testCompile('org.junit.jupiter.junit-jupiter-api:$junitVersion')
-    testCompile()
+    testCompile("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+    testCompile("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }
 
 check {
