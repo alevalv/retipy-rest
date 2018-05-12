@@ -17,14 +17,12 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy
+package co.avaldes.retipy.domain.tortuosity
 
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
+import co.avaldes.retipy.domain.evaluation.RetinalEvaluation
 
-@SpringBootApplication
-class RetipyRestApplication
-
-    fun main(args: Array<String>) {
-        runApplication<RetipyRestApplication>(*args)
-    }
+interface ITortuosityService
+{
+    fun getDensity(evaluation: RetinalEvaluation): RetinalEvaluation
+    fun getFractal(evaluation: RetinalEvaluation): RetinalEvaluation
+}

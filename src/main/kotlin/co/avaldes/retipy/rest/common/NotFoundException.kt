@@ -17,14 +17,10 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy
+package co.avaldes.retipy.rest.common
 
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.ResponseStatus
 
-@SpringBootApplication
-class RetipyRestApplication
-
-    fun main(args: Array<String>) {
-        runApplication<RetipyRestApplication>(*args)
-    }
+@ResponseStatus(HttpStatus.NOT_FOUND)
+internal class NotFoundException(message: String): RuntimeException(message)

@@ -17,14 +17,12 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy
+package co.avaldes.retipy.domain.evaluation
 
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
-
-@SpringBootApplication
-class RetipyRestApplication
-
-    fun main(args: Array<String>) {
-        runApplication<RetipyRestApplication>(*args)
-    }
+interface IRetinalEvaluationService
+{
+    fun findById(id: Long): RetinalEvaluation?
+    fun save(retinalEvaluation: RetinalEvaluation): RetinalEvaluation
+    fun delete(retinalEvaluation: RetinalEvaluation)
+    fun processImage(image: String, algorithm: String): RetinalEvaluation?
+}

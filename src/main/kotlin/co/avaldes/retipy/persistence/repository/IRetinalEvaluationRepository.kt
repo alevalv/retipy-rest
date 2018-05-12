@@ -17,14 +17,12 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy
+package co.avaldes.retipy.persistence.repository
 
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
+import co.avaldes.retipy.persistence.RetinalEvaluationBean
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor
+import org.springframework.data.repository.PagingAndSortingRepository
+import org.springframework.stereotype.Repository
 
-@SpringBootApplication
-class RetipyRestApplication
-
-    fun main(args: Array<String>) {
-        runApplication<RetipyRestApplication>(*args)
-    }
+@Repository
+interface IRetinalEvaluationRepository : PagingAndSortingRepository<RetinalEvaluationBean, Long>, JpaSpecificationExecutor<RetinalEvaluationBean>
