@@ -11,6 +11,11 @@ To run the server use the command `gradle bootRun`
 
 To run all code checks (test, etc) run the command `gradle build`
 
+Known Issues
+------------
+Currently jacoco does not provide a good solution for code coverage using kotlin code, it is enabled
+but the reports are not working as expected
+
 License
 -------
 retipy-rest is free software: you can redistribute it and/or modify

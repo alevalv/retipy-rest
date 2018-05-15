@@ -30,16 +30,15 @@ internal class DiagnosticTest
     private val image = "a text image?"
     private val diagnostic = "some diagnostic"
     private val rois = "[]"
-    private val notes= "some observations"
     private val status = DiagnosticStatus.COMPLETED
     private val creationDate = Date()
     private val updateDate = Date()
 
     private val testInstance =
-        Diagnostic(id, image, diagnostic, rois, notes, status, creationDate, updateDate)
+        Diagnostic(id, image, diagnostic, rois, status, creationDate, updateDate)
 
     @Test
-    fun `test onCreate`()
+    fun test_onCreate()
     {
         testInstance.onCreate()
         assertNotEquals(creationDate, testInstance.creationDate)
@@ -47,7 +46,7 @@ internal class DiagnosticTest
     }
 
     @Test
-    fun `test onUpdate`()
+    fun test_onUpdate()
     {
         testInstance.onUpdate()
         assertNotEquals(updateDate, testInstance.updateDate)

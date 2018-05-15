@@ -19,8 +19,10 @@
 
 package co.avaldes.retipy.rest
 
+import co.avaldes.retipy.domain.diagnostic.Diagnostic
 import co.avaldes.retipy.domain.diagnostic.DiagnosticStatus
 import co.avaldes.retipy.domain.diagnostic.IDiagnosticService
+import co.avaldes.retipy.rest.common.BadRequestException
 import co.avaldes.retipy.rest.common.NotFoundException
 import co.avaldes.retipy.rest.dto.DiagnosticDTO
 import co.avaldes.retipy.util.JsonBlob
@@ -59,7 +61,6 @@ class DiagnosticEndpoint(private val diagnosticService: IDiagnosticService)
             "",
             "some diagnostic",
             JsonBlob("[]"),
-            "this is an observation",
             DiagnosticStatus.COMPLETED,
             Date(),
             Date())
@@ -69,18 +70,41 @@ class DiagnosticEndpoint(private val diagnosticService: IDiagnosticService)
     fun addDiagnostic(@RequestBody diagnosticDTO: DiagnosticDTO): DiagnosticDTO
     {
         val id = diagnosticDTO.id ?: 0
-        if (diagnosticService.existsById(id))
-        {
-            diagnosticDTO.status = DiagnosticStatus.UPDATED
-        }
-        else
-        {
-            diagnosticDTO.status = DiagnosticStatus.CREATED
-        }
-        diagnosticDTO.id = id
-        val savedDiagnostic = diagnosticService.save(DiagnosticDTO.toDomain(diagnosticDTO))
+        val currentDiagnostic = diagnosticService.findById(id)
+        val diagnosticToPersist : Diagnostic =
+            if (currentDiagnostic.isPresent)
+            {
+                val d = currentDiagnostic.get()
+                Diagnostic(
+                    id,
+                    diagnosticDTO.image ?: d.image,
+                    diagnosticDTO.diagnostic ?: d.diagnostic,
+                    diagnosticDTO.rois?.blob ?: d.rois,
+                    DiagnosticStatus.UPDATED,
+                    diagnosticDTO.creationDate ?: d.creationDate,
+                    diagnosticDTO.updateDate ?: d.updateDate)
+            }
+            else
+            {
+                diagnosticDTO.id = id
+                DiagnosticDTO.toDomain(diagnosticDTO)
+            }
+        val savedDiagnostic = diagnosticService.save(diagnosticToPersist)
 
         return DiagnosticDTO.fromDomain(savedDiagnostic)
+    }
+
+    @PostMapping("/retipy/diagnostic/image")
+    fun addDiagnosticByImage(@RequestBody image: String): DiagnosticDTO
+    {
+        if (image.isBlank())
+        {
+            throw BadRequestException("body must contain a base64 image")
+        }
+        val diagnostic = Diagnostic(
+            0, image, "", "[]",DiagnosticStatus.CREATED, Date(), Date())
+        val storedDiagnostic = diagnosticService.save(diagnostic)
+        return DiagnosticDTO.fromDomain(storedDiagnostic)
     }
 
     @DeleteMapping("/retipy/diagnostic/{id}")
