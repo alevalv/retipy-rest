@@ -1,0 +1,27 @@
+POST http://localhost:8080/retipy/diagnostic
+Content-Type: application/json
+
+{
+  "id": "1",
+  "diagnostic": "",
+  "roiElementList": [
+    {
+      "notes": "Test",
+      "roi_x": [
+        134,
+        97,
+        172,
+        313,
+        197
+      ],
+      "roi_y": [
+        351,
+        425,
+        515,
+        461,
+        383
+      ]
+    }
+  ],
+  "status": "UPDATED"
+}

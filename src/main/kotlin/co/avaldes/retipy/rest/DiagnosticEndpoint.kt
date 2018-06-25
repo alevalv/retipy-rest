@@ -43,7 +43,7 @@ import java.util.*
  */
 @CrossOrigin
 @RestController
-class DiagnosticEndpoint(private val diagnosticService: IDiagnosticService)
+internal class DiagnosticEndpoint(private val diagnosticService: IDiagnosticService)
 {
     @GetMapping("/retipy/diagnostic/{id}")
     fun getDiagnostic(@PathVariable id: Long): DiagnosticDTO

@@ -43,7 +43,7 @@ import javax.validation.Valid
  */
 @CrossOrigin
 @RestController
-class RetinalEvaluationEndpoint(private val retinalEvaluationService: IRetinalEvaluationService)
+internal class RetinalEvaluationEndpoint(private val retinalEvaluationService: IRetinalEvaluationService)
 {
     @GetMapping("/retipy/evaluation/{id}")
     fun getEvaluation(@PathVariable id: Long): RetinalEvaluationDTO

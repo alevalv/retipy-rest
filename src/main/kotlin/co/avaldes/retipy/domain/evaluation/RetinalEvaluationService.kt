@@ -32,8 +32,8 @@ import java.util.*
  */
 @Service
 internal class RetinalEvaluationService(
-    val retinalEvaluationRepository: IRetinalEvaluationRepository,
-    val tortuosityService: ITortuosityService)
+    private val retinalEvaluationRepository: IRetinalEvaluationRepository,
+    private val tortuosityService: ITortuosityService)
     : IRetinalEvaluationService
 {
     override fun findById(id: Long): RetinalEvaluation?
