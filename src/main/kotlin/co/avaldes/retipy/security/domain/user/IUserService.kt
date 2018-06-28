@@ -34,7 +34,7 @@ interface IUserService
     /**
      * Gets a [User] by its username, returns null if no user is found.
      *
-     * @param username the username of the *User*
+     * @param username the username of the [User]
      */
     fun findByUsername(username: String): User?
 

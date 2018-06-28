@@ -1,0 +1,17 @@
+POST http://localhost:8080/retipy/user/login
+content-type: application/json
+
+{
+    "username": "alevalv",
+    "password": "mypassword"
+}
+
+###
+POST http://localhost:8080/retipy/user/login
+content-type: application/json
+
+{
+    "username": "alevalv",
+    "password": "wrongpassword"
+}
+

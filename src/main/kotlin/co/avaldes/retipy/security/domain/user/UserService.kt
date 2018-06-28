@@ -21,6 +21,7 @@ package co.avaldes.retipy.security.domain.user
 
 import co.avaldes.retipy.security.domain.common.NoOpPasswordValidator
 import co.avaldes.retipy.security.persistence.user.IUserRepository
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 /**
@@ -28,7 +29,8 @@ import org.springframework.stereotype.Service
  */
 @Service
 internal class UserService(
-    private val userRepository: IUserRepository) : IUserService
+    private val userRepository: IUserRepository,
+    private val passwordEncoder: PasswordEncoder) : IUserService
 {
     private val passwordValidator = NoOpPasswordValidator()
 
@@ -44,8 +46,16 @@ internal class UserService(
 
     override fun findByUsername(username: String): User?
     {
-        val bean = userRepository.findByUsername(username)
-        return if (bean != null) User.fromPersistence(bean) else null
+        var user: User? = null
+        if (!username.isBlank())
+        {
+            val bean = userRepository.findByUsername(username)
+            if (bean != null)
+            {
+                user = User.fromPersistence(bean)
+            }
+        }
+        return user
     }
 
     override fun delete(user: User)
@@ -65,7 +75,7 @@ internal class UserService(
             user.identity,
             user.name,
             user.username,
-            user.password,
+            passwordEncoder.encode(user.password),
             true,
             false,
             false)
@@ -82,7 +92,7 @@ internal class UserService(
             storedUser.identity,
             storedUser.name,
             storedUser.username,
-            newPassword,
+            passwordEncoder.encode(newPassword),
             storedUser.enabled,
             storedUser.locked,
             false))
@@ -106,7 +116,7 @@ internal class UserService(
     {
         var login : User? = null
         val persistedUser = findByUsername(username)
-        if (persistedUser != null && password == persistedUser.password)
+        if (persistedUser != null && passwordEncoder.matches(password, persistedUser.password))
         {
             login = persistedUser
         }

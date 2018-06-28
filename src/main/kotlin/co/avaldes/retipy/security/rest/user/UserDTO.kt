@@ -22,7 +22,7 @@ package co.avaldes.retipy.security.rest.user
 import co.avaldes.retipy.security.domain.user.User
 import java.util.*
 
-data class UserLoginDTO(
+data class UserDTO(
     val username: String,
     val identity: String,
     val password: String,
@@ -31,18 +31,18 @@ data class UserLoginDTO(
 {
     companion object
     {
-        fun toDomain(userLoginDTO: UserLoginDTO) =
+        fun toDomain(userDTO: UserDTO) =
             User(
                 0L,
-                userLoginDTO.identity,
-                userLoginDTO.name,
-                userLoginDTO.username,
-                userLoginDTO.password,
+                userDTO.identity,
+                userDTO.name,
+                userDTO.username,
+                userDTO.password,
                 false, // a login request should be disabled/locked/expired by default.
                 true,
                 true)
 
         fun fromDomain(user: User, date: Date = Date()) =
-            UserLoginDTO(user.username, user.identity, "", user.name, date)
+            UserDTO(user.username, user.identity, "", user.name, date)
     }
 }

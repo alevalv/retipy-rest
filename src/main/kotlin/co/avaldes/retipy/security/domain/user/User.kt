@@ -20,17 +20,19 @@
 package co.avaldes.retipy.security.domain.user
 
 import co.avaldes.retipy.security.persistence.user.UserBean
+import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.userdetails.UserDetails
 
-data class User(
+class User(
     val id: Long,
     val identity: String,
     val name: String,
-    val username: String,
-    val password: String,
+    private val username: String,
+    private val password: String,
     val enabled: Boolean,
     val locked: Boolean,
     val expired: Boolean
-)
+) : UserDetails
 {
     companion object
     {
@@ -54,4 +56,21 @@ data class User(
             user.locked,
             user.expired)
     }
+
+    override fun getAuthorities(): MutableCollection<out GrantedAuthority>
+    {
+        return mutableListOf()
+    }
+
+    override fun isEnabled() = enabled
+
+    override fun getUsername() = username
+
+    override fun isCredentialsNonExpired() = !expired
+
+    override fun getPassword() = password
+
+    override fun isAccountNonExpired() = !expired
+
+    override fun isAccountNonLocked() = !locked
 }
