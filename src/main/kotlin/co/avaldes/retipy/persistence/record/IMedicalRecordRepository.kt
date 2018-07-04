@@ -17,12 +17,11 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.persistence.repository
+package co.avaldes.retipy.persistence.record
 
-import co.avaldes.retipy.persistence.RetinalEvaluationBean
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 import org.springframework.data.repository.PagingAndSortingRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface IRetinalEvaluationRepository : PagingAndSortingRepository<RetinalEvaluationBean, Long>, JpaSpecificationExecutor<RetinalEvaluationBean>
+interface  IMedicalRecordRepository : PagingAndSortingRepository<MedicalRecordBean, Long>, JpaSpecificationExecutor<MedicalRecordBean>

@@ -21,7 +21,7 @@ package co.avaldes.retipy.domain.evaluation
 
 import co.avaldes.retipy.domain.Results
 import co.avaldes.retipy.domain.tortuosity.ITortuosityService
-import co.avaldes.retipy.persistence.repository.IRetinalEvaluationRepository
+import co.avaldes.retipy.persistence.evaluation.IRetinalEvaluationRepository
 import org.springframework.stereotype.Service
 import java.util.*
 

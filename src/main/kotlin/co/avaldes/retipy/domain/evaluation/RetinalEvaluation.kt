@@ -20,7 +20,7 @@
 package co.avaldes.retipy.domain.evaluation
 
 import co.avaldes.retipy.domain.Results
-import co.avaldes.retipy.persistence.RetinalEvaluationBean
+import co.avaldes.retipy.persistence.evaluation.RetinalEvaluationBean
 import java.util.*
 
 data class RetinalEvaluation(
@@ -40,11 +40,11 @@ data class RetinalEvaluation(
     companion object
     {
         fun toPersistence(retinalEvaluation: RetinalEvaluation) = RetinalEvaluationBean(
-                retinalEvaluation.id,
-                retinalEvaluation.uri,
-                retinalEvaluation.timestamp,
-                retinalEvaluation.results.getResults(),
-                retinalEvaluation.status)
+            retinalEvaluation.id,
+            retinalEvaluation.uri,
+            retinalEvaluation.timestamp,
+            retinalEvaluation.results.getResults(),
+            retinalEvaluation.status)
 
         fun fromPersistence(retinalEvaluationBean: RetinalEvaluationBean) = RetinalEvaluation(
             retinalEvaluationBean.id,

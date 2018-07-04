@@ -17,7 +17,7 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.persistence
+package co.avaldes.retipy.persistence.evaluation
 
 import co.avaldes.retipy.domain.Results
 import co.avaldes.retipy.domain.evaluation.RetinalEvaluation
