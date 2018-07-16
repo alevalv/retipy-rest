@@ -17,11 +17,19 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.domain.evaluation
+package co.avaldes.retipy.common
 
-import co.avaldes.retipy.common.ICRUDService
+import org.springframework.security.crypto.password.PasswordEncoder
 
-interface IRetinalEvaluationService: ICRUDService<RetinalEvaluation>
+class NoOpPasswordEncoder : PasswordEncoder
 {
-    fun processImage(image: String, algorithm: String): RetinalEvaluation?
+    override fun encode(rawPassword: CharSequence?): String
+    {
+        return rawPassword.toString()
+    }
+
+    override fun matches(rawPassword: CharSequence?, encodedPassword: String?): Boolean
+    {
+        return rawPassword == encodedPassword!!.subSequence(0, encodedPassword.lastIndex)
+    }
 }

@@ -17,11 +17,14 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.domain.evaluation
+package co.avaldes.retipy.common.nm
 
-import co.avaldes.retipy.common.ICRUDService
-
-interface IRetinalEvaluationService: ICRUDService<RetinalEvaluation>
+enum class Education
 {
-    fun processImage(image: String, algorithm: String): RetinalEvaluation?
+    None,
+    Primary,
+    HighSchool,
+    Bachelor,
+    Master,
+    Doctorate
 }

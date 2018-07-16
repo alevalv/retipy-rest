@@ -19,6 +19,23 @@
 
 package co.avaldes.retipy.domain.record
 
-interface IMedicalRecordService
+
+interface IPatientService
 {
+    /**
+     * Gets the patient with the given [id]. If the patient does not exist. an
+     * [IllegalArgumentException] will be thrown.
+     */
+    fun getPatient(id: Long) : Patient
+
+    /**
+     * Persists the given [patient] in the database. Returns a new [Patient] with possible changes
+     * from the persistence layer.
+     */
+    fun save(patient: Patient) : Patient
+
+    /**
+     * Add a new record to the given [patientId], the record will be placed last.
+     */
+    fun addRecordToPatient(patientId: Long, record: Record): Patient
 }

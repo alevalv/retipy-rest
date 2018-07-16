@@ -19,30 +19,38 @@
 
 package co.avaldes.retipy.persistence.record
 
+import co.avaldes.retipy.common.nm.Education
+import co.avaldes.retipy.common.nm.Sex
 import java.util.*
+import javax.persistence.CascadeType
 import javax.persistence.Entity
+import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
+import javax.persistence.JoinColumn
+import javax.persistence.Lob
+import javax.persistence.OneToMany
+import javax.persistence.Table
 
-@Entity
-data class MedicalRecordBean(
+@Entity @Table(name = "patient")
+data class PatientBean(
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     val id:Long,
-    val version: Long,
-    val creationDate: Date,
-    val updateDate: Date,
-    val visualLeftEye: String,
-    val visualRightEye: String,
-    val visualLeftPh: String,
-    val visualRightPh: String,
-    val pupilLeftEyeRD: Int,
-    val pupilLeftEyeRC: Int,
-    val pupilLeftEyeDPA: Int,
-    val pupilRightEyeRD: Int,
-    val pupilRightEyeRC: Int,
-    val pupilRightEyeDPA: Int,
-    val biomicroscopy: String,
-    val PIO: String,
-    val evaluationId: Long
-    )
+    val identity: Long,
+    val name: String,
+    val birthDate: Date,
+    val sex: Sex,
+    val origin: String,
+    val procedence: String,
+    val education: Education,
+    val race: String,
+    @Lob
+    val pathologicalPast: String,
+    @Lob
+    val familiarPast: String,
+    @Lob
+    val medicines: String,
+    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER, orphanRemoval = true)
+    @JoinColumn(name = "medicalrecord_id")
+    var medicalRecords: List<MedicalRecordBean> = emptyList())

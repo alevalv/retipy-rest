@@ -36,7 +36,7 @@ internal class RetinalEvaluationService(
     private val tortuosityService: ITortuosityService)
     : IRetinalEvaluationService
 {
-    override fun findById(id: Long): RetinalEvaluation?
+    override fun find(id: Long): RetinalEvaluation?
     {
         val bean = retinalEvaluationRepository.findById(id)
         var retinalEvaluation: RetinalEvaluation? = null
@@ -45,16 +45,27 @@ internal class RetinalEvaluationService(
         return retinalEvaluation
     }
 
-    override fun save(retinalEvaluation: RetinalEvaluation): RetinalEvaluation
+    override fun get(id: Long): RetinalEvaluation
+    {
+        return find(id)
+            ?: throw IllegalArgumentException("retinal evaluation with id $id does not exist")
+    }
+
+    override fun save(obj: RetinalEvaluation): RetinalEvaluation
     {
         val savedBean = retinalEvaluationRepository.save(
-            RetinalEvaluation.toPersistence(retinalEvaluation))
+            RetinalEvaluation.toPersistence(obj))
         return RetinalEvaluation.fromPersistence(savedBean)
     }
 
-    override fun delete(retinalEvaluation: RetinalEvaluation)
+    override fun delete(obj: RetinalEvaluation)
     {
-        retinalEvaluationRepository.delete(RetinalEvaluation.toPersistence(retinalEvaluation))
+        retinalEvaluationRepository.delete(RetinalEvaluation.toPersistence(obj))
+    }
+
+    override fun delete(id: Long)
+    {
+        retinalEvaluationRepository.deleteById(id)
     }
 
     override fun processImage(image: String, algorithm: String): RetinalEvaluation?

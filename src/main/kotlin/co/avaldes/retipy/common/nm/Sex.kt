@@ -17,11 +17,10 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.domain.evaluation
+package co.avaldes.retipy.common.nm
 
-import co.avaldes.retipy.common.ICRUDService
-
-interface IRetinalEvaluationService: ICRUDService<RetinalEvaluation>
+enum class Sex
 {
-    fun processImage(image: String, algorithm: String): RetinalEvaluation?
+    Male,
+    Female
 }

@@ -23,7 +23,7 @@ import co.avaldes.retipy.security.persistence.user.UserBean
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
-class User(
+data class User(
     val id: Long,
     val identity: String,
     val name: String,

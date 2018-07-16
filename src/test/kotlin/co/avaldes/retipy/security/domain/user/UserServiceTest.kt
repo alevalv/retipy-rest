@@ -19,13 +19,14 @@
 
 package co.avaldes.retipy.security.domain.user
 
+import co.avaldes.retipy.common.NoOpPasswordEncoder
 import co.avaldes.retipy.security.persistence.user.IUserRepository
 import co.avaldes.retipy.security.persistence.user.UserBean
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.doReturn
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import io.mockk.clearMocks
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
+import io.mockk.verifySequence
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -38,41 +39,40 @@ internal class UserServiceTest
     private val username = "beanu"
     private val userBean = UserBean(userId, "111111", "bean", username, "beanp", true, false, false)
 
-    private val mockUserRepository: IUserRepository = mock<IUserRepository>
-        {
-            on { findByUsername(any()) } doReturn userBean
-        }
-    private val test : UserService = UserService(mockUserRepository)
+    private val mockUserRepository: IUserRepository = mockk(relaxed = true)
+    private lateinit var testInstance : UserService
 
     @BeforeEach
-    fun setUp()
+    fun init()
     {
-        whenever(mockUserRepository.findById(userId)).thenReturn(Optional.of(userBean))
-        whenever(mockUserRepository.findByUsername(username)).thenReturn(userBean)
+        clearMocks(mockUserRepository)
+        testInstance = UserService(mockUserRepository, NoOpPasswordEncoder())
+        every { mockUserRepository.findByUsername(any()) } returns userBean
+        every { mockUserRepository.findById(any()) } returns Optional.of(userBean)
     }
 
     @Test
     fun findById()
     {
-        val user = test.findById(userId)
+        val user = testInstance.findById(userId)
         Assertions.assertEquals(userId, user!!.id, "user id does not match")
     }
 
     @Test
     fun findByUsername()
     {
-        val user = test.findByUsername(username)
+        val user = testInstance.findByUsername(username)
         Assertions.assertEquals(username, user!!.username, "username does not match")
     }
 
     @Test
     fun createUser()
     {
-        whenever(mockUserRepository.save<UserBean>(any())).thenReturn(userBean)
-        whenever(mockUserRepository.findByUsername(username)).thenReturn(null)
-        val savedUser = test.createUser(
+        every { mockUserRepository.save<UserBean>(any()) } returns userBean
+        every { mockUserRepository.findByUsername(username) } returns null
+        val savedUser = testInstance.createUser(
             User(0, username, username, username, username, true, false , false))
-        verify(mockUserRepository).save<UserBean>(any())
+        verify(exactly = 1) {  mockUserRepository.save<UserBean>(any()) }
         Assertions.assertEquals(
             savedUser, User.fromPersistence(userBean), "returned user object does not match")
     }
@@ -81,14 +81,14 @@ internal class UserServiceTest
     fun createUser_Exception()
     {
         assertThrows<IllegalArgumentException> {
-            test.createUser(
+            testInstance.createUser(
                 User(userId, username, username, username, username, true, false , false)) }
     }
 
     @Test
     fun delete()
     {
-        test.delete(User.fromPersistence(userBean))
-        verify(mockUserRepository).delete(any())
+        testInstance.delete(User.fromPersistence(userBean))
+        verifySequence { mockUserRepository.delete(any()) }
     }
 }

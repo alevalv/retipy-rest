@@ -17,11 +17,14 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.domain.evaluation
+package co.avaldes.retipy.persistence.record
 
-import co.avaldes.retipy.common.ICRUDService
-
-interface IRetinalEvaluationService: ICRUDService<RetinalEvaluation>
-{
-    fun processImage(image: String, algorithm: String): RetinalEvaluation?
-}
+import javax.persistence.Embeddable
+import javax.persistence.Lob
+//TODO investigate more on this
+@Embeddable
+data class Biomicroscopy(
+    val name: String,
+    @Lob
+    val description: String,
+    val count: String)

@@ -17,18 +17,17 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.domain.record
+package co.avaldes.retipy.common
 
-import co.avaldes.retipy.persistence.record.IMedicalRecordRepository
-import org.springframework.stereotype.Service
-
-@Service
-internal class MedicalRecordService(
-    private val medicalRecordRepository: IMedicalRecordRepository): IMedicalRecordService
+interface ICRUDService<T>
 {
-    fun getRecord(id:Long) : MedicalRecord?
-    {
-        val bean = medicalRecordRepository.findById(id)
-        return if (bean.isPresent) MedicalRecord.fromPersistence(bean.get()) else null
-    }
+    fun find(id: Long): T?
+
+    fun get(id: Long): T
+
+    fun save(obj: T): T
+
+    fun delete(obj: T)
+
+    fun delete(id: Long)
 }

@@ -48,7 +48,7 @@ internal class RetinalEvaluationEndpoint(private val retinalEvaluationService: I
     @GetMapping("/retipy/evaluation/{id}")
     fun getEvaluation(@PathVariable id: Long): RetinalEvaluationDTO
     {
-        val evaluation = retinalEvaluationService.findById(id)
+        val evaluation = retinalEvaluationService.find(id)
             ?: throw  NotFoundException("$id is not a valid evaluation")
         return RetinalEvaluationDTO.fromDomain(evaluation)
     }
@@ -56,7 +56,7 @@ internal class RetinalEvaluationEndpoint(private val retinalEvaluationService: I
     @GetMapping("/retipy/evaluation/{id}/{result}")
     fun getEvaluationResult(@PathVariable id: Long, @PathVariable result: Long): ResultDTO
     {
-        val evaluation = retinalEvaluationService.findById(id)
+        val evaluation = retinalEvaluationService.find(id)
             ?: throw  NotFoundException("$id is not a valid evaluation")
         val results = evaluation.results.getResults()
         if (result >= results.size)
@@ -67,7 +67,7 @@ internal class RetinalEvaluationEndpoint(private val retinalEvaluationService: I
     @PutMapping("/retipy/evaluation/{id}/result")
     fun putResult(@PathVariable id: Long, @RequestBody resultDTO: ResultDTO): RetinalEvaluationDTO
     {
-        var evaluation = retinalEvaluationService.findById(id)
+        var evaluation = retinalEvaluationService.find(id)
             ?: throw  NotFoundException("$id is not a valid evaluation")
         val result: Results.Result =
             if (resultDTO.image.isEmpty())
@@ -104,7 +104,7 @@ internal class RetinalEvaluationEndpoint(private val retinalEvaluationService: I
     @DeleteMapping("/retipy/evaluation/{id}")
     fun deleteEvaluation(@PathVariable id: Long)
     {
-        val evaluation = retinalEvaluationService.findById(id)
+        val evaluation = retinalEvaluationService.find(id)
         if (evaluation != null)
         {
             retinalEvaluationService.delete(evaluation)
