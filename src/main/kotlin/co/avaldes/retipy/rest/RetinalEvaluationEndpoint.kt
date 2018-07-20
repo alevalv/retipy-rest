@@ -20,8 +20,8 @@
 package co.avaldes.retipy.rest
 
 import co.avaldes.retipy.domain.Results
-import co.avaldes.retipy.domain.evaluation.IRetinalEvaluationService
-import co.avaldes.retipy.domain.evaluation.RetinalEvaluation
+import co.avaldes.retipy.domain.evaluation.retinal.IRetinalEvaluationService
+import co.avaldes.retipy.domain.evaluation.retinal.RetinalEvaluation
 import co.avaldes.retipy.rest.common.BadRequestException
 import co.avaldes.retipy.rest.common.NotFoundException
 import co.avaldes.retipy.rest.dto.ResultDTO

@@ -19,7 +19,7 @@
 
 package co.avaldes.retipy.domain.tortuosity
 
-import co.avaldes.retipy.domain.evaluation.RetinalEvaluation
+import co.avaldes.retipy.domain.evaluation.retinal.RetinalEvaluation
 
 interface ITortuosityService
 {

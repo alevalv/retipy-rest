@@ -17,7 +17,7 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.rest.dto.record
+package co.avaldes.retipy.rest.dto.patient
 
 import co.avaldes.retipy.common.nm.Education
 import co.avaldes.retipy.common.nm.Sex
@@ -38,7 +38,7 @@ data class PatientDTO(
     val pathologicalPast: List<String>,
     val familiarPast: List<String>,
     val medicines: List<String>,
-    val records: List<RecordDTO>)
+    val opticalEvaluations: List<OpticalEvaluationDTO>)
 {
     companion object
     {
@@ -55,7 +55,7 @@ data class PatientDTO(
             patient.pathologicalPast,
             patient.familiarPast,
             patient.medicines,
-            patient.getMedicalRecords().map { RecordDTO.fromDomain(it) })
+            patient.getMedicalRecords().map { OpticalEvaluationDTO.fromDomain(it) })
 
         fun toDomain(patientDTO: PatientDTO) = Patient(
             patientDTO.id,
@@ -70,6 +70,6 @@ data class PatientDTO(
             patientDTO.pathologicalPast,
             patientDTO.familiarPast,
             patientDTO.medicines,
-            patientDTO.records.map { RecordDTO.toDomain(it) })
+            patientDTO.opticalEvaluations.map { OpticalEvaluationDTO.toDomain(it) })
     }
 }

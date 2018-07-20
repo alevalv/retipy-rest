@@ -17,10 +17,11 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.persistence.record
+package co.avaldes.retipy.persistence.patient
 
 import co.avaldes.retipy.common.nm.Education
 import co.avaldes.retipy.common.nm.Sex
+import co.avaldes.retipy.persistence.evaluation.optical.OpticalEvaluationBean
 import java.util.*
 import javax.persistence.CascadeType
 import javax.persistence.Entity
@@ -53,4 +54,4 @@ data class PatientBean(
     val medicines: String,
     @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "medicalrecord_id")
-    var medicalRecords: List<MedicalRecordBean> = emptyList())
+    var opticalEvaluations: List<OpticalEvaluationBean> = emptyList())

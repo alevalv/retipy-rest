@@ -17,10 +17,10 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.domain.evaluation
+package co.avaldes.retipy.domain.evaluation.retinal
 
 import co.avaldes.retipy.domain.Results
-import co.avaldes.retipy.persistence.evaluation.RetinalEvaluationBean
+import co.avaldes.retipy.persistence.evaluation.retinal.RetinalEvaluationBean
 import java.util.*
 
 data class RetinalEvaluation(

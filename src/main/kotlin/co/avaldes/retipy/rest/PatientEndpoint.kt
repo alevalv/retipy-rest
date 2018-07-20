@@ -20,7 +20,7 @@
 package co.avaldes.retipy.rest
 
 import co.avaldes.retipy.domain.record.IPatientService
-import co.avaldes.retipy.rest.dto.record.PatientDTO
+import co.avaldes.retipy.rest.dto.patient.PatientDTO
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable

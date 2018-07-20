@@ -19,6 +19,8 @@
 
 package co.avaldes.retipy.domain.record
 
+import co.avaldes.retipy.domain.evaluation.optical.OpticalEvaluation
+
 
 interface IPatientService
 {
@@ -35,7 +37,7 @@ interface IPatientService
     fun save(patient: Patient) : Patient
 
     /**
-     * Add a new record to the given [patientId], the record will be placed last.
+     * Add a new opticalEvaluation to the given [patientId], the opticalEvaluation will be placed last.
      */
-    fun addRecordToPatient(patientId: Long, record: Record): Patient
+    fun addRecordToPatient(patientId: Long, opticalEvaluation: OpticalEvaluation): Patient
 }

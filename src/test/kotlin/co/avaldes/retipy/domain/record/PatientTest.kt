@@ -21,6 +21,7 @@ package co.avaldes.retipy.domain.record
 
 import co.avaldes.retipy.common.nm.Education
 import co.avaldes.retipy.common.nm.Sex
+import co.avaldes.retipy.domain.evaluation.optical.OpticalEvaluation
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -28,8 +29,8 @@ import java.util.*
 
 internal class PatientTest
 {
-    private val medicalRecord1 = Record(1, 1, Date(), Date(), "", "", "", "", 0, 0, 0, 0, 0, 0, "", "", 0)
-    private val medicalRecord2 = Record(2, 3, Date(), Date(), "", "", "", "", 0, 0, 0, 0, 0, 0, "", "", 0)
+    private val medicalRecord1 = OpticalEvaluation(1, 1, Date(), Date(), "", "", "", "", 0, 0, 0, 0, 0, 0, "", "", 0)
+    private val medicalRecord2 = OpticalEvaluation(2, 3, Date(), Date(), "", "", "", "", 0, 0, 0, 0, 0, 0, "", "", 0)
 
     private var testInstance : Patient = Patient(
         1,
@@ -97,13 +98,13 @@ internal class PatientTest
         testInstance.setMedicalRecord(medicalRecord1)
         testInstance.setMedicalRecord(medicalRecord2)
         Assertions.assertEquals(
-            medicalRecord1, testInstance.getMedicalRecords()[0], "record order is incorrect")
+            medicalRecord1, testInstance.getMedicalRecords()[0], "patient order is incorrect")
         Assertions.assertEquals(
-            medicalRecord2, testInstance.getMedicalRecords()[1], "record order is incorrect")
-        val medicalRecord3 = Record(2, 2, Date(), Date(), "", "", "", "", 0, 0, 0, 0, 0, 0, "", "", 0)
+            medicalRecord2, testInstance.getMedicalRecords()[1], "patient order is incorrect")
+        val medicalRecord3 = OpticalEvaluation(2, 2, Date(), Date(), "", "", "", "", 0, 0, 0, 0, 0, 0, "", "", 0)
         testInstance.setMedicalRecord(medicalRecord3)
         Assertions.assertEquals(
-            medicalRecord3, testInstance.getMedicalRecords()[1], "record order is incorrect")
+            medicalRecord3, testInstance.getMedicalRecords()[1], "patient order is incorrect")
     }
 
     @Test

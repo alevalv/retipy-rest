@@ -17,7 +17,7 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.persistence.evaluation
+package co.avaldes.retipy.persistence.evaluation.retinal
 
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 import org.springframework.data.repository.PagingAndSortingRepository

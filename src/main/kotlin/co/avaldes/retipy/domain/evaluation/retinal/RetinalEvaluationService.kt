@@ -17,11 +17,11 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.domain.evaluation
+package co.avaldes.retipy.domain.evaluation.retinal
 
 import co.avaldes.retipy.domain.Results
 import co.avaldes.retipy.domain.tortuosity.ITortuosityService
-import co.avaldes.retipy.persistence.evaluation.IRetinalEvaluationRepository
+import co.avaldes.retipy.persistence.evaluation.retinal.IRetinalEvaluationRepository
 import org.springframework.stereotype.Service
 import java.util.*
 

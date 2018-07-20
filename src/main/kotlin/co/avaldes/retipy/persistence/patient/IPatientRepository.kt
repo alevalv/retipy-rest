@@ -17,14 +17,9 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.persistence.record
+package co.avaldes.retipy.persistence.patient
 
-import javax.persistence.Embeddable
-import javax.persistence.Lob
-//TODO investigate more on this
-@Embeddable
-data class Biomicroscopy(
-    val name: String,
-    @Lob
-    val description: String,
-    val count: String)
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor
+import org.springframework.data.repository.PagingAndSortingRepository
+
+interface IPatientRepository : PagingAndSortingRepository<PatientBean, Long>, JpaSpecificationExecutor<PatientBean>

@@ -17,11 +17,11 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.persistence.record
+package co.avaldes.retipy.domain.evaluation.retinal
 
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor
-import org.springframework.data.repository.PagingAndSortingRepository
-import org.springframework.stereotype.Repository
+import co.avaldes.retipy.common.ICRUDService
 
-@Repository
-interface  IMedicalRecordRepository : PagingAndSortingRepository<MedicalRecordBean, Long>, JpaSpecificationExecutor<MedicalRecordBean>
+interface IRetinalEvaluationService: ICRUDService<RetinalEvaluation>
+{
+    fun processImage(image: String, algorithm: String): RetinalEvaluation?
+}

@@ -19,7 +19,7 @@
 
 package co.avaldes.retipy.rest.dto
 
-import co.avaldes.retipy.domain.evaluation.RetinalEvaluation
+import co.avaldes.retipy.domain.evaluation.retinal.RetinalEvaluation
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonRootName
 import java.util.*

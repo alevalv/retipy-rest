@@ -19,7 +19,8 @@
 
 package co.avaldes.retipy.domain.record
 
-import co.avaldes.retipy.persistence.record.IPatientRepository
+import co.avaldes.retipy.domain.evaluation.optical.OpticalEvaluation
+import co.avaldes.retipy.persistence.patient.IPatientRepository
 import org.springframework.stereotype.Service
 
 @Service
@@ -39,11 +40,11 @@ class PatientService(val patientRepository: IPatientRepository) : IPatientServic
         return Patient.fromPersistence(savedPatient)
     }
 
-    override fun addRecordToPatient(patientId: Long, record: Record): Patient
+    override fun addRecordToPatient(patientId: Long, opticalEvaluation: OpticalEvaluation): Patient
     {
         val savedPatient = getPatient(patientId)
-        record.id = savedPatient.recordCount().toLong()
-        savedPatient.setMedicalRecord(record)
+        opticalEvaluation.id = savedPatient.recordCount().toLong()
+        savedPatient.setMedicalRecord(opticalEvaluation)
         return save(savedPatient)
     }
 }

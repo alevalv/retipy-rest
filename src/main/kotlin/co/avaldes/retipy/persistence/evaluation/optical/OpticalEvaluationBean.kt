@@ -17,16 +17,17 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.persistence.record
+package co.avaldes.retipy.persistence.evaluation.optical
 
 import java.util.*
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
+import javax.persistence.Lob
 
 @Entity
-data class MedicalRecordBean(
+data class OpticalEvaluationBean(
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     val id:Long,
     val version: Long,
@@ -42,6 +43,7 @@ data class MedicalRecordBean(
     val pupilRightEyeRD: Int,
     val pupilRightEyeRC: Int,
     val pupilRightEyeDPA: Int,
+    @Lob
     val biomicroscopy: String,
     val PIO: String,
     val evaluationId: Long

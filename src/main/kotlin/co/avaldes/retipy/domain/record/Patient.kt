@@ -21,7 +21,8 @@ package co.avaldes.retipy.domain.record
 
 import co.avaldes.retipy.common.nm.Education
 import co.avaldes.retipy.common.nm.Sex
-import co.avaldes.retipy.persistence.record.PatientBean
+import co.avaldes.retipy.domain.evaluation.optical.OpticalEvaluation
+import co.avaldes.retipy.persistence.patient.PatientBean
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -38,27 +39,27 @@ data class Patient(
     var pathologicalPast: List<String>,
     var familiarPast: List<String>,
     var medicines: List<String>,
-    private val records: List<Record>)
+    private val opticalEvaluations: List<OpticalEvaluation>)
 {
-    private val recordMap : MutableMap<Long, Record> = HashMap()
+    private val opticalEvaluationMap : MutableMap<Long, OpticalEvaluation> = HashMap()
 
     init
     {
-        this.records.forEach{
-            recordMap[it.version] = it
+        this.opticalEvaluations.forEach{
+            opticalEvaluationMap[it.version] = it
         }
     }
 
-    fun getMedicalRecords() : List<Record> = recordMap.values.toList().sortedBy { record -> record.version }
+    fun getMedicalRecords() : List<OpticalEvaluation> = opticalEvaluationMap.values.toList().sortedBy { record -> record.version }
 
-    fun getMedicalRecord(id: Long) : Record? = recordMap[id]
+    fun getMedicalRecord(id: Long) : OpticalEvaluation? = opticalEvaluationMap[id]
 
-    fun setMedicalRecord(record: Record)
+    fun setMedicalRecord(opticalEvaluation: OpticalEvaluation)
     {
-        recordMap[record.id] = record
+        opticalEvaluationMap[opticalEvaluation.id] = opticalEvaluation
     }
 
-    fun recordCount() = recordMap.size
+    fun recordCount() = opticalEvaluationMap.size
 
     companion object
     {
@@ -77,7 +78,7 @@ data class Patient(
             parseListFromString(patientBean.pathologicalPast),
             parseListFromString(patientBean.familiarPast),
             parseListFromString(patientBean.medicines),
-            patientBean.medicalRecords.map { Record.fromPersistence(it) })
+            patientBean.opticalEvaluations.map { OpticalEvaluation.fromPersistence(it) })
 
         fun toPersistence(patient: Patient) = PatientBean(
             patient.id,
@@ -92,7 +93,7 @@ data class Patient(
             parseListToString(patient.pathologicalPast),
             parseListToString(patient.familiarPast),
             parseListToString(patient.medicines),
-            patient.getMedicalRecords().map { Record.toPersistence(it) })
+            patient.getMedicalRecords().map { OpticalEvaluation.toPersistence(it) })
         
         private fun parseListFromString(string:String): List<String>
         {
