@@ -39,7 +39,7 @@ data class OpticalEvaluation(
     var pupilRightEyeRC: Int,
     var pupilRightEyeDPA: Int,
     var biomicroscopy: MutableMap<String, String>,
-    var PIO: String,
+    var ocularIntraPressure: String,
     var evaluationId: Long)
 {
     init
@@ -93,7 +93,7 @@ data class OpticalEvaluation(
                     builder.append(it.value)
                     builder.append(BIOMICROSCOPY_SEPARATOR)
                 }
-                builder.deleteCharAt(builder.length)
+                builder.deleteCharAt(builder.lastIndexOf(BIOMICROSCOPY_SEPARATOR))
             }
             return builder.toString()
         }
@@ -114,7 +114,7 @@ data class OpticalEvaluation(
             opticalEvaluationBean.pupilRightEyeRC,
             opticalEvaluationBean.pupilRightEyeDPA,
             parseBiomicroscopy(opticalEvaluationBean.biomicroscopy),
-            opticalEvaluationBean.PIO,
+            opticalEvaluationBean.ocularIntraPressure,
             opticalEvaluationBean.evaluationId)
 
         fun toPersistence(opticalEvaluation: OpticalEvaluation) = OpticalEvaluationBean(
@@ -133,7 +133,7 @@ data class OpticalEvaluation(
             opticalEvaluation.pupilRightEyeRC,
             opticalEvaluation.pupilRightEyeDPA,
             biomicroscopyToString(opticalEvaluation.biomicroscopy),
-            opticalEvaluation.PIO,
+            opticalEvaluation.ocularIntraPressure,
             opticalEvaluation.evaluationId
         )
     }

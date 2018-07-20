@@ -60,7 +60,7 @@ data class OpticalEvaluationDTO(
             opticalEvaluation.pupilRightEyeRC,
             opticalEvaluation.pupilRightEyeDPA,
             opticalEvaluation.biomicroscopy,
-            opticalEvaluation.PIO,
+            opticalEvaluation.ocularIntraPressure,
             opticalEvaluation.evaluationId
         )
 

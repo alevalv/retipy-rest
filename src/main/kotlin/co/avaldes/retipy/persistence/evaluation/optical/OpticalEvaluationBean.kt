@@ -45,6 +45,6 @@ data class OpticalEvaluationBean(
     val pupilRightEyeDPA: Int,
     @Lob
     val biomicroscopy: String,
-    val PIO: String,
+    val ocularIntraPressure: String,
     val evaluationId: Long
     )

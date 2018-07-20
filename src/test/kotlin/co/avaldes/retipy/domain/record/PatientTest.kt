@@ -29,8 +29,10 @@ import java.util.*
 
 internal class PatientTest
 {
-    private val medicalRecord1 = OpticalEvaluation(1, 1, Date(), Date(), "", "", "", "", 0, 0, 0, 0, 0, 0, "", "", 0)
-    private val medicalRecord2 = OpticalEvaluation(2, 3, Date(), Date(), "", "", "", "", 0, 0, 0, 0, 0, 0, "", "", 0)
+    private val opticalEvaluation1 =
+        OpticalEvaluation(1, 1, Date(), Date(), "", "", "", "", 0, 0, 0, 0, 0, 0, emptyMap<String, String>().toMutableMap(), "", 0)
+    private val opticalEvaluation2 =
+        OpticalEvaluation(2, 3, Date(), Date(), "", "", "", "", 0, 0, 0, 0, 0, 0, emptyMap<String, String>().toMutableMap(), "", 0)
 
     private var testInstance : Patient = Patient(
         1,
@@ -70,38 +72,38 @@ internal class PatientTest
     fun getMedicalRecords()
     {
         Assertions.assertTrue(testInstance.getMedicalRecords().isEmpty())
-        testInstance.setMedicalRecord(medicalRecord1)
+        testInstance.setMedicalRecord(opticalEvaluation1)
         Assertions.assertFalse(testInstance.getMedicalRecords().isEmpty())
-        Assertions.assertEquals(medicalRecord1, testInstance.getMedicalRecords()[0])
+        Assertions.assertEquals(opticalEvaluation1, testInstance.getMedicalRecords()[0])
     }
 
     @Test
     fun addMedicalRecord()
     {
-        testInstance.setMedicalRecord(medicalRecord1)
+        testInstance.setMedicalRecord(opticalEvaluation1)
         Assertions.assertEquals(1, testInstance.recordCount())
-        testInstance.setMedicalRecord(medicalRecord2)
+        testInstance.setMedicalRecord(opticalEvaluation2)
         Assertions.assertEquals(2, testInstance.recordCount())
     }
 
     @Test
     fun getMedicalRecord()
     {
-        testInstance.setMedicalRecord(medicalRecord1)
-        Assertions.assertEquals(medicalRecord1, testInstance.getMedicalRecord(1))
+        testInstance.setMedicalRecord(opticalEvaluation1)
+        Assertions.assertEquals(opticalEvaluation1, testInstance.getMedicalRecord(1))
         Assertions.assertNull(testInstance.getMedicalRecord(1111))
     }
 
     @Test
     fun getMedicalRecord_Order()
     {
-        testInstance.setMedicalRecord(medicalRecord1)
-        testInstance.setMedicalRecord(medicalRecord2)
+        testInstance.setMedicalRecord(opticalEvaluation1)
+        testInstance.setMedicalRecord(opticalEvaluation2)
         Assertions.assertEquals(
-            medicalRecord1, testInstance.getMedicalRecords()[0], "patient order is incorrect")
+            opticalEvaluation1, testInstance.getMedicalRecords()[0], "patient order is incorrect")
         Assertions.assertEquals(
-            medicalRecord2, testInstance.getMedicalRecords()[1], "patient order is incorrect")
-        val medicalRecord3 = OpticalEvaluation(2, 2, Date(), Date(), "", "", "", "", 0, 0, 0, 0, 0, 0, "", "", 0)
+            opticalEvaluation2, testInstance.getMedicalRecords()[1], "patient order is incorrect")
+        val medicalRecord3 = OpticalEvaluation(2, 2, Date(), Date(), "", "", "", "", 0, 0, 0, 0, 0, 0, emptyMap<String, String>().toMutableMap(), "", 0)
         testInstance.setMedicalRecord(medicalRecord3)
         Assertions.assertEquals(
             medicalRecord3, testInstance.getMedicalRecords()[1], "patient order is incorrect")
@@ -112,7 +114,7 @@ internal class PatientTest
     {
         val patientBean = Patient.toPersistence(testInstance)
         val patient = Patient.fromPersistence(patientBean)
-        Assertions.assertTrue(testInstance == patient, "mapping failed")
+        Assertions.assertEquals(testInstance, patient, "mapping failed")
     }
 
 }

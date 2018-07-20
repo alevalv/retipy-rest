@@ -109,7 +109,7 @@ data class Patient(
                     builder.append(it)
                     builder.append(SEPARATOR)
                 }
-                builder.deleteCharAt(builder.length)
+                builder.deleteCharAt(builder.lastIndexOf(SEPARATOR))
             }
             return builder.toString()
         }
