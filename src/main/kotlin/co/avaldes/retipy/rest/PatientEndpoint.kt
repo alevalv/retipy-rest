@@ -35,7 +35,7 @@ class PatientEndpoint(private val patientService: IPatientService)
     @GetMapping("/retipy/patient/{id}")
     fun getPatient(@PathVariable id: Long): PatientDTO
     {
-        return PatientDTO.fromDomain(patientService.getPatient(id))
+        return PatientDTO.fromDomain(patientService.get(id))
     }
 
     @GetMapping()

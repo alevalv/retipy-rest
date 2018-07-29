@@ -17,16 +17,17 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.domain.record
+package co.avaldes.retipy.security.domain
 
-import co.avaldes.retipy.common.ICRUDService
-import co.avaldes.retipy.domain.evaluation.optical.OpticalEvaluation
+import org.springframework.security.core.AuthenticationException
+import org.springframework.security.web.AuthenticationEntryPoint
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
-
-interface IPatientService: ICRUDService<Patient>
+class DefaultAuthenticationEntryPoint : AuthenticationEntryPoint
 {
-    /**
-     * Add a new opticalEvaluation to the given [patientId], the opticalEvaluation will be placed last.
-     */
-    fun addRecordToPatient(patientId: Long, opticalEvaluation: OpticalEvaluation): Patient
+    override fun commence(request: HttpServletRequest?, response: HttpServletResponse?, authException: AuthenticationException?)
+    {
+        response!!.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You are not logged in")
+    }
 }

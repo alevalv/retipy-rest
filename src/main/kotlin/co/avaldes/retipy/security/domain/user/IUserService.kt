@@ -19,29 +19,19 @@
 
 package co.avaldes.retipy.security.domain.user
 
+import co.avaldes.retipy.common.ICRUDService
+
 /**
  * Interface that defines operations related to the domain object [User].
  */
-interface IUserService
+interface IUserService: ICRUDService<User>
 {
-    /**
-     * Gets a [User] by its given id. If no user has the given id, a null value will be returned
-     *
-     * @param id the unique identifier of the user to be queried
-     */
-    fun findById(id: Long): User?
-
     /**
      * Gets a [User] by its username, returns null if no user is found.
      *
      * @param username the username of the [User]
      */
     fun findByUsername(username: String): User?
-
-    /**
-     * Deletes the given [User] from the service.
-     */
-    fun delete(user: User)
 
     /**
      * Creates a new [User]. The method expects that the [User.id] is set to 0L and that the

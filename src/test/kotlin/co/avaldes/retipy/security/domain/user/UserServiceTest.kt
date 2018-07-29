@@ -54,7 +54,7 @@ internal class UserServiceTest
     @Test
     fun findById()
     {
-        val user = testInstance.findById(userId)
+        val user = testInstance.find(userId)
         Assertions.assertEquals(userId, user!!.id, "user id does not match")
     }
 

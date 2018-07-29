@@ -25,8 +25,9 @@ import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.Lob
+import javax.persistence.Table
 
-@Entity
+@Entity @Table(name = "optical_evaluation")
 data class OpticalEvaluationBean(
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     val id:Long,

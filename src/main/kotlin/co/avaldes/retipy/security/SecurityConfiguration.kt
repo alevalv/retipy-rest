@@ -19,6 +19,8 @@
 
 package co.avaldes.retipy.security
 
+import co.avaldes.retipy.security.domain.AuthenticationFilter
+import co.avaldes.retipy.security.domain.DefaultAuthenticationEntryPoint
 import co.avaldes.retipy.security.domain.user.UserDetailsServiceImpl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
@@ -28,8 +30,10 @@ import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
+import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 @Configuration
 class SecurityConfiguration : WebSecurityConfigurerAdapter()
@@ -37,17 +41,33 @@ class SecurityConfiguration : WebSecurityConfigurerAdapter()
     @Autowired @Lazy
     private lateinit var userDetailsService: UserDetailsServiceImpl
 
+    @Autowired @Lazy
+    private lateinit var authenticationFilter: AuthenticationFilter
+
     private val passwordEncoder = BCryptPasswordEncoder()
+    private val defaultEntryPoint = DefaultAuthenticationEntryPoint()
 
     @Bean
-    fun passwordEncoder() : PasswordEncoder = passwordEncoder
+    fun passwordEncoder(): PasswordEncoder = passwordEncoder
 
     @Bean
     override fun authenticationManagerBean(): AuthenticationManager = super.authenticationManagerBean()
 
     override fun configure(http: HttpSecurity)
     {
-        http.csrf().disable().authorizeRequests().anyRequest().permitAll()
+        http
+            .cors().and().csrf().disable()
+            .exceptionHandling().authenticationEntryPoint(defaultEntryPoint).and()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+            .authorizeRequests()
+            .antMatchers("/retipy/user/**")
+                .permitAll()
+            .antMatchers("/retipy/user/enable")
+                .authenticated()
+            .anyRequest()
+                .authenticated()
+
+        http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
     }
 
     override fun configure(auth: AuthenticationManagerBuilder)

@@ -1,0 +1,5 @@
+POST http://localhost:8080/retipy/user/enable
+content-type: text/plain
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJyZXRpcHkiLCJzdWIiOiJhbGV2YWx2IiwiaWRlbnRpdHkiOiIxMTExMTExMSIsInNjb3BlIjoidXNlcnMiLCJpYXQiOjE1MzI5MDMyNzgsImV4cCI6MTUzMjkwNjg3OH0._T7zv87OegZRqZszzdwGcNuG3y_URI7-VXRnLmxLIfo
+
+new_user

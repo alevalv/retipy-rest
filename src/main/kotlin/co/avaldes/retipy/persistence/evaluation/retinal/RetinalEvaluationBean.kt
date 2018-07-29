@@ -33,7 +33,7 @@ import javax.persistence.Temporal
 import javax.persistence.TemporalType
 
 @Entity
-@Table(name="RetinalEvaluation")
+@Table(name="retinal_evaluation")
 data class RetinalEvaluationBean(
         @Id @GeneratedValue(strategy = GenerationType.AUTO)
         val id: Long,

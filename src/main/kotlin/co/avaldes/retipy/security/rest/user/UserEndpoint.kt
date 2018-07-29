@@ -19,6 +19,7 @@
 
 package co.avaldes.retipy.security.rest.user
 
+import co.avaldes.retipy.security.domain.TokenService
 import co.avaldes.retipy.security.domain.user.IUserService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.web.bind.annotation.CrossOrigin
@@ -34,7 +35,8 @@ import org.springframework.web.bind.annotation.RestController
  */
 @CrossOrigin
 @RestController
-internal class UserEndpoint(private val userService: IUserService)
+internal class UserEndpoint(
+    private val userService: IUserService, private val tokenService: TokenService)
 {
     internal data class LoginRequest(val username: String, val password: String)
 
@@ -43,7 +45,13 @@ internal class UserEndpoint(private val userService: IUserService)
     {
         val user = userService.login(loginRequest.username, loginRequest.password)
             ?: throw UsernameNotFoundException("Incorrect username or password")
-        return user.password
+        return tokenService.createToken(user)
+    }
+
+    @PostMapping("retipy/user/token")
+    fun isTokenValid(@RequestBody token: String): Boolean
+    {
+        return tokenService.isTokenValid(token)
     }
 
     @PostMapping("/retipy/user")
@@ -51,6 +59,22 @@ internal class UserEndpoint(private val userService: IUserService)
     {
         val user = userService.createUser(UserDTO.toDomain(userDTO))
         return UserDTO.fromDomain(user)
+    }
+
+    @PostMapping("/retipy/user/enable")
+    fun enableUser(@RequestBody username:String): Boolean
+    {
+        val user = userService.findByUsername(username)
+        var success = false
+        if (user != null && !user.enabled)
+        {
+            user.enabled = true
+            user.expired = false
+            user.locked = false
+            userService.save(user)
+            success = true
+        }
+        return success
     }
 
     @PostMapping("/retipy/user/password")

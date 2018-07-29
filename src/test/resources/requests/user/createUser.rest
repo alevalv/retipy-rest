@@ -2,8 +2,8 @@ POST http://localhost:8080/retipy/user
 content-type: application/json
 
 {
-    "username": "alevalv",
+    "username": "new_user",
     "identity": "123456",
-    "password": "mypassword",
-    "name": "Alejandro Valdes"
+    "password": "new_password",
+    "name": "New User"
 }

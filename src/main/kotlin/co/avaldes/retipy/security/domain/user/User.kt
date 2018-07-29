@@ -25,13 +25,13 @@ import org.springframework.security.core.userdetails.UserDetails
 
 data class User(
     val id: Long,
-    val identity: String,
-    val name: String,
-    private val username: String,
-    private val password: String,
-    val enabled: Boolean,
-    val locked: Boolean,
-    val expired: Boolean
+    var identity: String,
+    var name: String,
+    private var username: String,
+    private var password: String,
+    var enabled: Boolean,
+    var locked: Boolean,
+    var expired: Boolean
 ) : UserDetails
 {
     companion object

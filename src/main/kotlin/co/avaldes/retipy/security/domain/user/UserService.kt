@@ -34,7 +34,7 @@ internal class UserService(
 {
     private val passwordValidator = NoOpPasswordValidator()
 
-    override fun findById(id: Long): User?
+    override fun find(id: Long): User?
     {
         val bean = userRepository.findById(id)
         var user : User? = null
@@ -58,16 +58,16 @@ internal class UserService(
         return user
     }
 
-    override fun delete(user: User)
+    override fun delete(obj: User)
     {
-        userRepository.delete(User.toPersistence(user))
+        userRepository.delete(User.toPersistence(obj))
     }
 
     override fun createUser(user: User): User
     {
         if (user.id != 0L || this.findByUsername(user.username) != null)
         {
-            throw IllegalArgumentException("New user data is invalid")
+            throw IllegalArgumentException("New user is invalid")
         }
         passwordValidator.validatePassword(user.password)
         val newUser = User(
@@ -76,7 +76,7 @@ internal class UserService(
             user.name,
             user.username,
             passwordEncoder.encode(user.password),
-            true,
+            false,
             false,
             false)
 
@@ -85,7 +85,7 @@ internal class UserService(
 
     override fun updatePassword(user: User, newPassword: String): User
     {
-        val storedUser = findById(user.id) ?: throw IllegalArgumentException("Invalid user")
+        val storedUser = find(user.id) ?: throw IllegalArgumentException("Invalid user")
         passwordValidator.validatePassword(newPassword)
         return save(User(
             storedUser.id,
@@ -100,7 +100,7 @@ internal class UserService(
 
     override fun updateName(user: User, name: String): User
     {
-        val storedUser = findById(user.id) ?: throw IllegalArgumentException("Invalid user")
+        val storedUser = find(user.id) ?: throw IllegalArgumentException("Invalid user")
         return save(User(
             storedUser.id,
             storedUser.identity,
@@ -116,17 +116,28 @@ internal class UserService(
     {
         var login : User? = null
         val persistedUser = findByUsername(username)
-        if (persistedUser != null && passwordEncoder.matches(password, persistedUser.password))
+        if (persistedUser != null
+            && persistedUser.enabled
+            && !persistedUser.expired
+            && !persistedUser.locked
+            && passwordEncoder.matches(password, persistedUser.password))
         {
             login = persistedUser
         }
         return login
     }
 
-    private fun save(user: User): User
+    override fun save(obj: User): User
     {
-        val savedBean = userRepository.save(User.toPersistence(user))
+        val savedBean = userRepository.save(User.toPersistence(obj))
         return User.fromPersistence(savedBean)
     }
 
+    override fun get(id: Long): User =
+        find(id) ?: throw IllegalArgumentException("User with id $id not found")
+
+    override fun delete(id: Long)
+    {
+        userRepository.deleteById(id)
+    }
 }

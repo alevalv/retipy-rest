@@ -1,8 +1,9 @@
 POST http://localhost:8080/retipy/diagnostic
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJyZXRpcHkiLCJzdWIiOiJhbGV2YWx2IiwiaWRlbnRpdHkiOiIxMjM0NTYiLCJzY29wZSI6InVzZXJzIiwiaWF0IjoxNTMyOTAxODg3LCJleHAiOjE1MzI5MDU0ODd9.RuVyMEGqtnUg237IxBsvFQ2bwhkXvdtXtrNxtkyS4B8
 
 {
-  "id": "1",
+  "id": "0",
   "diagnostic": "",
   "roiElementList": [
     {

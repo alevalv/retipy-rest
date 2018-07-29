@@ -26,23 +26,37 @@ import org.springframework.stereotype.Service
 @Service
 class PatientService(val patientRepository: IPatientRepository) : IPatientService
 {
-    override fun getPatient(id: Long) : Patient
+    override fun find(id: Long): Patient?
     {
+        var patient : Patient? = null
         val savedPatientBean = patientRepository.findById(id)
-        if (!savedPatientBean.isPresent)
-            throw IllegalArgumentException("patient with id $id not found")
-        return Patient.fromPersistence(savedPatientBean.get())
+        if (savedPatientBean.isPresent)
+            patient = Patient.fromPersistence(savedPatientBean.get())
+        return patient
     }
 
-    override fun save(patient: Patient) : Patient
+    override fun delete(obj: Patient)
     {
-        val savedPatient = patientRepository.save(Patient.toPersistence(patient))
+        patientRepository.delete(Patient.toPersistence(obj))
+    }
+
+    override fun delete(id: Long)
+    {
+        patientRepository.deleteById(id)
+    }
+
+    override fun get(id: Long) : Patient =
+        find(id) ?: throw IllegalArgumentException("patient with id $id not found")
+
+    override fun save(obj: Patient) : Patient
+    {
+        val savedPatient = patientRepository.save(Patient.toPersistence(obj))
         return Patient.fromPersistence(savedPatient)
     }
 
     override fun addRecordToPatient(patientId: Long, opticalEvaluation: OpticalEvaluation): Patient
     {
-        val savedPatient = getPatient(patientId)
+        val savedPatient = get(patientId)
         opticalEvaluation.id = savedPatient.recordCount().toLong()
         savedPatient.setMedicalRecord(opticalEvaluation)
         return save(savedPatient)
