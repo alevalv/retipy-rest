@@ -22,6 +22,7 @@ package co.avaldes.retipy.domain.record
 import co.avaldes.retipy.domain.evaluation.optical.OpticalEvaluation
 import co.avaldes.retipy.persistence.patient.IPatientRepository
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class PatientService(val patientRepository: IPatientRepository) : IPatientService
@@ -50,6 +51,14 @@ class PatientService(val patientRepository: IPatientRepository) : IPatientServic
 
     override fun save(obj: Patient) : Patient
     {
+        if (obj.id == 0L)
+        {
+            if (patientRepository.findByIdentity(obj.identity) != null)
+            {
+                throw IllegalArgumentException(
+                    "Patient with identity ${obj.identity} already exists")
+            }
+        }
         val savedPatient = patientRepository.save(Patient.toPersistence(obj))
         return Patient.fromPersistence(savedPatient)
     }
@@ -60,5 +69,16 @@ class PatientService(val patientRepository: IPatientRepository) : IPatientServic
         opticalEvaluation.id = savedPatient.recordCount().toLong()
         savedPatient.setMedicalRecord(opticalEvaluation)
         return save(savedPatient)
+    }
+
+    override fun getAllPatients(): List<Triple<Long, Long, String>>
+    {
+        val patientsBeans = patientRepository.findAll()
+        val patientList: MutableList<Triple<Long, Long, String>> = ArrayList(patientsBeans.count())
+        patientsBeans
+            .sortedBy { patient -> patient.identity }
+            .forEach{ patient -> patientList.add(Triple(patient.id, patient.identity, patient.name)) }
+
+        return patientList
     }
 }

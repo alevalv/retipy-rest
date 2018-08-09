@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @CrossOrigin
 @RestController
-class PatientEndpoint(private val patientService: IPatientService)
+internal class PatientEndpoint(private val patientService: IPatientService)
 {
     @GetMapping("/retipy/patient/{id}")
     fun getPatient(@PathVariable id: Long): PatientDTO
@@ -38,7 +38,11 @@ class PatientEndpoint(private val patientService: IPatientService)
         return PatientDTO.fromDomain(patientService.get(id))
     }
 
-    @GetMapping()
+    @GetMapping("/retipy/patient/list")
+    fun listPatient(): List<Triple<Long, Long, String>>
+    {
+        return patientService.getAllPatients()
+    }
 
     @PostMapping("/retipy/patient")
     fun savePatient(@RequestBody patientDTO: PatientDTO) : PatientDTO

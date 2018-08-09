@@ -23,3 +23,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 import org.springframework.data.repository.PagingAndSortingRepository
 
 interface IPatientRepository : PagingAndSortingRepository<PatientBean, Long>, JpaSpecificationExecutor<PatientBean>
+{
+    fun findByIdentity(identity: Long): PatientBean?
+}

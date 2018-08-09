@@ -29,4 +29,10 @@ interface IPatientService: ICRUDService<Patient>
      * Add a new opticalEvaluation to the given [patientId], the opticalEvaluation will be placed last.
      */
     fun addRecordToPatient(patientId: Long, opticalEvaluation: OpticalEvaluation): Patient
+
+    /**
+     * Returns a list of triplets with the patient unique id, its identity and its name, sorted by
+     * their identity.
+     */
+    fun getAllPatients(): List<Triple<Long, Long, String>>
 }

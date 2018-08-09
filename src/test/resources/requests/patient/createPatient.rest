@@ -1,1 +1,41 @@
 POST http://localhost:8080/retipy/patient
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJyZXRpcHkiLCJzdWIiOiJhbGV2YWx2IiwiaWRlbnRpdHkiOiIxMTExMTExMSIsInNjb3BlIjoidXNlcnMiLCJpYXQiOjE1MzM3Nzg1OTQsImV4cCI6MTUzMzc4MjE5NH0.PuCIKmx-lQtON7aW9Q4IV3l5NHs-zg7aqBdYjPvsbjc
+
+{
+    "id": 0,
+    "identity": 123456,
+    "name": "New Patient",
+    "birthDate": "654739200",
+    "sex": "Male",
+    "origin": "some Origin",
+    "procedence": "procedence",
+    "education": "Bachelor",
+    "race": "Indian",
+    "pathologicalPast": ["1past", "2past", "3past"],
+    "familiarPast": ["1fam", "2fam", "3fam"],
+    "medicines": [],
+    "opticalEvaluations": [
+        {
+            "id": 0,
+            "version": 1,
+            "creationDate": null,
+            "creationDate": null,
+            "visualLeftEye": "20/20",
+            "visualRightEye": "20/20",
+            "visualLeftPh": "20/20",
+            "visualRightPh": "20/20",
+            "pupilLeftEyeRD": 30,
+            "pupilLeftEyeRC": 30,
+            "pupilLeftEyeDPA": 30,
+            "pupilRightEyeRD": 30,
+            "pupilRightEyeRC": 30,
+            "pupilRightEyeDPA": 30,
+            "biomicroscopy": {
+                "Cornea": "asdasd"
+            },
+            "PIO": "texttexttext",
+            "evaluationId": 0
+        }
+    ]
+}

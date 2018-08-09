@@ -25,8 +25,8 @@ import java.util.*
 data class OpticalEvaluationDTO(
     val id: Long,
     val version: Long,
-    val creationDate: Date,
-    val updateDate: Date,
+    val creationDate: Date?,
+    val updateDate: Date?,
     val visualLeftEye: String,
     val visualRightEye: String,
     val visualLeftPh: String,
@@ -67,8 +67,8 @@ data class OpticalEvaluationDTO(
         fun toDomain(opticalEvaluationDTO: OpticalEvaluationDTO) = OpticalEvaluation(
             opticalEvaluationDTO.id,
             opticalEvaluationDTO.version,
-            opticalEvaluationDTO.creationDate,
-            opticalEvaluationDTO.updateDate,
+            opticalEvaluationDTO.creationDate ?: Date(),
+            opticalEvaluationDTO.updateDate ?: Date(),
             opticalEvaluationDTO.visualLeftEye,
             opticalEvaluationDTO.visualRightEye,
             opticalEvaluationDTO.visualLeftPh,
