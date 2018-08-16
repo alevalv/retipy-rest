@@ -1,13 +1,16 @@
 language: java
+before_script:
+ - export VERSION=$(cat gradle.properties | sed -n '/version =/p' | cut -d '=' -f2 | cut -d ' ' -f2)
 script:
  - ./gradlew build
 after_success:
  - bash <(curl -s https://codecov.io/bash)
 before_deploy:
- - export VERSION=$(cat gradle.properties | sed -n '/version =/p' | cut -d '=' -f2 | cut -d ' ' -f2)
  - git config --local user.name "Alejandro Valdes"
  - git config --local user.email "alejandrovaldes@live.com"
  - git tag -f $VERSION
+ - git remote add gh https://${TRAVIS_REPO_SLUG%/*}:${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git
+ - git push -f gh $VERSION
  - ./gradlew jar
 deploy:
  provider: releases
@@ -16,3 +19,6 @@ deploy:
  file: "build/libs/retipy-rest-${VERSION}.jar"
  skip_cleanup: true
  prerelease: true
+ overwrite: true
+ on:
+   branch: master
