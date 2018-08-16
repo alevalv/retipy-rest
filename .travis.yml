@@ -4,12 +4,15 @@ script:
 after_success:
  - bash <(curl -s https://codecov.io/bash)
 before_deploy:
+ - export VERSION=$(cat gradle.properties | sed -n '/version =/p' | cut -d '=' -f2 | cut -d ' ' -f2)
  - git config --local user.name "Alejandro Valdes"
  - git config --local user.email "alejandrovaldes@live.com"
- - git tag "$(cat gradle.properties | sed -n '/version =/p' | cut -d '=' -f2 | cut -d ' ' -f2)"
+ - git tag $VERSION
+ - ./gradlew jar
 deploy:
  provider: releases
  api_key: $GITHUB_TOKEN
- file: "build/libs/*.jar"
+ file_glob: true
+ file: "build/libs/retipy-rest-${VERSION}.jar"
  skip_cleanup: true
  prerelease: true
