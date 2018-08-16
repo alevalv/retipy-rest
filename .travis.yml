@@ -3,3 +3,12 @@ script:
  - ./gradlew build
 after_success:
  - bash <(curl -s https://codecov.io/bash)
+before_deploy:
+ - git config --local user.name "Alejandro Valdes"
+ - git config --local user.email "alejandrovaldes@live.com"
+ - git tag "$(cat gradle.properties | sed -n '/version =/p' | cut -d '=' -f2 | cut -d ' ' -f2)"
+deploy:
+ provider: releases
+ api_key: $GITHUB_TOKEN
+ file: "build/libs/*.jar"
+ skip_cleanup: true

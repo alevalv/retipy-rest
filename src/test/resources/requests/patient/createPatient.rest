@@ -1,6 +1,6 @@
 POST http://localhost:8080/retipy/patient
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJyZXRpcHkiLCJzdWIiOiJhbGV2YWx2IiwiaWRlbnRpdHkiOiIxMTExMTExMSIsInNjb3BlIjoidXNlcnMiLCJpYXQiOjE1MzM3Nzg1OTQsImV4cCI6MTUzMzc4MjE5NH0.PuCIKmx-lQtON7aW9Q4IV3l5NHs-zg7aqBdYjPvsbjc
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJyZXRpcHkiLCJzdWIiOiJhbGV2YWx2IiwiaWRlbnRpdHkiOiIxMTExMTExMSIsInNjb3BlIjoidXNlcnMiLCJpYXQiOjE1MzM4NjYwMzcsImV4cCI6MTUzNDAzODgzN30.PWEWyx5_A0mkpXw1nqo1aqHTNw3x_lJlBVT7TL-8A5I
 
 {
     "id": 0,

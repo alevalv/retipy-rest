@@ -49,9 +49,9 @@ internal class UserEndpoint(
     }
 
     @PostMapping("retipy/user/token")
-    fun isTokenValid(@RequestBody token: String): Boolean
+    fun renewToken(@RequestBody token: String): String
     {
-        return tokenService.isTokenValid(token)
+        return tokenService.renewToken(token)
     }
 
     @PostMapping("/retipy/user")

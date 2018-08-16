@@ -24,8 +24,9 @@ import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.MalformedJwtException
 import io.jsonwebtoken.SignatureAlgorithm
-import io.jsonwebtoken.SignatureException
-import io.jsonwebtoken.impl.crypto.MacProvider
+import io.jsonwebtoken.security.Keys
+import io.jsonwebtoken.security.SecurityException
+import org.springframework.security.access.AccessDeniedException
 import org.springframework.stereotype.Service
 import java.time.Instant
 import java.time.temporal.ChronoUnit
@@ -34,7 +35,7 @@ import java.util.*
 @Service
 class TokenService
 {
-    private val key = MacProvider.generateKey(SignatureAlgorithm.HS256)
+    private val key = Keys.secretKeyFor(SignatureAlgorithm.HS256)
     private val issuer = "retipy"
     fun createToken(user: User): String
     {
@@ -45,12 +46,39 @@ class TokenService
             .claim("identity", user.identity)
             .claim("scope", "users")
             .setIssuedAt(Date.from(currentTime))
-            .setExpiration(Date.from(currentTime.plus(60, ChronoUnit.MINUTES)))
-            .signWith(
-                SignatureAlgorithm.HS256,
-                key)
+            .setExpiration(Date.from(currentTime.plus(48, ChronoUnit.HOURS)))
+            .signWith(key)
             .compact()
         return token
+    }
+
+    fun renewToken(token: String): String
+    {
+        val currentTime = Instant.now()
+        try
+        {
+            val claims = Jwts.parser()
+                .requireIssuer(issuer)
+                .require("scope", "users")
+                .setSigningKey(key)
+                .parseClaimsJws(token)
+            return Jwts.builder()
+                .setIssuer(issuer)
+                .setClaims(claims.body)
+                .setIssuedAt(Date.from(currentTime))
+                .setExpiration(Date.from(currentTime.plus(48, ChronoUnit.HOURS)))
+                .signWith(key)
+                .compact()
+        }
+        catch(e: SecurityException) {
+            throw AccessDeniedException("Invalid Token")
+        }
+        catch(e: ExpiredJwtException) {
+            throw AccessDeniedException("Invalid token")
+        }
+        catch(e: MalformedJwtException) {
+            throw AccessDeniedException("Invalid token")
+        }
     }
 
     fun isTokenValid(string: String): Boolean
@@ -62,14 +90,10 @@ class TokenService
         var isValid = false
         try
         {
-            Jwts.parser()
-                .requireIssuer(issuer)
-                .require("scope", "users")
-                .setSigningKey(key)
-                .parseClaimsJws(string)
+
             isValid = true
         }
-        catch(e: SignatureException) {}
+        catch(e: SecurityException) {}
         catch(e: ExpiredJwtException) {}
         catch(e: MalformedJwtException) {}
         return isValid

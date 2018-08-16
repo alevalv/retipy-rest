@@ -19,8 +19,8 @@
 
 buildscript {
     ext {
-        kotlinVersion = '1.2.51'
-        springBootVersion = '2.0.3.RELEASE'
+        kotlinVersion = '1.2.60'
+        springBootVersion = '2.0.4.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -31,6 +31,10 @@ buildscript {
         classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
         classpath("org.jetbrains.kotlin:kotlin-noarg:${kotlinVersion}")
     }
+}
+
+plugins {
+    id "com.github.ben-manes.versions" version "0.20.0"
 }
 
 apply plugin: 'kotlin'
@@ -63,18 +67,20 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
     compile('org.springframework.boot:spring-boot-starter-data-rest')
     compile('org.springframework.boot:spring-boot-starter-security')
-    compile('io.jsonwebtoken:jjwt:0.9.1')
+    compile('io.jsonwebtoken:jjwt-api:0.10.3')
     compile('com.fasterxml.jackson.module:jackson-module-kotlin')
     compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     compile("org.jetbrains.kotlin:kotlin-reflect")
     runtime('org.springframework.boot:spring-boot-devtools')
     runtime('com.h2database:h2')
+    runtime('io.jsonwebtoken:jjwt-impl:0.10.3')
+    runtime('io.jsonwebtoken:jjwt-jackson:0.10.3')
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('org.springframework.restdocs:spring-restdocs-mockmvc')
     testCompile('org.springframework.security:spring-security-test')
     testCompile("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testCompile("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
-    testCompile("io.mockk:mockk:1.8.5")
+    testCompile("io.mockk:mockk:1.8.6")
 }
 
 check {
