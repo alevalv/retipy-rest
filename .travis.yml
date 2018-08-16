@@ -12,3 +12,4 @@ deploy:
  api_key: $GITHUB_TOKEN
  file: "build/libs/*.jar"
  skip_cleanup: true
+ prerelease: true
