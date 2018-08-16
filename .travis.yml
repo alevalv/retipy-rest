@@ -7,7 +7,7 @@ before_deploy:
  - export VERSION=$(cat gradle.properties | sed -n '/version =/p' | cut -d '=' -f2 | cut -d ' ' -f2)
  - git config --local user.name "Alejandro Valdes"
  - git config --local user.email "alejandrovaldes@live.com"
- - git tag $VERSION
+ - git tag -f $VERSION
  - ./gradlew jar
 deploy:
  provider: releases
