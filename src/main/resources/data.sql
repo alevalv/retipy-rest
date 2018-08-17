@@ -1,1 +1,1 @@
-INSERT INTO user (id, identity, name, username, password, enabled, locked, expired) VALUES (-1, '11111111', 'alevalv', 'alevalv', '$2a$10$kDlXfP9GgCkRnWIG0YdmRuNiyCt135Q1OrbLMJGH1XMkHd3UTciaC', true, false, false)
+INSERT INTO user (id, identity, name, username, password, enabled, locked, expired) VALUES (-1, '11111111', 'alevalv', 'alevalv', '$2a$10$kDlXfP9GgCkRnWIG0YdmRuNiyCt135Q1OrbLMJGH1XMkHd3UTciaC', true, false, false);

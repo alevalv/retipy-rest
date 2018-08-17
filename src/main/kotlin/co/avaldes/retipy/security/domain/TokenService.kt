@@ -81,16 +81,20 @@ class TokenService
         }
     }
 
-    fun isTokenValid(string: String): Boolean
+    fun isTokenValid(token: String): Boolean
     {
-        if(string.isBlank())
+        if(token.isBlank())
         {
             return false
         }
         var isValid = false
         try
         {
-
+            Jwts.parser()
+                .requireIssuer(issuer)
+                .require("scope", "users")
+                .setSigningKey(key)
+                .parseClaimsJws(token)
             isValid = true
         }
         catch(e: SecurityException) {}
