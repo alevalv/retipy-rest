@@ -55,7 +55,7 @@ data class PatientDTO(
             patient.pathologicalPast,
             patient.familiarPast,
             patient.medicines,
-            patient.getMedicalRecords().map { OpticalEvaluationDTO.fromDomain(it) })
+            patient.getOpticalEvaluations().map { OpticalEvaluationDTO.fromDomain(it) })
 
         fun toDomain(patientDTO: PatientDTO) = Patient(
             patientDTO.id,

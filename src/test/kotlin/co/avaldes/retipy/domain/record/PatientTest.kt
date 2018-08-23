@@ -71,42 +71,42 @@ internal class PatientTest
     @Test
     fun getMedicalRecords()
     {
-        Assertions.assertTrue(testInstance.getMedicalRecords().isEmpty())
-        testInstance.setMedicalRecord(opticalEvaluation1)
-        Assertions.assertFalse(testInstance.getMedicalRecords().isEmpty())
-        Assertions.assertEquals(opticalEvaluation1, testInstance.getMedicalRecords()[0])
+        Assertions.assertTrue(testInstance.getOpticalEvaluations().isEmpty())
+        testInstance.addOpticalEvaluation(opticalEvaluation1)
+        Assertions.assertFalse(testInstance.getOpticalEvaluations().isEmpty())
+        Assertions.assertEquals(opticalEvaluation1, testInstance.getOpticalEvaluations()[0])
     }
 
     @Test
     fun addMedicalRecord()
     {
-        testInstance.setMedicalRecord(opticalEvaluation1)
+        testInstance.addOpticalEvaluation(opticalEvaluation1)
         Assertions.assertEquals(1, testInstance.recordCount())
-        testInstance.setMedicalRecord(opticalEvaluation2)
+        testInstance.addOpticalEvaluation(opticalEvaluation2)
         Assertions.assertEquals(2, testInstance.recordCount())
     }
 
     @Test
     fun getMedicalRecord()
     {
-        testInstance.setMedicalRecord(opticalEvaluation1)
-        Assertions.assertEquals(opticalEvaluation1, testInstance.getMedicalRecord(1))
-        Assertions.assertNull(testInstance.getMedicalRecord(1111))
+        testInstance.addOpticalEvaluation(opticalEvaluation1)
+        Assertions.assertEquals(opticalEvaluation1, testInstance.getOpticalEvaluation(1))
+        Assertions.assertNull(testInstance.getOpticalEvaluation(1111))
     }
 
     @Test
     fun getMedicalRecord_Order()
     {
-        testInstance.setMedicalRecord(opticalEvaluation1)
-        testInstance.setMedicalRecord(opticalEvaluation2)
+        testInstance.addOpticalEvaluation(opticalEvaluation1)
+        testInstance.addOpticalEvaluation(opticalEvaluation2)
         Assertions.assertEquals(
-            opticalEvaluation1, testInstance.getMedicalRecords()[0], "patient order is incorrect")
+            opticalEvaluation1, testInstance.getOpticalEvaluations()[0], "patient order is incorrect")
         Assertions.assertEquals(
-            opticalEvaluation2, testInstance.getMedicalRecords()[1], "patient order is incorrect")
+            opticalEvaluation2, testInstance.getOpticalEvaluations()[1], "patient order is incorrect")
         val medicalRecord3 = OpticalEvaluation(2, 2, Date(), Date(), "", "", "", "", 0, 0, 0, 0, 0, 0, emptyMap<String, String>().toMutableMap(), "", 0)
-        testInstance.setMedicalRecord(medicalRecord3)
+        testInstance.addOpticalEvaluation(medicalRecord3)
         Assertions.assertEquals(
-            medicalRecord3, testInstance.getMedicalRecords()[1], "patient order is incorrect")
+            medicalRecord3, testInstance.getOpticalEvaluations()[1], "patient order is incorrect")
     }
 
     @Test

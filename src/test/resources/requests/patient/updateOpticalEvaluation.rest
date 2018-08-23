@@ -1,0 +1,28 @@
+POST http://localhost:8080/retipy/patient/1/opticalevaluation
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJyZXRpcHkiLCJzdWIiOiJhbGV2YWx2IiwiaWRlbnRpdHkiOiIxMTExMTExMSIsInNjb3BlIjoidXNlcnMiLCJpYXQiOjE1MzQ5OTQ2MjYsImV4cCI6MTUzNTE2NzQyNn0.NqXlcnqLOc0oOAeqKRJmbiHPQkowGC3A0SkaP5xbrjI
+
+{
+      "id": 2,
+      "version": 1,
+      "creationDate": "2018-08-23T02:54:24.953+0000",
+      "updateDate": "2018-08-23T02:54:24.953+0000",
+      "visualLeftEye": "20/20",
+      "visualRightEye": "20/20",
+      "visualLeftPh": "20/20",
+      "visualRightPh": "20/20",
+      "pupilLeftEyeRD": 30,
+      "pupilLeftEyeRC": 1,
+      "pupilLeftEyeDPA": 1,
+      "pupilRightEyeRD": 1,
+      "pupilRightEyeRC": 1,
+      "pupilRightEyeDPA": 1,
+      "biomicroscopy": {
+        "Cornea": "asdasd",
+        "Iris": "test123",
+        "Cristalino": "",
+        "Camara Anterior": ""
+      },
+      "intraocularPressure": "texttexttext",
+      "evaluationId": 0
+}

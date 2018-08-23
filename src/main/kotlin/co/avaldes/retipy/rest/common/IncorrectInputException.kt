@@ -17,6 +17,10 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.security.domain.common
+package co.avaldes.retipy.rest.common
 
-class InvalidPasswordException(message: String): IllegalArgumentException(message)
+import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.ResponseStatus
+
+@ResponseStatus(HttpStatus.BAD_REQUEST)
+class IncorrectInputException(request: String) : RuntimeException(request)

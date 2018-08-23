@@ -46,16 +46,21 @@ data class Patient(
     init
     {
         this.opticalEvaluations.forEach{
-            opticalEvaluationMap[it.version] = it
+            opticalEvaluationMap[it.id] = it
         }
     }
 
-    fun getMedicalRecords() : List<OpticalEvaluation> = opticalEvaluationMap.values.toList().sortedBy { record -> record.version }
+    fun getOpticalEvaluations() : List<OpticalEvaluation> = opticalEvaluationMap.values.toList().sortedBy { record -> record.version }
 
-    fun getMedicalRecord(id: Long) : OpticalEvaluation? = opticalEvaluationMap[id]
+    fun getOpticalEvaluation(id: Long) : OpticalEvaluation? = opticalEvaluationMap[id]
 
-    fun setMedicalRecord(opticalEvaluation: OpticalEvaluation)
+    fun addOpticalEvaluation(opticalEvaluation: OpticalEvaluation)
     {
+        val existingOpticalEvaluation = opticalEvaluationMap[opticalEvaluation.id]
+        if (existingOpticalEvaluation != null)
+        {
+            opticalEvaluation.version = existingOpticalEvaluation.version + 1L
+        }
         opticalEvaluationMap[opticalEvaluation.id] = opticalEvaluation
     }
 
@@ -93,7 +98,7 @@ data class Patient(
             parseListToString(patient.pathologicalPast),
             parseListToString(patient.familiarPast),
             parseListToString(patient.medicines),
-            patient.getMedicalRecords().map { OpticalEvaluation.toPersistence(it) })
+            patient.getOpticalEvaluations().map { OpticalEvaluation.toPersistence(it) })
         
         private fun parseListFromString(string:String): List<String>
         {

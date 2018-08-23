@@ -22,10 +22,10 @@ package co.avaldes.retipy.rest
 import co.avaldes.retipy.domain.diagnostic.Diagnostic
 import co.avaldes.retipy.domain.diagnostic.DiagnosticStatus
 import co.avaldes.retipy.domain.diagnostic.IDiagnosticService
-import co.avaldes.retipy.rest.common.BadRequestException
-import co.avaldes.retipy.rest.common.NotFoundException
+import co.avaldes.retipy.rest.common.IncorrectInputException
 import co.avaldes.retipy.rest.dto.DiagnosticDTO
 import co.avaldes.retipy.util.JsonBlob
+import org.springframework.data.rest.webmvc.ResourceNotFoundException
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -50,7 +50,7 @@ internal class DiagnosticEndpoint(private val diagnosticService: IDiagnosticServ
     {
         val diagnostic = diagnosticService.findById(id)
         return if (diagnostic.isPresent) DiagnosticDTO.fromDomain(diagnostic.get())
-            else throw NotFoundException("$id is not a valid diagnostic")
+            else throw ResourceNotFoundException("$id is not a valid diagnostic")
     }
 
     @GetMapping("/retipy/diagnostic/example")
@@ -99,7 +99,7 @@ internal class DiagnosticEndpoint(private val diagnosticService: IDiagnosticServ
     {
         if (image.isBlank())
         {
-            throw BadRequestException("body must contain a base64 image")
+            throw IncorrectInputException("body must contain a base64 image")
         }
         val diagnostic = Diagnostic(
             0, image, "", "[]",DiagnosticStatus.CREATED, Date(), Date())

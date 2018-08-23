@@ -20,6 +20,7 @@
 package co.avaldes.retipy.security.domain.user
 
 import co.avaldes.retipy.common.NoOpPasswordEncoder
+import co.avaldes.retipy.rest.common.IncorrectInputException
 import co.avaldes.retipy.security.persistence.user.IUserRepository
 import co.avaldes.retipy.security.persistence.user.UserBean
 import io.mockk.clearMocks
@@ -80,7 +81,7 @@ internal class UserServiceTest
     @Test
     fun createUser_Exception()
     {
-        assertThrows<IllegalArgumentException> {
+        assertThrows<IncorrectInputException> {
             testInstance.createUser(
                 User(userId, username, username, username, username, true, false , false)) }
     }

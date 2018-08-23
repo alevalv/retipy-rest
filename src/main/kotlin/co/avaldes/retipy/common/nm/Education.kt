@@ -26,5 +26,6 @@ enum class Education
     HighSchool,
     Bachelor,
     Master,
-    Doctorate
+    Doctorate,
+    PostDoctorate
 }

@@ -22,10 +22,11 @@ package co.avaldes.retipy.rest
 import co.avaldes.retipy.domain.Results
 import co.avaldes.retipy.domain.evaluation.retinal.IRetinalEvaluationService
 import co.avaldes.retipy.domain.evaluation.retinal.RetinalEvaluation
-import co.avaldes.retipy.rest.common.BadRequestException
+import co.avaldes.retipy.rest.common.IncorrectInputException
 import co.avaldes.retipy.rest.common.NotFoundException
 import co.avaldes.retipy.rest.dto.ResultDTO
 import co.avaldes.retipy.rest.dto.RetinalEvaluationDTO
+import org.springframework.data.rest.webmvc.ResourceNotFoundException
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -49,7 +50,7 @@ internal class RetinalEvaluationEndpoint(private val retinalEvaluationService: I
     fun getEvaluation(@PathVariable id: Long): RetinalEvaluationDTO
     {
         val evaluation = retinalEvaluationService.find(id)
-            ?: throw  NotFoundException("$id is not a valid evaluation")
+            ?: throw  ResourceNotFoundException("$id is not a valid evaluation")
         return RetinalEvaluationDTO.fromDomain(evaluation)
     }
 
@@ -57,7 +58,7 @@ internal class RetinalEvaluationEndpoint(private val retinalEvaluationService: I
     fun getEvaluationResult(@PathVariable id: Long, @PathVariable result: Long): ResultDTO
     {
         val evaluation = retinalEvaluationService.find(id)
-            ?: throw  NotFoundException("$id is not a valid evaluation")
+            ?: throw  ResourceNotFoundException("$id is not a valid evaluation")
         val results = evaluation.results.getResults()
         if (result >= results.size)
             throw NotFoundException("$result is not a valid result id for evaluation $id")
@@ -68,7 +69,7 @@ internal class RetinalEvaluationEndpoint(private val retinalEvaluationService: I
     fun putResult(@PathVariable id: Long, @RequestBody resultDTO: ResultDTO): RetinalEvaluationDTO
     {
         var evaluation = retinalEvaluationService.find(id)
-            ?: throw  NotFoundException("$id is not a valid evaluation")
+            ?: throw  ResourceNotFoundException("$id is not a valid evaluation")
         val result: Results.Result =
             if (resultDTO.image.isEmpty())
                 Results.Result(
@@ -87,7 +88,7 @@ internal class RetinalEvaluationEndpoint(private val retinalEvaluationService: I
         val algorithmWithDefault = if (algorithm.isBlank()) "density" else algorithm
 
         val evaluation = retinalEvaluationService.processImage(image, algorithmWithDefault)
-            ?: throw BadRequestException("Given image cannot be processed")
+            ?: throw IncorrectInputException("Given image cannot be processed")
         return RetinalEvaluationDTO.fromDomain(evaluation)
     }
 

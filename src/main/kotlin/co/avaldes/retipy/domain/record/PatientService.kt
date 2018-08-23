@@ -21,6 +21,7 @@ package co.avaldes.retipy.domain.record
 
 import co.avaldes.retipy.domain.evaluation.optical.OpticalEvaluation
 import co.avaldes.retipy.persistence.patient.IPatientRepository
+import co.avaldes.retipy.rest.common.IncorrectInputException
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -47,7 +48,7 @@ class PatientService(val patientRepository: IPatientRepository) : IPatientServic
     }
 
     override fun get(id: Long) : Patient =
-        find(id) ?: throw IllegalArgumentException("patient with id $id not found")
+        find(id) ?: throw IncorrectInputException("patient with id $id not found")
 
     override fun save(obj: Patient) : Patient
     {
@@ -55,7 +56,7 @@ class PatientService(val patientRepository: IPatientRepository) : IPatientServic
         {
             if (patientRepository.findByIdentity(obj.identity) != null)
             {
-                throw IllegalArgumentException(
+                throw IncorrectInputException(
                     "Patient with identity ${obj.identity} already exists")
             }
         }
@@ -63,12 +64,18 @@ class PatientService(val patientRepository: IPatientRepository) : IPatientServic
         return Patient.fromPersistence(savedPatient)
     }
 
-    override fun addRecordToPatient(patientId: Long, opticalEvaluation: OpticalEvaluation): Patient
+    override fun createOpticalEvaluation(patientId: Long): OpticalEvaluation =
+        saveOpticalEvaluation(patientId, OpticalEvaluation())
+
+    override fun saveOpticalEvaluation(patientId: Long, opticalEvaluation: OpticalEvaluation): OpticalEvaluation
     {
         val savedPatient = get(patientId)
-        opticalEvaluation.id = savedPatient.recordCount().toLong()
-        savedPatient.setMedicalRecord(opticalEvaluation)
-        return save(savedPatient)
+        val persistedIds = savedPatient.getOpticalEvaluations().map { it -> it.id }
+        savedPatient.addOpticalEvaluation(opticalEvaluation)
+        val persistedPatient = save(savedPatient)
+        return if (opticalEvaluation.id == 0L)
+            persistedPatient.getOpticalEvaluations().filterNot {persistedIds.contains(it.id)}.first()
+            else persistedPatient.getOpticalEvaluation(opticalEvaluation.id)!!
     }
 
     override fun getAllPatients(): List<Triple<Long, Long, String>>

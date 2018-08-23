@@ -20,6 +20,7 @@
 package co.avaldes.retipy.rest
 
 import co.avaldes.retipy.domain.record.IPatientService
+import co.avaldes.retipy.rest.dto.patient.OpticalEvaluationDTO
 import co.avaldes.retipy.rest.dto.patient.PatientDTO
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
@@ -55,4 +56,11 @@ internal class PatientEndpoint(private val patientService: IPatientService)
         return PatientDTO.fromDomain(patientService.save(PatientDTO.toDomain(patientDTO)))
     }
 
+    @PostMapping("/retipy/patient/{id}/opticalevaluation")
+    fun saveOpticalEvaluation(@PathVariable id: Long, @RequestBody opticalEvaluationDTO: OpticalEvaluationDTO): OpticalEvaluationDTO
+    {
+        return OpticalEvaluationDTO.fromDomain(
+            patientService.saveOpticalEvaluation(
+                id, OpticalEvaluationDTO.toDomain(opticalEvaluationDTO)));
+    }
 }

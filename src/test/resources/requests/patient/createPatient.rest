@@ -1,6 +1,6 @@
 POST http://localhost:8080/retipy/patient
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJyZXRpcHkiLCJzdWIiOiJhbGV2YWx2IiwiaWRlbnRpdHkiOiIxMTExMTExMSIsInNjb3BlIjoidXNlcnMiLCJpYXQiOjE1MzM4NjYwMzcsImV4cCI6MTUzNDAzODgzN30.PWEWyx5_A0mkpXw1nqo1aqHTNw3x_lJlBVT7TL-8A5I
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJyZXRpcHkiLCJzdWIiOiJhbGV2YWx2IiwiaWRlbnRpdHkiOiIxMTExMTExMSIsInNjb3BlIjoidXNlcnMiLCJpYXQiOjE1MzQ5OTQ2MjYsImV4cCI6MTUzNTE2NzQyNn0.NqXlcnqLOc0oOAeqKRJmbiHPQkowGC3A0SkaP5xbrjI
 
 {
     "id": 0,
@@ -34,7 +34,7 @@ Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJyZXRpcHkiLCJzdWIiOiJhbGV2YWx2Iiwi
             "biomicroscopy": {
                 "Cornea": "asdasd"
             },
-            "PIO": "texttexttext",
+            "intraocularPressure": "texttexttext",
             "evaluationId": 0
         }
     ]

@@ -24,26 +24,27 @@ import java.util.*
 import kotlin.collections.HashMap
 
 data class OpticalEvaluation(
-    var id: Long,
-    var version: Long,
-    var creationDate: Date,
-    var updateDate: Date,
-    var visualLeftEye: String,
-    var visualRightEye: String,
-    var visualLeftPh: String,
-    var visualRightPh: String,
-    var pupilLeftEyeRD: Int,
-    var pupilLeftEyeRC: Int,
-    var pupilLeftEyeDPA: Int,
-    var pupilRightEyeRD: Int,
-    var pupilRightEyeRC: Int,
-    var pupilRightEyeDPA: Int,
-    var biomicroscopy: MutableMap<String, String>,
-    var ocularIntraPressure: String,
-    var evaluationId: Long)
+    var id: Long = 0,
+    var version: Long = 1,
+    var creationDate: Date = Date(),
+    var updateDate: Date = Date(),
+    var visualLeftEye: String = "",
+    var visualRightEye: String = "",
+    var visualLeftPh: String = "",
+    var visualRightPh: String = "",
+    var pupilLeftEyeRD: Int = 1,
+    var pupilLeftEyeRC: Int = 1,
+    var pupilLeftEyeDPA: Int = 1,
+    var pupilRightEyeRD: Int = 1,
+    var pupilRightEyeRC: Int = 1,
+    var pupilRightEyeDPA: Int = 1,
+    var biomicroscopy: MutableMap<String, String> = emptyMap<String, String>().toMutableMap(),
+    var ocularIntraPressure: String = "",
+    var evaluationId: Long = -1)
 {
     init
     {
+        biomicroscopy = biomicroscopy.filterNot { key -> key.value.isBlank() }.toMutableMap()
         // assert that the biomicroscopy contains the obligatory fields:
         if (biomicroscopy["Cornea"] == null)
         {

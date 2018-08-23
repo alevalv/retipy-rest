@@ -19,6 +19,7 @@
 
 package co.avaldes.retipy.security.domain.user
 
+import co.avaldes.retipy.rest.common.IncorrectInputException
 import co.avaldes.retipy.security.domain.common.NoOpPasswordValidator
 import co.avaldes.retipy.security.persistence.user.IUserRepository
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -67,7 +68,7 @@ internal class UserService(
     {
         if (user.id != 0L || this.findByUsername(user.username) != null)
         {
-            throw IllegalArgumentException("New user is invalid")
+            throw IncorrectInputException("New user is invalid")
         }
         passwordValidator.validatePassword(user.password)
         val newUser = User(
@@ -85,7 +86,7 @@ internal class UserService(
 
     override fun updatePassword(user: User, newPassword: String): User
     {
-        val storedUser = find(user.id) ?: throw IllegalArgumentException("Invalid user")
+        val storedUser = get(user.id)
         passwordValidator.validatePassword(newPassword)
         return save(User(
             storedUser.id,
@@ -100,7 +101,7 @@ internal class UserService(
 
     override fun updateName(user: User, name: String): User
     {
-        val storedUser = find(user.id) ?: throw IllegalArgumentException("Invalid user")
+        val storedUser = get(user.id)
         return save(User(
             storedUser.id,
             storedUser.identity,
@@ -134,7 +135,7 @@ internal class UserService(
     }
 
     override fun get(id: Long): User =
-        find(id) ?: throw IllegalArgumentException("User with id $id not found")
+        find(id) ?: throw IncorrectInputException("User with id $id not found")
 
     override fun delete(id: Long)
     {

@@ -35,7 +35,7 @@ interface IUserService: ICRUDService<User>
 
     /**
      * Creates a new [User]. The method expects that the [User.id] is set to 0L and that the
-     * username is unique, if any of those conditions are not met, a [IllegalArgumentException]
+     * username is unique, if any of those conditions are not met, a [IncorrectInputException]
      * will be thrown. Returns the persisted object.
      *
      * Note that the [User.password] should be plain text.
@@ -52,7 +52,7 @@ interface IUserService: ICRUDService<User>
      * @param user the [User] to be modified
      * @param newPassword the new password in plain text to be setted to the given user
      *
-     * @throws IllegalArgumentException if the given *user* does not exist.
+     * @throws IncorrectInputException if the given *user* does not exist.
      */
     fun updatePassword(user: User, newPassword: String): User
 
@@ -62,7 +62,7 @@ interface IUserService: ICRUDService<User>
      * @param user the [User] to be modified
      * @param name the new name to be stored in the user
      *
-     * @throws IllegalArgumentException if the given *user* does not exist.
+     * @throws IncorrectInputException if the given *user* does not exist.
      */
     fun updateName(user: User, name: String): User
 

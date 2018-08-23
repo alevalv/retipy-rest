@@ -22,6 +22,7 @@ package co.avaldes.retipy.domain.evaluation.retinal
 import co.avaldes.retipy.domain.Results
 import co.avaldes.retipy.domain.tortuosity.ITortuosityService
 import co.avaldes.retipy.persistence.evaluation.retinal.IRetinalEvaluationRepository
+import co.avaldes.retipy.rest.common.IncorrectInputException
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -48,7 +49,7 @@ internal class RetinalEvaluationService(
     override fun get(id: Long): RetinalEvaluation
     {
         return find(id)
-            ?: throw IllegalArgumentException("retinal evaluation with id $id does not exist")
+            ?: throw IncorrectInputException("retinal evaluation with id $id does not exist")
     }
 
     override fun save(obj: RetinalEvaluation): RetinalEvaluation

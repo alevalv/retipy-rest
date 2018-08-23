@@ -38,7 +38,7 @@ data class OpticalEvaluationDTO(
     val pupilRightEyeRC: Int,
     val pupilRightEyeDPA: Int,
     val biomicroscopy: Map<String, String>,
-    val PIO: String,
+    val intraocularPressure: String,
     val evaluationId: Long
 )
 {
@@ -80,7 +80,7 @@ data class OpticalEvaluationDTO(
             opticalEvaluationDTO.pupilRightEyeRC,
             opticalEvaluationDTO.pupilRightEyeDPA,
             opticalEvaluationDTO.biomicroscopy.toMutableMap(),
-            opticalEvaluationDTO.PIO,
+            opticalEvaluationDTO.intraocularPressure,
             opticalEvaluationDTO.evaluationId
         )
     }
