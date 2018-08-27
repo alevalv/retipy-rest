@@ -19,9 +19,9 @@
 
 package co.avaldes.retipy.domain.diagnostic
 
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor
-import org.springframework.data.repository.PagingAndSortingRepository
-import org.springframework.stereotype.Repository
+interface IDiagnosticService
+{
+    fun find(id: Long): Diagnostic?
 
-@Repository
-interface IDiagnosticService : PagingAndSortingRepository<Diagnostic, Long>, JpaSpecificationExecutor<Diagnostic>
+    fun get(id: Long): Diagnostic
+}

@@ -17,26 +17,11 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.rest.dto.patient
+package co.avaldes.retipy.persistence.diagnostic
 
-import java.util.*
-
-data class OpticalEvaluationDTO(
-    val id: Long,
-    val version: Long,
-    val creationDate: Date?,
-    val updateDate: Date?,
-    val visualLeftEye: String,
-    val visualRightEye: String,
-    val visualLeftPh: String,
-    val visualRightPh: String,
-    val pupilLeftEyeRD: Int,
-    val pupilLeftEyeRC: Int,
-    val pupilLeftEyeDPA: Int,
-    val pupilRightEyeRD: Int,
-    val pupilRightEyeRC: Int,
-    val pupilRightEyeDPA: Int,
-    val biomicroscopy: Map<String, String>,
-    val intraocularPressure: String,
-    val diagnostics: List<Long>
-)
+enum class DiagnosticStatus
+{
+    CREATED,
+    UPDATED,
+    COMPLETED
+}

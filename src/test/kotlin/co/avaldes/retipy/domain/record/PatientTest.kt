@@ -30,9 +30,9 @@ import java.util.*
 internal class PatientTest
 {
     private val opticalEvaluation1 =
-        OpticalEvaluation(1, 1, Date(), Date(), "", "", "", "", 0, 0, 0, 0, 0, 0, emptyMap<String, String>().toMutableMap(), "", 0)
+        OpticalEvaluation(1, 1, Date(), Date(), "", "", "", "", 0, 0, 0, 0, 0, 0, emptyMap<String, String>().toMutableMap(), "", emptyList())
     private val opticalEvaluation2 =
-        OpticalEvaluation(2, 3, Date(), Date(), "", "", "", "", 0, 0, 0, 0, 0, 0, emptyMap<String, String>().toMutableMap(), "", 0)
+        OpticalEvaluation(2, 3, Date(), Date(), "", "", "", "", 0, 0, 0, 0, 0, 0, emptyMap<String, String>().toMutableMap(), "", emptyList())
 
     private var testInstance : Patient = Patient(
         1,
@@ -103,7 +103,7 @@ internal class PatientTest
             opticalEvaluation1, testInstance.getOpticalEvaluations()[0], "patient order is incorrect")
         Assertions.assertEquals(
             opticalEvaluation2, testInstance.getOpticalEvaluations()[1], "patient order is incorrect")
-        val medicalRecord3 = OpticalEvaluation(2, 2, Date(), Date(), "", "", "", "", 0, 0, 0, 0, 0, 0, emptyMap<String, String>().toMutableMap(), "", 0)
+        val medicalRecord3 = OpticalEvaluation(2, 2, Date(), Date(), "", "", "", "", 0, 0, 0, 0, 0, 0, emptyMap<String, String>().toMutableMap(), "", emptyList())
         testInstance.addOpticalEvaluation(medicalRecord3)
         Assertions.assertEquals(
             medicalRecord3, testInstance.getOpticalEvaluations()[1], "patient order is incorrect")

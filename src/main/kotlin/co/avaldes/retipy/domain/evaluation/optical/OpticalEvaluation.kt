@@ -19,6 +19,7 @@
 
 package co.avaldes.retipy.domain.evaluation.optical
 
+import co.avaldes.retipy.domain.diagnostic.Diagnostic
 import co.avaldes.retipy.persistence.evaluation.optical.OpticalEvaluationBean
 import java.util.*
 import kotlin.collections.HashMap
@@ -40,8 +41,10 @@ data class OpticalEvaluation(
     var pupilRightEyeDPA: Int = 1,
     var biomicroscopy: MutableMap<String, String> = emptyMap<String, String>().toMutableMap(),
     var ocularIntraPressure: String = "",
-    var evaluationId: Long = -1)
+    private var diagnostics: List<Diagnostic> = emptyList())
 {
+    private val diagnosticMap: MutableMap<Long, Diagnostic> = HashMap()
+
     init
     {
         biomicroscopy = biomicroscopy.filterNot { key -> key.value.isBlank() }.toMutableMap()
@@ -62,6 +65,17 @@ data class OpticalEvaluation(
         {
             biomicroscopy["Camara Anterior"] = ""
         }
+
+        this.diagnostics.forEach { diagnosticMap[it.id] = it }
+    }
+
+    fun getDiagnostics() : List<Diagnostic> = diagnosticMap.values.toList().sortedBy { record -> record.id }
+
+    fun getDiagnostic(id: Long) : Diagnostic? = diagnosticMap[id]
+
+    fun addDiagnostic(diagnostic: Diagnostic)
+    {
+        diagnosticMap[diagnostic.id] = diagnostic
     }
 
     companion object
@@ -116,7 +130,7 @@ data class OpticalEvaluation(
             opticalEvaluationBean.pupilRightEyeDPA,
             parseBiomicroscopy(opticalEvaluationBean.biomicroscopy),
             opticalEvaluationBean.ocularIntraPressure,
-            opticalEvaluationBean.evaluationId)
+            opticalEvaluationBean.diagnostics.map { Diagnostic.fromPersistence(it) })
 
         fun toPersistence(opticalEvaluation: OpticalEvaluation) = OpticalEvaluationBean(
             opticalEvaluation.id,
@@ -135,8 +149,7 @@ data class OpticalEvaluation(
             opticalEvaluation.pupilRightEyeDPA,
             biomicroscopyToString(opticalEvaluation.biomicroscopy),
             opticalEvaluation.ocularIntraPressure,
-            opticalEvaluation.evaluationId
-        )
+            opticalEvaluation.getDiagnostics().map { Diagnostic.toPersistence(it) })
     }
 }
 

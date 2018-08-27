@@ -17,7 +17,7 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.domain.diagnostic
+package co.avaldes.retipy.persistence.diagnostic
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
@@ -35,7 +35,7 @@ internal class DiagnosticTest
     private val updateDate = Date()
 
     private val testInstance =
-        Diagnostic(id, image, diagnostic, rois, status, creationDate, updateDate)
+        DiagnosticBean(id, image, diagnostic, rois, status, creationDate, updateDate)
 
     @Test
     fun test_onCreate()

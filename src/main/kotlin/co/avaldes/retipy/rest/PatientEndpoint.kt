@@ -20,8 +20,11 @@
 package co.avaldes.retipy.rest
 
 import co.avaldes.retipy.domain.record.IPatientService
+import co.avaldes.retipy.rest.dto.DiagnosticDTO
 import co.avaldes.retipy.rest.dto.patient.OpticalEvaluationDTO
+import co.avaldes.retipy.rest.dto.patient.OpticalEvaluationDTOMapper
 import co.avaldes.retipy.rest.dto.patient.PatientDTO
+import co.avaldes.retipy.rest.dto.patient.PatientDTOMapper
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -34,14 +37,17 @@ import org.springframework.web.bind.annotation.RestController
  */
 @CrossOrigin
 @RestController
-internal class PatientEndpoint(private val patientService: IPatientService)
+internal class PatientEndpoint(
+    private val patientService: IPatientService,
+    private val opticalEvaluationDTOMapper: OpticalEvaluationDTOMapper,
+    private val patientDTOMapper: PatientDTOMapper)
 {
     data class PatientListDTO(val patientList: List<Triple<Long, Long, String>>)
 
     @GetMapping("/retipy/patient/{id}")
     fun getPatient(@PathVariable id: Long): PatientDTO
     {
-        return PatientDTO.fromDomain(patientService.get(id))
+        return patientDTOMapper.fromDomain(patientService.get(id))
     }
 
     @GetMapping("/retipy/patient/list")
@@ -53,14 +59,25 @@ internal class PatientEndpoint(private val patientService: IPatientService)
     @PostMapping("/retipy/patient")
     fun savePatient(@RequestBody patientDTO: PatientDTO) : PatientDTO
     {
-        return PatientDTO.fromDomain(patientService.save(PatientDTO.toDomain(patientDTO)))
+        return patientDTOMapper.fromDomain(
+            patientService.save(patientDTOMapper.toDomain(patientDTO)))
     }
 
     @PostMapping("/retipy/patient/{id}/opticalevaluation")
     fun saveOpticalEvaluation(@PathVariable id: Long, @RequestBody opticalEvaluationDTO: OpticalEvaluationDTO): OpticalEvaluationDTO
     {
-        return OpticalEvaluationDTO.fromDomain(
+        return opticalEvaluationDTOMapper.fromDomain(
             patientService.saveOpticalEvaluation(
-                id, OpticalEvaluationDTO.toDomain(opticalEvaluationDTO)));
+                id, opticalEvaluationDTOMapper.toDomain(opticalEvaluationDTO)))
+    }
+
+    @PostMapping("/retipy/patient/{patientId}/opticalevaluation/{opticalEvaluationId}/diagnostic")
+    fun saveDiagnostic(
+        @PathVariable patientId: Long,
+        @PathVariable opticalEvaluationId: Long,
+        @RequestBody diagnosticDTO: DiagnosticDTO): DiagnosticDTO {
+        return DiagnosticDTO.fromDomain(
+            patientService.saveDiagnostic(
+                patientId, opticalEvaluationId, DiagnosticDTO.toDomain(diagnosticDTO)))
     }
 }

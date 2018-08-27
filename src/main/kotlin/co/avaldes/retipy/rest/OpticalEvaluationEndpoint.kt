@@ -19,24 +19,26 @@
 
 package co.avaldes.retipy.rest
 
-import co.avaldes.retipy.domain.diagnostic.IDiagnosticService
-import co.avaldes.retipy.rest.dto.DiagnosticDTO
+import co.avaldes.retipy.domain.evaluation.optical.IOpticalEvaluationService
+import co.avaldes.retipy.rest.dto.patient.OpticalEvaluationDTO
+import co.avaldes.retipy.rest.dto.patient.OpticalEvaluationDTOMapper
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
 
 /**
- * Endpoint for Diagnostics.
- * Only get operations are allowed here, saving and deleting are responsibilities of patient.
+ * Endpoint for retrieving [OpticalEvaluationDTO]
  */
 @CrossOrigin
 @RestController
-internal class DiagnosticEndpoint(private val diagnosticService: IDiagnosticService)
+class OpticalEvaluationEndpoint(
+    private val opticalEvaluationService: IOpticalEvaluationService,
+    private val opticalEvaluationDTOMapper: OpticalEvaluationDTOMapper)
 {
-    @GetMapping("/retipy/diagnostic/{id}")
-    fun getPatient(@PathVariable id: Long): DiagnosticDTO
+    @GetMapping("/retipy/opticalevaluation/{id}")
+    fun getOpticalEvaluation(@PathVariable id: Long): OpticalEvaluationDTO
     {
-        return DiagnosticDTO.fromDomain(diagnosticService.get(id))
+        return opticalEvaluationDTOMapper.fromDomain(opticalEvaluationService.get(id))
     }
 }

@@ -19,6 +19,8 @@
 
 package co.avaldes.retipy.domain.record
 
+import co.avaldes.retipy.domain.diagnostic.Diagnostic
+import co.avaldes.retipy.domain.diagnostic.IDiagnosticService
 import co.avaldes.retipy.domain.evaluation.optical.OpticalEvaluation
 import co.avaldes.retipy.persistence.patient.IPatientRepository
 import co.avaldes.retipy.rest.common.IncorrectInputException
@@ -26,7 +28,9 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class PatientService(val patientRepository: IPatientRepository) : IPatientService
+class PatientService(
+    val patientRepository: IPatientRepository,
+    val diagnosticService: IDiagnosticService) : IPatientService
 {
     override fun find(id: Long): Patient?
     {
@@ -76,6 +80,48 @@ class PatientService(val patientRepository: IPatientRepository) : IPatientServic
         return if (opticalEvaluation.id == 0L)
             persistedPatient.getOpticalEvaluations().filterNot {persistedIds.contains(it.id)}.first()
             else persistedPatient.getOpticalEvaluation(opticalEvaluation.id)!!
+    }
+
+    override fun saveDiagnostic(
+        patientId: Long, opticalEvaluationId: Long, diagnostic: Diagnostic): Diagnostic
+    {
+        // recover data from backend if its missing
+        val id = diagnostic.id
+        val currentDiagnostic = diagnosticService.find(id)
+        val diagnosticToPersist : Diagnostic =
+            if (currentDiagnostic != null && diagnostic.image == null)
+            {
+                diagnostic.image = currentDiagnostic.image
+                diagnostic
+            }
+            else
+            {
+                if (id != 0L) {
+                    throw IncorrectInputException("Diagnostic id must be zero for new diagnostics")
+                }
+                diagnostic
+            }
+
+        // get the optical evaluation
+        val savedPatient = get(patientId)
+        val persistedOpticalEvaluation =
+            savedPatient.getOpticalEvaluation(opticalEvaluationId)
+                ?: throw IncorrectInputException(
+                    "Optical Evaluation with id $opticalEvaluationId not found")
+
+        val existingDiagnosticIds = persistedOpticalEvaluation.getDiagnostics().map { it -> it.id }
+        persistedOpticalEvaluation.addDiagnostic(diagnosticToPersist)
+        val savedOpticalEvaluation = save(savedPatient).getOpticalEvaluation(opticalEvaluationId)!!
+        return if (diagnostic.id == 0L)
+            savedOpticalEvaluation.getDiagnostics()
+                .filterNot {existingDiagnosticIds.contains(it.id)}.first()
+        else savedOpticalEvaluation.getDiagnostic(diagnostic.id)!!
+    }
+
+    override fun saveDiagnosticByImage(
+        patientId: Long, opticalEvaluationId: Long, image: String): Diagnostic
+    {
+        return saveDiagnostic(patientId, opticalEvaluationId, Diagnostic(image=image))
     }
 
     override fun getAllPatients(): List<Triple<Long, Long, String>>

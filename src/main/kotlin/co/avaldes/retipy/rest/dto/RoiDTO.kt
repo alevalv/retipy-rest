@@ -17,26 +17,16 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.rest.dto.patient
+package co.avaldes.retipy.rest.dto
 
-import java.util.*
+import co.avaldes.retipy.domain.diagnostic.Roi
 
-data class OpticalEvaluationDTO(
-    val id: Long,
-    val version: Long,
-    val creationDate: Date?,
-    val updateDate: Date?,
-    val visualLeftEye: String,
-    val visualRightEye: String,
-    val visualLeftPh: String,
-    val visualRightPh: String,
-    val pupilLeftEyeRD: Int,
-    val pupilLeftEyeRC: Int,
-    val pupilLeftEyeDPA: Int,
-    val pupilRightEyeRD: Int,
-    val pupilRightEyeRC: Int,
-    val pupilRightEyeDPA: Int,
-    val biomicroscopy: Map<String, String>,
-    val intraocularPressure: String,
-    val diagnostics: List<Long>
-)
+data class RoiDTO (val roi_x: List<Int>, val roi_y: List<Int>, val notes: String)
+{
+    companion object
+    {
+        fun fromDomain(roi: Roi) = RoiDTO(roi.roi_x, roi.roi_y, roi.notes)
+
+        fun toDomain(roiDTO: RoiDTO) = Roi(roiDTO.roi_x, roiDTO.roi_y, roiDTO.notes)
+    }
+}

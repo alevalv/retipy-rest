@@ -1,11 +1,11 @@
-POST http://localhost:8080/retipy/diagnostic
+POST http://localhost:8080/retipy/patient/1/opticalevaluation/2/diagnostic
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJyZXRpcHkiLCJzdWIiOiJuZXdfdXNlciIsImlkZW50aXR5IjoiMTIzNDU2Iiwic2NvcGUiOiJ1c2VycyIsImlhdCI6MTUzMjkxNjIyMiwiZXhwIjoxNTMyOTE5ODIyfQ.aVhKeG_hpuGfizb1qe0qhTVvvHwoukKpYwSqKwOKPEA
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJyZXRpcHkiLCJzdWIiOiJhbGV2YWx2IiwiaWRlbnRpdHkiOiIxMTExMTExMSIsInNjb3BlIjoidXNlcnMiLCJpYXQiOjE1MzUzMzEwMzUsImV4cCI6MTUzNTUwMzgzNX0.od38AEZ0zS3Y0vsZ100L9ddw0HyBLCqC2bgxKnSydPo
 
 {
   "id": "0",
   "diagnostic": "",
-  "roiElementList": [
+  "rois": [
     {
       "notes": "Test",
       "roi_x": [

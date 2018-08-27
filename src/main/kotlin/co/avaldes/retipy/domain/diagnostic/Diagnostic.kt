@@ -19,40 +19,40 @@
 
 package co.avaldes.retipy.domain.diagnostic
 
+import co.avaldes.retipy.persistence.diagnostic.DiagnosticBean
+import co.avaldes.retipy.persistence.diagnostic.DiagnosticStatus
+import co.avaldes.retipy.rest.common.IncorrectInputException
 import java.util.*
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.Lob
-import javax.persistence.PrePersist
-import javax.persistence.PreUpdate
-import javax.persistence.Table
-import javax.persistence.Temporal
-import javax.persistence.TemporalType
 
-@Entity
-@Table(name = "Diagnostics")
 data class Diagnostic(
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    val id: Long,
-    @Lob val image: String,
-    val diagnostic: String,
-    @Lob val rois: String,
-    var status: DiagnosticStatus,
-    @Temporal(TemporalType.TIMESTAMP) var creationDate: Date,
-    @Temporal(TemporalType.TIMESTAMP) var updateDate: Date)
+    var id: Long = 0,
+    var image: String? = "",
+    var diagnostic: String = "",
+    var rois: List<Roi> = emptyList(),
+    var status: DiagnosticStatus = DiagnosticStatus.CREATED,
+    var creationDate: Date = Date(),
+    var updateDate: Date = Date())
 {
-    @PrePersist
-    internal fun onCreate()
+    companion object
     {
-        status = DiagnosticStatus.CREATED
-        creationDate = Date()
-    }
+        fun fromPersistence(diagnosticBean: DiagnosticBean) = Diagnostic(
+            diagnosticBean.id,
+            diagnosticBean.image,
+            diagnosticBean.diagnostic,
+            Roi.fromPersistence(diagnosticBean.rois),
+            diagnosticBean.status,
+            diagnosticBean.creationDate,
+            diagnosticBean.updateDate
+        )
 
-    @PreUpdate
-    internal fun onUpdate()
-    {
-        updateDate = Date()
+        fun toPersistence(diagnostic: Diagnostic) = DiagnosticBean(
+            diagnostic.id,
+            diagnostic.image ?: throw IncorrectInputException("A diagnostic cannot have a null image"),
+            diagnostic.diagnostic,
+            Roi.toPersistence(diagnostic.rois),
+            diagnostic.status,
+            diagnostic.creationDate,
+            diagnostic.updateDate
+        )
     }
 }

@@ -1,2 +1,3 @@
-GET http://localhost:8080/retipy/diagnostic/3
+GET http://localhost:8080/retipy/opticalevaluation/2
+Content-Type: application/json
 Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJyZXRpcHkiLCJzdWIiOiJhbGV2YWx2IiwiaWRlbnRpdHkiOiIxMTExMTExMSIsInNjb3BlIjoidXNlcnMiLCJpYXQiOjE1MzUzMzEwMzUsImV4cCI6MTUzNTUwMzgzNX0.od38AEZ0zS3Y0vsZ100L9ddw0HyBLCqC2bgxKnSydPo

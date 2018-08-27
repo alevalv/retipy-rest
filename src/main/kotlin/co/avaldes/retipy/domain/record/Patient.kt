@@ -50,7 +50,7 @@ data class Patient(
         }
     }
 
-    fun getOpticalEvaluations() : List<OpticalEvaluation> = opticalEvaluationMap.values.toList().sortedBy { record -> record.version }
+    fun getOpticalEvaluations() : List<OpticalEvaluation> = opticalEvaluationMap.values.toList().sortedBy { record -> record.id }
 
     fun getOpticalEvaluation(id: Long) : OpticalEvaluation? = opticalEvaluationMap[id]
 

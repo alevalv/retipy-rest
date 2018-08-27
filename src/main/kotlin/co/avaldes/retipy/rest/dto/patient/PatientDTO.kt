@@ -21,7 +21,6 @@ package co.avaldes.retipy.rest.dto.patient
 
 import co.avaldes.retipy.common.nm.Education
 import co.avaldes.retipy.common.nm.Sex
-import co.avaldes.retipy.domain.record.Patient
 import java.util.*
 
 
@@ -38,38 +37,5 @@ data class PatientDTO(
     val pathologicalPast: List<String>,
     val familiarPast: List<String>,
     val medicines: List<String>,
-    val opticalEvaluations: List<OpticalEvaluationDTO>)
-{
-    companion object
-    {
-        fun fromDomain(patient: Patient) = PatientDTO(
-            patient.id,
-            patient.identity,
-            patient.name,
-            patient.birthDate,
-            patient.sex,
-            patient.origin,
-            patient.procedence,
-            patient.education,
-            patient.race,
-            patient.pathologicalPast,
-            patient.familiarPast,
-            patient.medicines,
-            patient.getOpticalEvaluations().map { OpticalEvaluationDTO.fromDomain(it) })
-
-        fun toDomain(patientDTO: PatientDTO) = Patient(
-            patientDTO.id,
-            patientDTO.identity,
-            patientDTO.name,
-            patientDTO.birthDate,
-            patientDTO.sex,
-            patientDTO.origin,
-            patientDTO.procedence,
-            patientDTO.education,
-            patientDTO.race,
-            patientDTO.pathologicalPast,
-            patientDTO.familiarPast,
-            patientDTO.medicines,
-            patientDTO.opticalEvaluations.map { OpticalEvaluationDTO.toDomain(it) })
-    }
-}
+    val opticalEvaluations: List<OpticalEvaluationDTO>
+)

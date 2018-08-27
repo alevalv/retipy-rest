@@ -20,21 +20,20 @@
 package co.avaldes.retipy.rest.dto
 
 import co.avaldes.retipy.domain.diagnostic.Diagnostic
-import co.avaldes.retipy.domain.diagnostic.DiagnosticStatus
-import co.avaldes.retipy.util.JsonBlob
+import co.avaldes.retipy.persistence.diagnostic.DiagnosticStatus
 import java.util.*
 
 /**
  * DTO class to transfer a diagnostic with on the rest layer.
  */
 data class DiagnosticDTO(
-        var id: Long?,
-        val image: String?,
-        val diagnostic: String?,
-        val rois:JsonBlob?,
-        var status: DiagnosticStatus?,
-        val creationDate: Date?,
-        val updateDate: Date?)
+    val id: Long,
+    val image: String?,
+    val diagnostic: String,
+    val rois: List<RoiDTO>,
+    val status: DiagnosticStatus?,
+    val creationDate: Date?,
+    val updateDate: Date?)
 {
     companion object
     {
@@ -42,16 +41,16 @@ data class DiagnosticDTO(
             diagnostic.id,
             diagnostic.image,
             diagnostic.diagnostic,
-            JsonBlob(diagnostic.rois),
+            diagnostic.rois.map {RoiDTO.fromDomain(it)},
             diagnostic.status,
             diagnostic.creationDate,
             diagnostic.updateDate)
 
         fun toDomain(diagnosticDTO: DiagnosticDTO) = Diagnostic(
-            diagnosticDTO.id ?: 0,
+            diagnosticDTO.id,
             diagnosticDTO.image ?: "",
-            diagnosticDTO.diagnostic ?: "",
-            diagnosticDTO.rois?.blob ?: "[]",
+            diagnosticDTO.diagnostic,
+            diagnosticDTO.rois.map { RoiDTO.toDomain(it) },
             diagnosticDTO.status ?: DiagnosticStatus.CREATED,
             diagnosticDTO.creationDate ?: Date(),
             diagnosticDTO.updateDate ?: Date())

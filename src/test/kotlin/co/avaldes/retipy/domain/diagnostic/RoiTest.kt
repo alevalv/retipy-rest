@@ -17,44 +17,39 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.domain.evaluation.optical
+package co.avaldes.retipy.domain.diagnostic
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.util.*
 
-internal class OpticalEvaluationTest
+internal class RoiTest
 {
-    private lateinit var testInstance: OpticalEvaluation
+    private val roi_x = listOf(1, 3, 4, 5, 6)
+    private val roi_y = listOf(1, 2, 4, 7, 6)
+    private val notes = "this is a test roi"
+
+    private lateinit var testInstance: Roi
 
     @BeforeEach
     fun setUp()
     {
-        testInstance = OpticalEvaluation(
-            1, 1,
-            Date(),
-            Date(),
-            "",
-            "",
-            "",
-            "",
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            mutableMapOf(Pair("Iris", "some")),
-            "",
-            emptyList())
+        testInstance = Roi(roi_x, roi_y, notes)
     }
 
     @Test
-    fun mappers()
+    fun test_toString()
     {
-        val opticalEvaluationBean = OpticalEvaluation.toPersistence(testInstance)
-        val opticalEvaluation = OpticalEvaluation.fromPersistence(opticalEvaluationBean)
-        Assertions.assertEquals(testInstance, opticalEvaluation, "mapping failed")
+        Assertions.assertEquals(
+            "{\"roi_x\":[1,3,4,5,6],\"roi_y\":[1,2,4,7,6],\"notes\":\"this is a test roi\"}",
+            testInstance.toString())
+    }
+
+    @Test
+    fun test_persistence() {
+        val rois = listOf(testInstance, testInstance, testInstance)
+        val persistedRois = Roi.toPersistence(rois)
+        val fromPersistenceRois = Roi.fromPersistence(persistedRois)
+        Assertions.assertEquals(rois, fromPersistenceRois)
     }
 }

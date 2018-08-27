@@ -20,6 +20,7 @@
 package co.avaldes.retipy.domain.record
 
 import co.avaldes.retipy.common.ICRUDService
+import co.avaldes.retipy.domain.diagnostic.Diagnostic
 import co.avaldes.retipy.domain.evaluation.optical.OpticalEvaluation
 
 
@@ -40,4 +41,17 @@ interface IPatientService: ICRUDService<Patient>
      * Adds a new optical evaluation to the given patient.
      */
     fun createOpticalEvaluation(patientId: Long): OpticalEvaluation
+
+    /**
+     * Adds or modify the given diagnostic.
+     * Will throw error if the [Patient] or the [OpticalEvaluation] does not exist.
+     */
+    fun saveDiagnostic(
+        patientId: Long, opticalEvaluationId: Long, diagnostic: Diagnostic): Diagnostic
+
+    /**
+     * Creates a new diagnostic for the given image in base 64.
+     * * Will throw error if the [Patient] or the [OpticalEvaluation] does not exist.
+     */
+    fun saveDiagnosticByImage(patientId: Long, opticalEvaluationId: Long, image: String): Diagnostic
 }
