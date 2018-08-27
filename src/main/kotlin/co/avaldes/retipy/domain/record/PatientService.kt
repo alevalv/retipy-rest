@@ -88,19 +88,14 @@ class PatientService(
         // recover data from backend if its missing
         val id = diagnostic.id
         val currentDiagnostic = diagnosticService.find(id)
-        val diagnosticToPersist : Diagnostic =
-            if (currentDiagnostic != null && diagnostic.image == null)
-            {
-                diagnostic.image = currentDiagnostic.image
-                diagnostic
-            }
-            else
-            {
-                if (id != 0L) {
-                    throw IncorrectInputException("Diagnostic id must be zero for new diagnostics")
-                }
-                diagnostic
-            }
+        if (currentDiagnostic != null && diagnostic.image == null)
+        {
+            diagnostic.image = currentDiagnostic.image
+        }
+        else if(diagnostic.id != 0L && currentDiagnostic == null)
+        {
+            throw IncorrectInputException("Diagnostic id must be zero for new diagnostics")
+        }
 
         // get the optical evaluation
         val savedPatient = get(patientId)
@@ -110,7 +105,7 @@ class PatientService(
                     "Optical Evaluation with id $opticalEvaluationId not found")
 
         val existingDiagnosticIds = persistedOpticalEvaluation.getDiagnostics().map { it -> it.id }
-        persistedOpticalEvaluation.addDiagnostic(diagnosticToPersist)
+        persistedOpticalEvaluation.addDiagnostic(diagnostic)
         val savedOpticalEvaluation = save(savedPatient).getOpticalEvaluation(opticalEvaluationId)!!
         return if (diagnostic.id == 0L)
             savedOpticalEvaluation.getDiagnostics()
