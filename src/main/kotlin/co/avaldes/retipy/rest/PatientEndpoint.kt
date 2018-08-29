@@ -25,6 +25,7 @@ import co.avaldes.retipy.rest.dto.patient.OpticalEvaluationDTO
 import co.avaldes.retipy.rest.dto.patient.OpticalEvaluationDTOMapper
 import co.avaldes.retipy.rest.dto.patient.PatientDTO
 import co.avaldes.retipy.rest.dto.patient.PatientDTOMapper
+import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -79,5 +80,16 @@ internal class PatientEndpoint(
         return DiagnosticDTO.fromDomain(
             patientService.saveDiagnostic(
                 patientId, opticalEvaluationId, DiagnosticDTO.toDomain(diagnosticDTO)))
+    }
+
+    @PostMapping(
+        "/retipy/patient/{patientId}/opticalevaluation/{opticalEvaluationId}/diagnostic/image",
+        consumes = [MediaType.TEXT_PLAIN_VALUE])
+    fun saveDiagnosticByImage(
+        @PathVariable patientId: Long,
+        @PathVariable opticalEvaluationId: Long,
+        @RequestBody image: String): DiagnosticDTO {
+        return DiagnosticDTO.fromDomain(
+            patientService.saveDiagnosticByImage(patientId, opticalEvaluationId, image))
     }
 }

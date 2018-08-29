@@ -1,4 +1,4 @@
-POST http://localhost:8080/retipy/user/login
+POST {{host}}/retipy/user/login
 content-type: application/json
 
 {

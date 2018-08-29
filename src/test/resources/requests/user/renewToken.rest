@@ -1,4 +1,4 @@
-POST http://localhost:8080/retipy/user/token
+POST {{host}}/retipy/user/token
 content-type: text/plain
 
 eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJyZXRpcHkiLCJzdWIiOiJhbGV2YWx2IiwiaWRlbnRpdHkiOiIxMTExMTExMSIsInNjb3BlIjoidXNlcnMiLCJpYXQiOjE1MzM4NjE1MDYsImV4cCI6MTUzNDAzNDMwNn0.uGx1SvVn-mjTyIHXYfsipHzKXt163SSPRc5LkGMMVf4

@@ -38,7 +38,15 @@ data class Roi(
 
         fun fromPersistence(string: String): List<Roi> {
             val objectMapper = ObjectMapper()
-            return string.split(SEPARATOR).map { objectMapper.readValue(it, Roi::class.java) }
+            val roiStrings = string.split(SEPARATOR)
+            val roi: MutableList<Roi> = ArrayList(roiStrings.size)
+            roiStrings.forEach {
+                if (it.isNotBlank())
+                {
+                    roi.add(objectMapper.readValue(it, Roi::class.java))
+                }
+            }
+            return roi
         }
 
         fun toPersistence(rois: List<Roi>): String {

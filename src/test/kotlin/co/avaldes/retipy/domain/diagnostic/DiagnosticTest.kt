@@ -19,44 +19,34 @@
 
 package co.avaldes.retipy.domain.diagnostic
 
+import co.avaldes.retipy.persistence.diagnostic.DiagnosticStatus
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-internal class RoiTest
+internal class DiagnosticTest
 {
-    private val roi_x = listOf(1, 3, 4, 5, 6)
-    private val roi_y = listOf(1, 2, 4, 7, 6)
-    private val notes = "this is a test roi"
+    private val diagnosticId = 3L
+    private val diagnostic = "a diagnostic"
+    private val image = "some image"
+    private val roi = Roi(listOf(1, 2, 3), listOf(1, 2, 3), "sample text")
 
-    private lateinit var testInstance: Roi
+    private lateinit var testInstance: Diagnostic
+
 
     @BeforeEach
     fun setUp()
     {
-        testInstance = Roi(roi_x, roi_y, notes)
+        testInstance = Diagnostic(
+            diagnosticId, image, diagnostic, listOf(roi), DiagnosticStatus.CREATED)
     }
 
     @Test
-    fun test_toString()
+    fun test_mappers()
     {
-        Assertions.assertEquals(
-            "{\"roi_x\":[1,3,4,5,6],\"roi_y\":[1,2,4,7,6],\"notes\":\"this is a test roi\"}",
-            testInstance.toString())
-    }
+        val bean =  Diagnostic.toPersistence(testInstance)
+        val domain = Diagnostic.fromPersistence(bean)
 
-    @Test
-    fun test_persistence() {
-        val rois = listOf(testInstance, testInstance, testInstance)
-        val persistedRois = Roi.toPersistence(rois)
-        val fromPersistenceRois = Roi.fromPersistence(persistedRois)
-        Assertions.assertEquals(rois, fromPersistenceRois)
-    }
-
-    @Test
-    fun test_emptyRoiMapper()
-    {
-        val bean = Roi.toPersistence(listOf())
-        val domain = Roi.fromPersistence(bean)
+        Assertions.assertEquals(testInstance, domain)
     }
 }

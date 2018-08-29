@@ -19,6 +19,7 @@
 
 package co.avaldes.retipy.domain.evaluation.optical
 
+import co.avaldes.retipy.domain.diagnostic.Diagnostic
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -47,7 +48,18 @@ internal class OpticalEvaluationTest
             0,
             mutableMapOf(Pair("Iris", "some")),
             "",
-            emptyList())
+            listOf(Diagnostic()))
+    }
+
+    @Test
+    fun verifyConstructor()
+    {
+        for (opticalEvaluationField in OpticalEvaluation.BIOMICROSCOPY_REQUIRED)
+        {
+            Assertions.assertNotNull(
+                testInstance.biomicroscopy[opticalEvaluationField],
+                "$opticalEvaluationField cannot be null")
+        }
     }
 
     @Test

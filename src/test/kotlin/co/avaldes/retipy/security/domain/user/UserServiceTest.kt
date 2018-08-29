@@ -73,7 +73,7 @@ internal class UserServiceTest
         every { mockUserRepository.findByUsername(username) } returns null
         val savedUser = testInstance.createUser(
             User(0, username, username, username, username, true, false , false))
-        verify(exactly = 1) {  mockUserRepository.save<UserBean>(any()) }
+        verify(exactly = 1) { mockUserRepository.save<UserBean>(any()) }
         Assertions.assertEquals(
             savedUser, User.fromPersistence(userBean), "returned user object does not match")
     }

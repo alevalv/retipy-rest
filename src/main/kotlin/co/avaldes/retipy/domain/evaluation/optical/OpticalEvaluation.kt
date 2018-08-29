@@ -47,23 +47,16 @@ data class OpticalEvaluation(
 
     init
     {
+        // remove all biomicroscopy fields that have no value associated with it
         biomicroscopy = biomicroscopy.filterNot { key -> key.value.isBlank() }.toMutableMap()
+
         // assert that the biomicroscopy contains the obligatory fields:
-        if (biomicroscopy["Cornea"] == null)
+        for (biomicroscopyField in BIOMICROSCOPY_REQUIRED)
         {
-            biomicroscopy["Cornea"] = ""
-        }
-        if (biomicroscopy["Iris"] == null)
-        {
-            biomicroscopy["Iris"] = ""
-        }
-        if (biomicroscopy["Cristalino"] == null)
-        {
-            biomicroscopy["Cristalino"] = ""
-        }
-        if (biomicroscopy["Camara Anterior"] == null)
-        {
-            biomicroscopy["Camara Anterior"] = ""
+            if (biomicroscopy[biomicroscopyField] == null)
+            {
+                biomicroscopy[biomicroscopyField] = ""
+            }
         }
 
         this.diagnostics.forEach { diagnosticMap[it.id] = it }
@@ -80,6 +73,8 @@ data class OpticalEvaluation(
 
     companion object
     {
+        val BIOMICROSCOPY_REQUIRED: List<String> = listOf("Cornea", "Iris", "Cristalino", "Camara Anterior")
+
         val BIOMICROSCOPY_SEPARATOR = "#"
 
         val BIOMICROSCOPY_TUPLE_SEPARATOR = "|"

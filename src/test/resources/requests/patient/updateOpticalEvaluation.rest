@@ -1,6 +1,6 @@
-POST http://localhost:8080/retipy/patient/1/opticalevaluation
+POST {{host}}/retipy/patient/1/opticalevaluation
 Content-Type: application/json
-Authorization: eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJyZXRpcHkiLCJzdWIiOiJhbGV2YWx2IiwiaWRlbnRpdHkiOiIxMTExMTExMSIsInNjb3BlIjoidXNlcnMiLCJpYXQiOjE1MzQ5OTQ2MjYsImV4cCI6MTUzNTE2NzQyNn0.NqXlcnqLOc0oOAeqKRJmbiHPQkowGC3A0SkaP5xbrjI
+Authorization: {{token}}
 
 {
       "id": 2,

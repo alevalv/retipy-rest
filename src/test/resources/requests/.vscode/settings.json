@@ -1,0 +1,13 @@
+{
+    "rest-client.environmentVariables": {
+        "local": {
+            "host": "http://localhost:8080",
+            "token": "SET TOKEN BEFORE"
+        },
+        "production": {
+            "host": "https://retipy-rest.avaldes.co",
+            "token": "SET TOKEN BEFORE"
+        }
+    }
+
+}

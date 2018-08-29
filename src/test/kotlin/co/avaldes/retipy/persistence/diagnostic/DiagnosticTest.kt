@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Test
 import java.util.*
 
-internal class DiagnosticTest
+internal class DiagnosticBeanTest
 {
     private val id:Long = 100L
     private val image = "a text image?"

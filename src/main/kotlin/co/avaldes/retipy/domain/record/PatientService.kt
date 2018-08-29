@@ -29,8 +29,8 @@ import java.util.*
 
 @Service
 class PatientService(
-    val patientRepository: IPatientRepository,
-    val diagnosticService: IDiagnosticService) : IPatientService
+    private val patientRepository: IPatientRepository,
+    private val diagnosticService: IDiagnosticService) : IPatientService
 {
     override fun find(id: Long): Patient?
     {
@@ -106,6 +106,7 @@ class PatientService(
 
         val existingDiagnosticIds = persistedOpticalEvaluation.getDiagnostics().map { it -> it.id }
         persistedOpticalEvaluation.addDiagnostic(diagnostic)
+        savedPatient.addOpticalEvaluation(persistedOpticalEvaluation)
         val savedOpticalEvaluation = save(savedPatient).getOpticalEvaluation(opticalEvaluationId)!!
         return if (diagnostic.id == 0L)
             savedOpticalEvaluation.getDiagnostics()
