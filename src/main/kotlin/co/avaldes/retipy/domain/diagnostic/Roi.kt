@@ -22,8 +22,8 @@ package co.avaldes.retipy.domain.diagnostic
 import com.fasterxml.jackson.databind.ObjectMapper
 
 data class Roi(
-    var roi_x: List<Int> = emptyList(),
-    var roi_y: List<Int> = emptyList(),
+    var x: List<Int> = emptyList(),
+    var y: List<Int> = emptyList(),
     var notes: String = "")
 {
     override fun toString(): String

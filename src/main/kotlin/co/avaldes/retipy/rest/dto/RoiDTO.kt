@@ -21,12 +21,12 @@ package co.avaldes.retipy.rest.dto
 
 import co.avaldes.retipy.domain.diagnostic.Roi
 
-data class RoiDTO (val roi_x: List<Int>, val roi_y: List<Int>, val notes: String)
+data class RoiDTO (val x: List<Int>, val y: List<Int>, val notes: String)
 {
     companion object
     {
-        fun fromDomain(roi: Roi) = RoiDTO(roi.roi_x, roi.roi_y, roi.notes)
+        fun fromDomain(roi: Roi) = RoiDTO(roi.x, roi.y, roi.notes)
 
-        fun toDomain(roiDTO: RoiDTO) = Roi(roiDTO.roi_x, roiDTO.roi_y, roiDTO.notes)
+        fun toDomain(roiDTO: RoiDTO) = Roi(roiDTO.x, roiDTO.y, roiDTO.notes)
     }
 }

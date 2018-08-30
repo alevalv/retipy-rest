@@ -74,4 +74,14 @@ internal class PatientServiceTest
         val diagnostic = testInstance.saveDiagnosticByImage(1 ,2, image)
         Assert.assertEquals(diagnostic.id, diagnosticId)
     }
+
+    @Test
+    fun test_getAllPatients()
+    {
+        every { mockPatientRepository.findAll() } returns listOf(patientBean)
+
+        val patientList = testInstance.getAllPatients()
+        Assert.assertEquals(1, patientList.size)
+        Assert.assertEquals(patientId, patientList.first().first)
+    }
 }

@@ -19,6 +19,7 @@
 
 package co.avaldes.retipy.domain.diagnostic
 
+import org.junit.Assert
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -41,7 +42,7 @@ internal class RoiTest
     fun test_toString()
     {
         Assertions.assertEquals(
-            "{\"roi_x\":[1,3,4,5,6],\"roi_y\":[1,2,4,7,6],\"notes\":\"this is a test roi\"}",
+            "{\"x\":[1,3,4,5,6],\"y\":[1,2,4,7,6],\"notes\":\"this is a test roi\"}",
             testInstance.toString())
     }
 
@@ -58,5 +59,7 @@ internal class RoiTest
     {
         val bean = Roi.toPersistence(listOf())
         val domain = Roi.fromPersistence(bean)
+
+        Assert.assertTrue(domain.isEmpty())
     }
 }
