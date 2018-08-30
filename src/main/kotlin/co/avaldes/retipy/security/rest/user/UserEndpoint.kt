@@ -19,8 +19,10 @@
 
 package co.avaldes.retipy.security.rest.user
 
+import co.avaldes.retipy.rest.common.IncorrectInputException
 import co.avaldes.retipy.security.domain.TokenService
 import co.avaldes.retipy.security.domain.user.IUserService
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.PostMapping
@@ -78,10 +80,17 @@ internal class UserEndpoint(
     }
 
     @PostMapping("/retipy/user/password")
-    fun updatePassword(@RequestBody userDTO: UserDTO): UserDTO
+    fun updatePassword(@RequestBody password: String)
     {
-        val user = userService.updatePassword(
-            UserDTO.toDomain(userDTO), userDTO.password)
-        return UserDTO.fromDomain(user)
+        val authentication = SecurityContextHolder.getContext().authentication
+        val user = userService.findByUsername(authentication.name)
+        if (user != null)
+        {
+            userService.updatePassword(user, password)
+        }
+        else
+        {
+            throw IncorrectInputException("username not found")
+        }
     }
 }
