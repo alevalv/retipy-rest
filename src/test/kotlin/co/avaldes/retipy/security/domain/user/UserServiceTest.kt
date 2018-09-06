@@ -38,7 +38,7 @@ internal class UserServiceTest
 {
     private val userId : Long = 1
     private val username = "beanu"
-    private val userBean = UserBean(userId, "111111", "bean", username, "beanp", true, false, false)
+    private val userBean = UserBean(userId, "111111", "bean", username, "beanp", "",true, false, false)
 
     private val mockUserRepository: IUserRepository = mockk(relaxed = true)
     private lateinit var testInstance : UserService
@@ -72,7 +72,7 @@ internal class UserServiceTest
         every { mockUserRepository.save<UserBean>(any()) } returns userBean
         every { mockUserRepository.findByUsername(username) } returns null
         val savedUser = testInstance.createUser(
-            User(0, username, username, username, username, true, false , false))
+            User(0, username, username, username, username, mutableSetOf(),true, false , false))
         verify(exactly = 1) { mockUserRepository.save<UserBean>(any()) }
         Assertions.assertEquals(
             savedUser, User.fromPersistence(userBean), "returned user object does not match")
@@ -83,7 +83,7 @@ internal class UserServiceTest
     {
         assertThrows<IncorrectInputException> {
             testInstance.createUser(
-                User(userId, username, username, username, username, true, false , false)) }
+                User(userId, username, username, username, username, mutableSetOf(),true, false , false)) }
     }
 
     @Test

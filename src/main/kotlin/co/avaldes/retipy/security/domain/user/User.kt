@@ -19,8 +19,10 @@
 
 package co.avaldes.retipy.security.domain.user
 
+import co.avaldes.retipy.security.persistence.user.Roles
 import co.avaldes.retipy.security.persistence.user.UserBean
 import org.springframework.security.core.GrantedAuthority
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
 data class User(
@@ -29,6 +31,7 @@ data class User(
     var name: String,
     private var username: String,
     private var password: String,
+    var roles: MutableSet<Roles>,
     var enabled: Boolean,
     var locked: Boolean,
     var expired: Boolean
@@ -36,31 +39,53 @@ data class User(
 {
     companion object
     {
-        fun fromPersistence(userBean: UserBean) = User(
-            userBean.id,
-            userBean.identity,
-            userBean.name,
-            userBean.username,
-            userBean.password,
-            userBean.enabled,
-            userBean.locked,
-            userBean.expired)
+        val ROLES_SEPARATOR = ","
 
-        fun toPersistence(user: User) = UserBean(
-            user.id,
-            user.identity,
-            user.name,
-            user.username,
-            user.password,
-            user.enabled,
-            user.locked,
-            user.expired)
+        fun fromPersistence(userBean: UserBean): User
+        {
+            val roles = HashSet<Roles>()
+            if (userBean.roles.isNotBlank())
+            {
+                userBean.roles.split(ROLES_SEPARATOR).forEach { roles.add(Roles.valueOf(it)) }
+            }
+            return User(
+                userBean.id,
+                userBean.identity,
+                userBean.name,
+                userBean.username,
+                userBean.password,
+                roles,
+                userBean.enabled,
+                userBean.locked,
+                userBean.expired)
+        }
+
+        fun toPersistence(user: User): UserBean
+        {
+            val builder = StringBuilder()
+            if (!user.roles.isEmpty())
+            {
+                user.roles.forEach{
+                    builder.append(it)
+                    builder.append(ROLES_SEPARATOR)
+                }
+                builder.deleteCharAt(builder.lastIndexOf(ROLES_SEPARATOR))
+            }
+            return UserBean(
+                user.id,
+                user.identity,
+                user.name,
+                user.username,
+                user.password,
+                builder.toString(),
+                user.enabled,
+                user.locked,
+                user.expired)
+        }
     }
 
-    override fun getAuthorities(): MutableCollection<out GrantedAuthority>
-    {
-        return mutableListOf()
-    }
+    override fun getAuthorities(): MutableCollection<out GrantedAuthority> =
+        roles.map { SimpleGrantedAuthority(it.authority) }.toMutableList()
 
     override fun isEnabled() = enabled
 

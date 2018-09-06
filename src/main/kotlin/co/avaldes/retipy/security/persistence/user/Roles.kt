@@ -19,23 +19,13 @@
 
 package co.avaldes.retipy.security.persistence.user
 
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.Table
+const val ROLE_ADMINISTRATOR = "ROLE_ADMINISTRATOR"
+const val ROLE_DOCTOR = "ROLE_DOCTOR"
+const val ROLE_RESIDENT = "ROLE_RESIDENT"
 
-@Entity @Table(name = "user")
-data class UserBean(
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    val id: Long,
-    val identity: String,
-    val name: String,
-    val username: String,
-    val password: String,
-    val roles: String,
-    val enabled: Boolean,
-    val locked: Boolean,
-    val expired: Boolean)
+enum class Roles(val authority: String)
 {
+    Administrator(ROLE_ADMINISTRATOR),
+    Doctor(ROLE_DOCTOR),
+    Resident(ROLE_RESIDENT),
 }

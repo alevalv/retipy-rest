@@ -1,9 +1,11 @@
-POST {{host}}/retipy/user
+POST {{host}}/retipy/user/new
 content-type: application/json
+Authorization: {{token}}
 
 {
     "username": "new_user",
     "identity": "123456",
     "password": "new_password",
-    "name": "New User"
+    "name": "New User",
+    "roles": ["Resident"]
 }

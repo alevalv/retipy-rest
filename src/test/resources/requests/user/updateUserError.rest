@@ -1,0 +1,10 @@
+POST {{host}}/retipy/user
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+  "username": "alevalv1234",
+  "identity": "987654321",
+  "password": "123123123",
+  "name": "Alejandro"
+}

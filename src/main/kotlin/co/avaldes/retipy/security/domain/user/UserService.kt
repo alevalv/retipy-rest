@@ -22,6 +22,7 @@ package co.avaldes.retipy.security.domain.user
 import co.avaldes.retipy.rest.common.IncorrectInputException
 import co.avaldes.retipy.security.domain.common.NoOpPasswordValidator
 import co.avaldes.retipy.security.persistence.user.IUserRepository
+import co.avaldes.retipy.security.persistence.user.Roles
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -77,6 +78,7 @@ internal class UserService(
             user.name,
             user.username,
             passwordEncoder.encode(user.password),
+            mutableSetOf(Roles.Resident),
             false,
             false,
             false)
@@ -94,6 +96,7 @@ internal class UserService(
             storedUser.name,
             storedUser.username,
             passwordEncoder.encode(newPassword),
+            storedUser.roles,
             storedUser.enabled,
             storedUser.locked,
             false))
@@ -108,6 +111,7 @@ internal class UserService(
             name,
             storedUser.username,
             storedUser.password,
+            storedUser.roles,
             storedUser.enabled,
             storedUser.locked,
             false))

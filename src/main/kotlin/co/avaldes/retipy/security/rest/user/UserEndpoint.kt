@@ -22,9 +22,13 @@ package co.avaldes.retipy.security.rest.user
 import co.avaldes.retipy.rest.common.IncorrectInputException
 import co.avaldes.retipy.security.domain.TokenService
 import co.avaldes.retipy.security.domain.user.IUserService
+import co.avaldes.retipy.security.persistence.user.ROLE_ADMINISTRATOR
+import org.springframework.http.ResponseEntity
+import org.springframework.security.access.annotation.Secured
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.web.bind.annotation.CrossOrigin
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
@@ -41,7 +45,11 @@ internal class UserEndpoint(
     private val userService: IUserService, private val tokenService: TokenService)
 {
     internal data class LoginRequest(val username: String, val password: String)
+    internal data class PasswordChangeRequestDTO(val oldpassword: String, val newpassword: String)
 
+    /**
+     * Unsecured endpoint
+     */
     @PostMapping("/retipy/user/login")
     fun login(@RequestBody loginRequest: LoginRequest): String
     {
@@ -50,21 +58,67 @@ internal class UserEndpoint(
         return tokenService.createToken(user)
     }
 
+    /**
+     * Unsecured endpoint
+     */
     @PostMapping("retipy/user/token")
     fun renewToken(@RequestBody token: String): String
     {
         return tokenService.renewToken(token)
     }
 
+    @GetMapping("/retipy/user")
+    fun getCurrentUser(): UserDTO
+    {
+        val authentication = SecurityContextHolder.getContext().authentication
+        val user = userService.findByUsername(authentication.name)
+        if (user != null)
+        {
+            return UserDTO.fromDomain(user)
+        }
+        else
+        {
+            throw IncorrectInputException("username not found")
+        }
+    }
+
     @PostMapping("/retipy/user")
+    fun updateUser(@RequestBody userDTO: UserDTO): UserDTO
+    {
+        val authentication = SecurityContextHolder.getContext().authentication
+        val user = userService.findByUsername(authentication.name)
+        if (user != null)
+        {
+            if (user.username != userDTO.username)
+            {
+                throw IncorrectInputException("cannot modify other users")
+            }
+            else
+            {
+                if (userDTO.identity != user.identity)
+                    user.identity = userDTO.identity
+                if (userDTO.name != user.name)
+                    user.name = userDTO.name
+                return UserDTO.fromDomain(userService.save(user))
+            }
+        }
+        else
+        {
+            throw IncorrectInputException("username not found")
+        }
+    }
+
+    @Secured(ROLE_ADMINISTRATOR)
+    @PostMapping("/retipy/user/new")
     fun createUser(@RequestBody userDTO: UserDTO): UserDTO
     {
         val user = userService.createUser(UserDTO.toDomain(userDTO))
         return UserDTO.fromDomain(user)
     }
 
+    @Secured(ROLE_ADMINISTRATOR)
     @PostMapping("/retipy/user/enable")
-    fun enableUser(@RequestBody username:String): Boolean
+    fun enableUser(@RequestBody username:String): ResponseEntity<Any>
     {
         val user = userService.findByUsername(username)
         var success = false
@@ -76,21 +130,29 @@ internal class UserEndpoint(
             userService.save(user)
             success = true
         }
-        return success
+        return if (success) ResponseEntity.ok().build() else ResponseEntity.badRequest().build()
     }
 
     @PostMapping("/retipy/user/password")
-    fun updatePassword(@RequestBody password: String)
+    fun updatePassword(@RequestBody passwordChangeRequestDTO: PasswordChangeRequestDTO)
     {
         val authentication = SecurityContextHolder.getContext().authentication
         val user = userService.findByUsername(authentication.name)
         if (user != null)
         {
-            userService.updatePassword(user, password)
+            if (userService.login(user.username, passwordChangeRequestDTO.oldpassword) != null)
+            {
+                userService.updatePassword(user, passwordChangeRequestDTO.newpassword)
+            }
+            else
+            {
+                throw IncorrectInputException("old password does not match")
+            }
         }
         else
         {
             throw IncorrectInputException("username not found")
         }
     }
+
 }
