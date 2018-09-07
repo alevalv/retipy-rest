@@ -17,15 +17,20 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.security.persistence.user
+package co.avaldes.retipy.domain.common
 
-const val ROLE_ADMINISTRATOR = "ROLE_ADMINISTRATOR"
-const val ROLE_DOCTOR = "ROLE_DOCTOR"
-const val ROLE_RESIDENT = "ROLE_RESIDENT"
-
-enum class Roles(val authority: String)
+/**
+ * Interface representing the operations to transform form the persistence (beans) to domain layer.
+ */
+interface IMapper<B, D>
 {
-    Administrator(ROLE_ADMINISTRATOR),
-    Doctor(ROLE_DOCTOR),
-    Resident(ROLE_RESIDENT),
+    /**
+     * Converts the [domainObject] to its persistence counterpart
+     */
+    fun toPersistence(domainObject: D): B
+
+    /**
+     * Converts the [bean] to its domain counterpart
+     */
+    fun fromPersistence(bean: B): D
 }

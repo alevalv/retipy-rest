@@ -19,24 +19,19 @@
 
 package co.avaldes.retipy.rest.dto.patient
 
-import co.avaldes.retipy.common.nm.Education
-import co.avaldes.retipy.common.nm.Sex
-import java.util.*
+import co.avaldes.retipy.domain.common.Person
 
+/**
+ * Simple DTO representing the basic info of a person.
+ */
+data class PersonDTO(
+    val id: Long, val identity: String, val name: String)
+{
+    companion object
+    {
+        fun fromDomain(person: Person) = PersonDTO(person.id, person.identity, person.name)
 
-data class PatientDTO(
-    val id: Long,
-    val identity: String,
-    val name: String,
-    val birthDate: Date,
-    val sex: Sex,
-    val origin: String,
-    val procedence: String,
-    val education: Education,
-    val race: String,
-    val pathologicalPast: List<String>,
-    val familiarPast: List<String>,
-    val medicines: List<String>,
-    val opticalEvaluations: List<OpticalEvaluationDTO>,
-    val assignedDoctors: List<PersonDTO>
-)
+        fun toDomain(personDTO: PersonDTO) =
+            Person(personDTO.id, personDTO.identity, personDTO.name)
+    }
+}

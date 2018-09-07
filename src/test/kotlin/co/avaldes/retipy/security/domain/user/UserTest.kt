@@ -19,7 +19,7 @@
 
 package co.avaldes.retipy.security.domain.user
 
-import co.avaldes.retipy.security.persistence.user.Roles
+import co.avaldes.retipy.security.persistence.user.Role
 import org.junit.Assert
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -35,7 +35,7 @@ internal class UserTest
     private val name = "A name"
     private val username = "ausername"
     private val password = "a password"
-    private val roles = mutableSetOf(Roles.Administrator, Roles.Doctor)
+    private val roles = mutableSetOf(Role.Administrator, Role.Doctor)
     private val enabled = true
     private val locked = false
     private val expired = false

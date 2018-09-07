@@ -17,8 +17,9 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.domain.record
+package co.avaldes.retipy.domain.patient
 
+import co.avaldes.retipy.domain.common.Person
 import co.avaldes.retipy.domain.diagnostic.Diagnostic
 import co.avaldes.retipy.domain.diagnostic.IDiagnosticService
 import co.avaldes.retipy.domain.evaluation.optical.OpticalEvaluation
@@ -30,20 +31,21 @@ import java.util.*
 @Service
 class PatientService(
     private val patientRepository: IPatientRepository,
-    private val diagnosticService: IDiagnosticService) : IPatientService
+    private val diagnosticService: IDiagnosticService,
+    private val patientMapper: PatientMapper) : IPatientService
 {
     override fun find(id: Long): Patient?
     {
         var patient : Patient? = null
         val savedPatientBean = patientRepository.findById(id)
         if (savedPatientBean.isPresent)
-            patient = Patient.fromPersistence(savedPatientBean.get())
+            patient = patientMapper.fromPersistence(savedPatientBean.get())
         return patient
     }
 
     override fun delete(obj: Patient)
     {
-        patientRepository.delete(Patient.toPersistence(obj))
+        patientRepository.delete(patientMapper.toPersistence(obj))
     }
 
     override fun delete(id: Long)
@@ -64,8 +66,8 @@ class PatientService(
                     "Patient with identity ${obj.identity} already exists")
             }
         }
-        val savedPatient = patientRepository.save(Patient.toPersistence(obj))
-        return Patient.fromPersistence(savedPatient)
+        val savedPatient = patientRepository.save(patientMapper.toPersistence(obj))
+        return patientMapper.fromPersistence(savedPatient)
     }
 
     override fun createOpticalEvaluation(patientId: Long): OpticalEvaluation =
@@ -120,13 +122,13 @@ class PatientService(
         return saveDiagnostic(patientId, opticalEvaluationId, Diagnostic(image=image))
     }
 
-    override fun getAllPatients(): List<Triple<Long, Long, String>>
+    override fun getAllPatients(): List<Person>
     {
         val patientsBeans = patientRepository.findAll()
-        val patientList: MutableList<Triple<Long, Long, String>> = ArrayList(patientsBeans.count())
+        val patientList: MutableList<Person> = ArrayList(patientsBeans.count())
         patientsBeans
             .sortedBy { patient -> patient.identity }
-            .forEach{ patient -> patientList.add(Triple(patient.id, patient.identity, patient.name)) }
+            .forEach{ patient -> patientList.add(Person(patient.id, patient.identity, patient.name)) }
 
         return patientList
     }

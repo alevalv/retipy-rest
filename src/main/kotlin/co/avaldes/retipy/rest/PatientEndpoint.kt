@@ -19,12 +19,13 @@
 
 package co.avaldes.retipy.rest
 
-import co.avaldes.retipy.domain.record.IPatientService
+import co.avaldes.retipy.domain.patient.IPatientService
 import co.avaldes.retipy.rest.dto.DiagnosticDTO
 import co.avaldes.retipy.rest.dto.patient.OpticalEvaluationDTO
 import co.avaldes.retipy.rest.dto.patient.OpticalEvaluationDTOMapper
 import co.avaldes.retipy.rest.dto.patient.PatientDTO
 import co.avaldes.retipy.rest.dto.patient.PatientDTOMapper
+import co.avaldes.retipy.rest.dto.patient.PersonDTO
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
@@ -43,7 +44,7 @@ internal class PatientEndpoint(
     private val opticalEvaluationDTOMapper: OpticalEvaluationDTOMapper,
     private val patientDTOMapper: PatientDTOMapper)
 {
-    data class PatientListDTO(val patientList: List<Triple<Long, Long, String>>)
+    data class PatientListDTO(val patientList: List<PersonDTO>)
 
     @GetMapping("/retipy/patient/{id}")
     fun getPatient(@PathVariable id: Long): PatientDTO
@@ -54,7 +55,7 @@ internal class PatientEndpoint(
     @GetMapping("/retipy/patient/list")
     fun listPatient(): PatientListDTO
     {
-        return PatientListDTO(patientService.getAllPatients())
+        return PatientListDTO(patientService.getAllPatients().map { PersonDTO.fromDomain(it) })
     }
 
     @PostMapping("/retipy/patient")

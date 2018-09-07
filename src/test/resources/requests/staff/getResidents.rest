@@ -1,0 +1,3 @@
+GET {{host}}/retipy/staff/resident
+Content-Type: application/json
+Authorization: {{token}}

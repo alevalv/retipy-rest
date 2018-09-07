@@ -17,9 +17,10 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.domain.record
+package co.avaldes.retipy.domain.patient
 
 import co.avaldes.retipy.common.ICRUDService
+import co.avaldes.retipy.domain.common.Person
 import co.avaldes.retipy.domain.diagnostic.Diagnostic
 import co.avaldes.retipy.domain.evaluation.optical.OpticalEvaluation
 
@@ -35,7 +36,7 @@ interface IPatientService: ICRUDService<Patient>
      * Returns a list of triplets with the patient unique id, its identity and its name, sorted by
      * their identity.
      */
-    fun getAllPatients(): List<Triple<Long, Long, String>>
+    fun getAllPatients(): List<Person>
 
     /**
      * Adds a new optical evaluation to the given patient.

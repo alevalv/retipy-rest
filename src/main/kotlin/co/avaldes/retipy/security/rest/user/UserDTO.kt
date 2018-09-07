@@ -20,13 +20,13 @@
 package co.avaldes.retipy.security.rest.user
 
 import co.avaldes.retipy.security.domain.user.User
-import co.avaldes.retipy.security.persistence.user.Roles
+import co.avaldes.retipy.security.persistence.user.Role
 
 data class UserDTO(
     val username: String,
     val identity: String,
     val password: String,
-    val roles: Set<Roles>,
+    val roles: Set<Role>,
     val name: String)
 {
     companion object

@@ -20,6 +20,8 @@
 package co.avaldes.retipy.security.domain.user
 
 import co.avaldes.retipy.common.ICRUDService
+import co.avaldes.retipy.domain.common.Person
+import co.avaldes.retipy.security.persistence.user.Role
 
 /**
  * Interface that defines operations related to the domain object [User].
@@ -74,4 +76,9 @@ interface IUserService: ICRUDService<User>
      * @param password the password to login
      */
     fun login(username: String, password: String): User?
+
+    /**
+     * Gets all users that belongs to a given role.
+     */
+    fun getUsersByRole(role: Role): List<Person>
 }

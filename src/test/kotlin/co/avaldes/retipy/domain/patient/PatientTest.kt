@@ -17,7 +17,7 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.domain.record
+package co.avaldes.retipy.domain.patient
 
 import co.avaldes.retipy.common.nm.Education
 import co.avaldes.retipy.common.nm.Sex
@@ -34,27 +34,14 @@ internal class PatientTest
     private val opticalEvaluation2 =
         OpticalEvaluation(2, 3, Date(), Date(), "", "", "", "", 0, 0, 0, 0, 0, 0, emptyMap<String, String>().toMutableMap(), "", emptyList())
 
-    private var testInstance : Patient = Patient(
-        1,
-        111,
-        "aname",
-        Date(),
-        Sex.Female,
-        "origin",
-        "p",
-        Education.Bachelor,
-        "race",
-        emptyList(),
-        emptyList(),
-        emptyList(),
-        emptyList())
+    private lateinit var testInstance : Patient
 
     @BeforeEach
     fun setUp()
     {
         testInstance = Patient(
             1,
-            111,
+            "111",
             "aname",
             Date(),
             Sex.Female,
@@ -62,6 +49,7 @@ internal class PatientTest
             "p",
             Education.Bachelor,
             "race",
+            emptyList(),
             emptyList(),
             emptyList(),
             emptyList(),
@@ -81,9 +69,9 @@ internal class PatientTest
     fun addMedicalRecord()
     {
         testInstance.addOpticalEvaluation(opticalEvaluation1)
-        Assertions.assertEquals(1, testInstance.recordCount())
+        Assertions.assertEquals(1, testInstance.opticalEvaluationCount())
         testInstance.addOpticalEvaluation(opticalEvaluation2)
-        Assertions.assertEquals(2, testInstance.recordCount())
+        Assertions.assertEquals(2, testInstance.opticalEvaluationCount())
     }
 
     @Test
@@ -108,13 +96,4 @@ internal class PatientTest
         Assertions.assertEquals(
             medicalRecord3, testInstance.getOpticalEvaluations()[1], "patient order is incorrect")
     }
-
-    @Test
-    fun mappers()
-    {
-        val patientBean = Patient.toPersistence(testInstance)
-        val patient = Patient.fromPersistence(patientBean)
-        Assertions.assertEquals(testInstance, patient, "mapping failed")
-    }
-
 }

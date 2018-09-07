@@ -17,7 +17,7 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.domain.record
+package co.avaldes.retipy.domain.patient
 
 import co.avaldes.retipy.common.nm.Education
 import co.avaldes.retipy.common.nm.Sex
@@ -27,6 +27,7 @@ import co.avaldes.retipy.persistence.diagnostic.DiagnosticStatus
 import co.avaldes.retipy.persistence.evaluation.optical.OpticalEvaluationBean
 import co.avaldes.retipy.persistence.patient.IPatientRepository
 import co.avaldes.retipy.persistence.patient.PatientBean
+import co.avaldes.retipy.security.domain.user.IUserService
 import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.mockk
@@ -46,7 +47,19 @@ internal class PatientServiceTest
         opticalEvaluationId, 1, Date(), Date(), "", "", "", "", 1, 1, 1, 1, 1, 1, "", "")
 
     private val patientBean = PatientBean(
-        patientId, 12123123, "", Date(), Sex.Female, "", "", Education.Bachelor, "", "", "", "", listOf(opticalEvaluationBean))
+        patientId,
+        "12123123",
+        "", Date(),
+        Sex.Female, "",
+        "",
+        Education.Bachelor,
+        "",
+
+        "",
+        "",
+        "",
+        listOf(opticalEvaluationBean),
+        "")
 
     private val diagnosticBean = DiagnosticBean(diagnosticId, image, "", "{}", DiagnosticStatus.CREATED, Date(), Date())
 
@@ -56,6 +69,7 @@ internal class PatientServiceTest
 
     private val mockPatientRepository: IPatientRepository = mockk(relaxed = true)
     private val mockDiagnosticService: IDiagnosticService = mockk(relaxed = true)
+    private val mockUserService: IUserService = mockk(relaxed = true)
     private lateinit var testInstance: PatientService
 
     @BeforeEach
@@ -63,7 +77,9 @@ internal class PatientServiceTest
     {
         clearMocks(mockPatientRepository)
         clearMocks(mockDiagnosticService)
-        testInstance = PatientService(mockPatientRepository, mockDiagnosticService)
+        clearMocks(mockUserService)
+        testInstance = PatientService(
+            mockPatientRepository, mockDiagnosticService, PatientMapper(mockUserService))
         every { mockPatientRepository.findById(patientId) } returns Optional.of(patientBean)
         every { mockPatientRepository.save(any<PatientBean>()) } returns patientBeanUpdated
     }
@@ -82,6 +98,6 @@ internal class PatientServiceTest
 
         val patientList = testInstance.getAllPatients()
         Assert.assertEquals(1, patientList.size)
-        Assert.assertEquals(patientId, patientList.first().first)
+        Assert.assertEquals(patientId, patientList.first().id)
     }
 }

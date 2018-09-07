@@ -19,10 +19,11 @@
 
 package co.avaldes.retipy.security.domain.user
 
+import co.avaldes.retipy.domain.common.Person
 import co.avaldes.retipy.rest.common.IncorrectInputException
 import co.avaldes.retipy.security.domain.common.NoOpPasswordValidator
 import co.avaldes.retipy.security.persistence.user.IUserRepository
-import co.avaldes.retipy.security.persistence.user.Roles
+import co.avaldes.retipy.security.persistence.user.Role
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -78,7 +79,7 @@ internal class UserService(
             user.name,
             user.username,
             passwordEncoder.encode(user.password),
-            mutableSetOf(Roles.Resident),
+            mutableSetOf(Role.Resident),
             false,
             false,
             false)
@@ -144,5 +145,11 @@ internal class UserService(
     override fun delete(id: Long)
     {
         userRepository.deleteById(id)
+    }
+
+    override fun getUsersByRole(role: Role): List<Person>
+    {
+        val beans = userRepository.findByRolesContaining(role.toString())
+        return beans.map { Person(it.id, it.identity, it.name) }
     }
 }

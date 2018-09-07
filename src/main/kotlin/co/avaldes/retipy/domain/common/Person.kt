@@ -17,26 +17,8 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.rest.dto.patient
+package co.avaldes.retipy.domain.common
 
-import co.avaldes.retipy.common.nm.Education
-import co.avaldes.retipy.common.nm.Sex
-import java.util.*
-
-
-data class PatientDTO(
-    val id: Long,
-    val identity: String,
-    val name: String,
-    val birthDate: Date,
-    val sex: Sex,
-    val origin: String,
-    val procedence: String,
-    val education: Education,
-    val race: String,
-    val pathologicalPast: List<String>,
-    val familiarPast: List<String>,
-    val medicines: List<String>,
-    val opticalEvaluations: List<OpticalEvaluationDTO>,
-    val assignedDoctors: List<PersonDTO>
-)
+data class Person(val id: Long, val identity: String, val name: String)
+{
+}

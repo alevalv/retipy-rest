@@ -19,19 +19,19 @@
 
 package co.avaldes.retipy.security.domain.user
 
-import co.avaldes.retipy.security.persistence.user.Roles
+import co.avaldes.retipy.security.persistence.user.Role
 import co.avaldes.retipy.security.persistence.user.UserBean
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
 data class User(
-    val id: Long,
+    var id: Long = 0L,
     var identity: String,
     var name: String,
     private var username: String,
     private var password: String,
-    var roles: MutableSet<Roles>,
+    var roles: MutableSet<Role>,
     var enabled: Boolean,
     var locked: Boolean,
     var expired: Boolean
@@ -43,10 +43,10 @@ data class User(
 
         fun fromPersistence(userBean: UserBean): User
         {
-            val roles = HashSet<Roles>()
+            val roles = HashSet<Role>()
             if (userBean.roles.isNotBlank())
             {
-                userBean.roles.split(ROLES_SEPARATOR).forEach { roles.add(Roles.valueOf(it)) }
+                userBean.roles.split(ROLES_SEPARATOR).forEach { roles.add(Role.valueOf(it)) }
             }
             return User(
                 userBean.id,

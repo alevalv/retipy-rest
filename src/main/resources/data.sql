@@ -1,1 +1,4 @@
 INSERT INTO user (id, identity, name, username, password, roles, enabled, locked, expired) VALUES (-1, '11111111', 'alevalv', 'alevalv', '$2a$10$kDlXfP9GgCkRnWIG0YdmRuNiyCt135Q1OrbLMJGH1XMkHd3UTciaC', 'Administrator', true, false, false);
+INSERT INTO user (id, identity, name, username, password, roles, enabled, locked, expired) VALUES (-2, '11111112', 'doctor', 'doctor', '$2a$10$kDlXfP9GgCkRnWIG0YdmRuNiyCt135Q1OrbLMJGH1XMkHd3UTciaC', 'Doctor', true, false, false);
+INSERT INTO user (id, identity, name, username, password, roles, enabled, locked, expired) VALUES (-3, '11111113', 'doctor2', 'doctor2', '$2a$10$kDlXfP9GgCkRnWIG0YdmRuNiyCt135Q1OrbLMJGH1XMkHd3UTciaC', 'Doctor', true, false, false);
+INSERT INTO user (id, identity, name, username, password, roles, enabled, locked, expired) VALUES (-4, '11111114', 'resident', 'resident', '$2a$10$kDlXfP9GgCkRnWIG0YdmRuNiyCt135Q1OrbLMJGH1XMkHd3UTciaC', 'Resident', true, false, false);

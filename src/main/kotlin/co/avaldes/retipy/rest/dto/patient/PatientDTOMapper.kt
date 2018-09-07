@@ -19,7 +19,7 @@
 
 package co.avaldes.retipy.rest.dto.patient
 
-import co.avaldes.retipy.domain.record.Patient
+import co.avaldes.retipy.domain.patient.Patient
 import co.avaldes.retipy.rest.common.IDTOMapper
 import org.springframework.stereotype.Component
 
@@ -40,12 +40,14 @@ class PatientDTOMapper(
         domainObject.pathologicalPast,
         domainObject.familiarPast,
         domainObject.medicines,
-        domainObject.getOpticalEvaluations().map { opticalEvaluationDTOMapper.fromDomain(it) }
+        domainObject.getOpticalEvaluations().map { opticalEvaluationDTOMapper.fromDomain(it) },
+        domainObject.assignedDoctors.map { PersonDTO.fromDomain(it) }
+
     )
 
     override fun toDomain(dto: PatientDTO) = Patient(
         dto.id,
-        dto.identity,
+        dto.identity.trim(),
         dto.name,
         dto.birthDate,
         dto.sex,
@@ -56,6 +58,7 @@ class PatientDTOMapper(
         dto.pathologicalPast,
         dto.familiarPast,
         dto.medicines,
-        dto.opticalEvaluations.map { opticalEvaluationDTOMapper.toDomain(it) }
+        dto.opticalEvaluations.map { opticalEvaluationDTOMapper.toDomain(it) },
+        dto.assignedDoctors.map { PersonDTO.toDomain(it) }
     )
 }

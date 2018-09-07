@@ -38,7 +38,7 @@ import javax.persistence.Table
 data class PatientBean(
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     val id:Long,
-    val identity: Long,
+    val identity: String,
     val name: String,
     val birthDate: Date,
     val sex: Sex,
@@ -54,4 +54,6 @@ data class PatientBean(
     val medicines: String,
     @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "medicalrecord_id")
-    var opticalEvaluations: List<OpticalEvaluationBean> = emptyList())
+    var opticalEvaluations: List<OpticalEvaluationBean> = emptyList(),
+    val assignedDoctors: String
+)
