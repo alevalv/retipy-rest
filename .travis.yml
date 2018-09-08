@@ -1,4 +1,8 @@
 language: java
+branches:
+ #Don't build tags
+ except:
+ - /^[\d|\.]+/
 before_script:
  - export VERSION=$(cat gradle.properties | sed -n '/version =/p' | cut -d '=' -f2 | cut -d ' ' -f2)
 script:
