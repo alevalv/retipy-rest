@@ -25,4 +25,4 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface IRetinalEvaluationRepository :
-    PagingAndSortingRepository<RetinalEvaluationBean, Long>, JpaSpecificationExecutor<RetinalEvaluationBean>
+    PagingAndSortingRepository<RetipyEvaluationBean, Long>, JpaSpecificationExecutor<RetipyEvaluationBean>

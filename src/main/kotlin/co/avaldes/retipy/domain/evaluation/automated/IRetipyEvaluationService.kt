@@ -17,12 +17,11 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.domain.tortuosity
+package co.avaldes.retipy.domain.evaluation.automated
 
-import co.avaldes.retipy.domain.evaluation.automated.RetipyEvaluation
+import co.avaldes.retipy.common.ICRUDService
 
-interface ITortuosityService
+interface IRetipyEvaluationService: ICRUDService<RetipyEvaluation>
 {
-    fun getDensity(evaluation: RetipyEvaluation): RetipyEvaluation
-    fun getFractal(evaluation: RetipyEvaluation): RetipyEvaluation
+    fun processImage(image: String, algorithm: String): RetipyEvaluation?
 }

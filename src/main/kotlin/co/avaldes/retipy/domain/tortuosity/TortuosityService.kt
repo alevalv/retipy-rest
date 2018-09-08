@@ -19,13 +19,10 @@
 
 package co.avaldes.retipy.domain.tortuosity
 
-import co.avaldes.retipy.domain.Results
-import co.avaldes.retipy.domain.evaluation.retinal.RetinalEvaluation
-import co.avaldes.retipy.util.JsonBlob
+import co.avaldes.retipy.domain.diagnostic.Roi
+import co.avaldes.retipy.domain.evaluation.automated.RetipyEvaluation
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
-import org.springframework.web.client.RestTemplate
-import org.springframework.web.client.postForObject
 
 /**
  * Service class that provides tortuosity related services
@@ -40,41 +37,43 @@ internal class TortuosityService(
     private final val endpoint: String = retipyUrl.trim() + "tortuosity/"
 
     private data class TortuosityRequest(val image: String)
-    data class Density(val uri: String, val data: JsonBlob)
+    data class Density(val uri: String, val data: List<Roi>)
 
-    override fun getDensity(evaluation: RetinalEvaluation): RetinalEvaluation
+    override fun getDensity(evaluation: RetipyEvaluation): RetipyEvaluation
     {
-        val inputImage = evaluation.results.getResult("original")!!.image
-        val template = RestTemplate()
-        val density: Density? = template.postForObject(
-                endpoint + "density", TortuosityRequest(inputImage), TortuosityRequest::class)
-        if (density != null)
-        {
-            evaluation.results.addResult(Results.Result(density.uri, density.data.blob, inputImage))
-            evaluation.status = RetinalEvaluation.EvaluationStatus.COMPLETE
-        }
-        else
-        {
-            evaluation.status = RetinalEvaluation.EvaluationStatus.ERROR
-        }
-        return evaluation
+        TODO("this class will be removed, refactored into a task")
+//        val inputImage = evaluation.results.getResult("original")!!.image
+//        val template = RestTemplate()
+//        val density: Density? = template.postForObject(
+//                endpoint + "density", TortuosityRequest(inputImage), TortuosityRequest::class)
+//        if (density != null)
+//        {
+//            evaluation.results.addResult(Results.Result(density.uri, density.data.blob, inputImage))
+//            evaluation.status = RetipyEvaluation.EvaluationStatus.COMPLETE
+//        }
+//        else
+//        {
+//            evaluation.status = RetipyEvaluation.EvaluationStatus.ERROR
+//        }
+//        return evaluation
     }
 
-    override fun getFractal(evaluation: RetinalEvaluation): RetinalEvaluation
+    override fun getFractal(evaluation: RetipyEvaluation): RetipyEvaluation
     {
-        val inputImage = evaluation.results.getResult("original")!!.image
-        val template = RestTemplate()
-        val density: Density? = template.postForObject(
-                endpoint + "fractal", TortuosityRequest(inputImage), TortuosityRequest::class)
-        if (density != null)
-        {
-            evaluation.results.addResult(Results.Result(density.uri, density.data.blob, inputImage))
-            evaluation.status = RetinalEvaluation.EvaluationStatus.COMPLETE
-        }
-        else
-        {
-            evaluation.status = RetinalEvaluation.EvaluationStatus.ERROR
-        }
-        return evaluation
+        TODO("this class will be removed, refactored into a task")
+//        val inputImage = evaluation.results.getResult("original")!!.image
+//        val template = RestTemplate()
+//        val density: Density? = template.postForObject(
+//                endpoint + "fractal", TortuosityRequest(inputImage), TortuosityRequest::class)
+//        if (density != null)
+//        {
+//            evaluation.results.addResult(Results.Result(density.uri, density.data.blob, inputImage))
+//            evaluation.status = RetipyEvaluation.EvaluationStatus.COMPLETE
+//        }
+//        else
+//        {
+//            evaluation.status = RetipyEvaluation.EvaluationStatus.ERROR
+//        }
+//        return evaluation
     }
 }

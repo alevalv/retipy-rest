@@ -22,6 +22,7 @@ package co.avaldes.retipy.domain.patient
 import co.avaldes.retipy.common.nm.Education
 import co.avaldes.retipy.common.nm.Sex
 import co.avaldes.retipy.domain.diagnostic.IDiagnosticService
+import co.avaldes.retipy.domain.evaluation.optical.OpticalEvaluation
 import co.avaldes.retipy.persistence.diagnostic.DiagnosticBean
 import co.avaldes.retipy.persistence.diagnostic.DiagnosticStatus
 import co.avaldes.retipy.persistence.evaluation.optical.OpticalEvaluationBean
@@ -99,5 +100,16 @@ internal class PatientServiceTest
         val patientList = testInstance.getAllPatients()
         Assert.assertEquals(1, patientList.size)
         Assert.assertEquals(patientId, patientList.first().id)
+    }
+
+    @Test
+    fun test_saveOpticalEvaluation()
+    {
+        val opticalEvaluation = testInstance.saveOpticalEvaluation(
+            1, OpticalEvaluation.fromPersistence(opticalEvaluationBean))
+        Assert.assertEquals(
+            "opticalEvaluationId does not match",
+            opticalEvaluationBean.id,
+            opticalEvaluation.id)
     }
 }

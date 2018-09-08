@@ -17,11 +17,9 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.domain.evaluation.retinal
+package co.avaldes.retipy.persistence.evaluation.retinal
 
-import co.avaldes.retipy.common.ICRUDService
-
-interface IRetinalEvaluationService: ICRUDService<RetinalEvaluation>
+enum class RetinalEvaluationStatus
 {
-    fun processImage(image: String, algorithm: String): RetinalEvaluation?
+    PENDING, COMPLETE, ERROR
 }

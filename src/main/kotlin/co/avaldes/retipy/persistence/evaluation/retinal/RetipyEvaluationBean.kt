@@ -19,34 +19,42 @@
 
 package co.avaldes.retipy.persistence.evaluation.retinal
 
-import co.avaldes.retipy.domain.Results
-import co.avaldes.retipy.domain.evaluation.retinal.RetinalEvaluation
 import java.util.*
-import javax.persistence.ElementCollection
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
+import javax.persistence.Lob
 import javax.persistence.PrePersist
+import javax.persistence.PreUpdate
 import javax.persistence.Table
-import javax.persistence.Temporal
-import javax.persistence.TemporalType
 
 @Entity
-@Table(name="retinal_evaluation")
-data class RetinalEvaluationBean(
-        @Id @GeneratedValue(strategy = GenerationType.AUTO)
-        val id: Long,
-        var uri: String,
-        @Temporal(TemporalType.TIMESTAMP) var timestamp: Date,
-        @ElementCollection val results: List<Results.Result>,
-        var status: RetinalEvaluation.EvaluationStatus)
+@Table(name="retipy_evaluation")
+data class RetipyEvaluationBean(
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    val id: Long,
+    val diagnosticId: Long,
+    val name: String,
+    @Lob
+    val image: String,
+    @Lob
+    val rois: String,
+    var status: RetinalEvaluationStatus = RetinalEvaluationStatus.PENDING,
+    var creationDate: Date = Date(),
+    var updateDate: Date = Date()
+)
 {
     @PrePersist
-    internal fun onCreate() {
-        timestamp = Date()
-        if (uri.isBlank())
-            uri = id.toString()
-        status = RetinalEvaluation.EvaluationStatus.PENDING
+    internal fun onCreate()
+    {
+        creationDate = Date()
+        status = RetinalEvaluationStatus.PENDING
+    }
+
+    @PreUpdate
+    internal fun onUpdate()
+    {
+        updateDate = Date()
     }
 }
