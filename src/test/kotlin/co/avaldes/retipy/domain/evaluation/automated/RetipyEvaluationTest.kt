@@ -19,7 +19,7 @@
 
 package co.avaldes.retipy.domain.evaluation.automated
 
-import co.avaldes.retipy.persistence.evaluation.retinal.RetinalEvaluationStatus
+import co.avaldes.retipy.persistence.evaluation.retinal.RetipyEvaluationStatus
 import org.junit.Assert
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -35,10 +35,10 @@ internal class RetipyEvaluationTest
         retipyEvaluation = RetipyEvaluation(
             123L,
             123545L,
-            "a evaluation",
+            RetipyTask.None,
             "a image",
             listOf(),
-            RetinalEvaluationStatus.COMPLETE,
+            RetipyEvaluationStatus.Complete,
             Date(),
             Date())
     }

@@ -1,0 +1,2 @@
+GET {{host}}/retipy/evaluation/4
+Authorization: {{token}}

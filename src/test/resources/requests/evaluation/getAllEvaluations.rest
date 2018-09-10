@@ -1,0 +1,2 @@
+GET {{host}}/retipy/diagnostic/3/evaluation
+Authorization: {{token}}

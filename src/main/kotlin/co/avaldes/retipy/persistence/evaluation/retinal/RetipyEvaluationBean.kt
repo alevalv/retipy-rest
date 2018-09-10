@@ -40,7 +40,7 @@ data class RetipyEvaluationBean(
     val image: String,
     @Lob
     val rois: String,
-    var status: RetinalEvaluationStatus = RetinalEvaluationStatus.PENDING,
+    val status: RetipyEvaluationStatus,
     var creationDate: Date = Date(),
     var updateDate: Date = Date()
 )
@@ -49,7 +49,6 @@ data class RetipyEvaluationBean(
     internal fun onCreate()
     {
         creationDate = Date()
-        status = RetinalEvaluationStatus.PENDING
     }
 
     @PreUpdate

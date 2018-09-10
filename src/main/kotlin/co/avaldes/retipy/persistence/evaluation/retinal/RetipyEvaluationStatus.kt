@@ -19,7 +19,13 @@
 
 package co.avaldes.retipy.persistence.evaluation.retinal
 
-enum class RetinalEvaluationStatus
+/**
+ * Enum class that represents the execution status of an evaluation, this is used when executing
+ * the tasks to process the evaluation.
+ */
+enum class RetipyEvaluationStatus
 {
-    PENDING, COMPLETE, ERROR
+    Pending,
+    Complete,
+    Error
 }

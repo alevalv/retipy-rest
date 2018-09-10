@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 /**
- * REST endpoint to handle User CRUD operations and login.
+ * REST uri to handle User CRUD operations and login.
  * The login operation should return an encrypted Jason Web Token (JWT).
  *
  * All operations are available in /retipy/user resource
@@ -48,7 +48,7 @@ internal class UserEndpoint(
     internal data class PasswordChangeRequestDTO(val oldpassword: String, val newpassword: String)
 
     /**
-     * Unsecured endpoint
+     * Unsecured uri
      */
     @PostMapping("/retipy/user/login")
     fun login(@RequestBody loginRequest: LoginRequest): String
@@ -59,7 +59,7 @@ internal class UserEndpoint(
     }
 
     /**
-     * Unsecured endpoint
+     * Unsecured uri
      */
     @PostMapping("retipy/user/token")
     fun renewToken(@RequestBody token: String): String

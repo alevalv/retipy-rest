@@ -22,10 +22,12 @@ package co.avaldes.retipy.security.persistence.user
 const val ROLE_ADMINISTRATOR = "ROLE_ADMINISTRATOR"
 const val ROLE_DOCTOR = "ROLE_DOCTOR"
 const val ROLE_RESIDENT = "ROLE_RESIDENT"
+const val ROLE_WORKER = "ROLE_WORKER"
 
 enum class Role(val authority: String)
 {
     Administrator(ROLE_ADMINISTRATOR),
     Doctor(ROLE_DOCTOR),
     Resident(ROLE_RESIDENT),
+    Worker(ROLE_WORKER),
 }

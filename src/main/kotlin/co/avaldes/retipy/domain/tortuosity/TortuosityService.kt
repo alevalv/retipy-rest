@@ -41,11 +41,11 @@ internal class TortuosityService(
 
     override fun getDensity(evaluation: RetipyEvaluation): RetipyEvaluation
     {
-        TODO("this class will be removed, refactored into a task")
+        TODO("this class will be removed, refactored into a name")
 //        val inputImage = evaluation.results.getResult("original")!!.image
 //        val template = RestTemplate()
 //        val density: Density? = template.postForObject(
-//                endpoint + "density", TortuosityRequest(inputImage), TortuosityRequest::class)
+//                uri + "density", TortuosityRequest(inputImage), TortuosityRequest::class)
 //        if (density != null)
 //        {
 //            evaluation.results.addResult(Results.Result(density.uri, density.data.blob, inputImage))
@@ -60,11 +60,11 @@ internal class TortuosityService(
 
     override fun getFractal(evaluation: RetipyEvaluation): RetipyEvaluation
     {
-        TODO("this class will be removed, refactored into a task")
+        TODO("this class will be removed, refactored into a name")
 //        val inputImage = evaluation.results.getResult("original")!!.image
 //        val template = RestTemplate()
 //        val density: Density? = template.postForObject(
-//                endpoint + "fractal", TortuosityRequest(inputImage), TortuosityRequest::class)
+//                uri + "fractal", TortuosityRequest(inputImage), TortuosityRequest::class)
 //        if (density != null)
 //        {
 //            evaluation.results.addResult(Results.Result(density.uri, density.data.blob, inputImage))

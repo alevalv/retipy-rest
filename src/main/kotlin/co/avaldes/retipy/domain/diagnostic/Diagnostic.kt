@@ -26,7 +26,7 @@ import java.util.*
 
 data class Diagnostic(
     var id: Long = 0,
-    var image: String? = "",
+    var image: String = "",
     var diagnostic: String = "",
     var rois: List<Roi> = emptyList(),
     var status: DiagnosticStatus = DiagnosticStatus.CREATED,
@@ -47,7 +47,7 @@ data class Diagnostic(
 
         fun toPersistence(diagnostic: Diagnostic) = DiagnosticBean(
             diagnostic.id,
-            diagnostic.image ?: throw IncorrectInputException("A diagnostic cannot have a null image"),
+            diagnostic.image,
             diagnostic.diagnostic,
             Roi.toPersistence(diagnostic.rois),
             diagnostic.status,

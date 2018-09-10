@@ -1,0 +1,5 @@
+POST {{host}}/retipy/diagnostic/3/evaluation
+Authorization: {{token}}
+Content-Type: text/plain
+
+TortuosityFractal

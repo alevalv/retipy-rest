@@ -23,5 +23,15 @@ import co.avaldes.retipy.common.ICRUDService
 
 interface IRetipyEvaluationService: ICRUDService<RetipyEvaluation>
 {
-    fun processImage(image: String, algorithm: String): RetipyEvaluation?
+    fun findByDiagnostic(diagnosticId: Long): List<RetipyEvaluation>
+
+    /**
+     * Creates a new Pending evaluation for the given diagnostic for the given name.
+     */
+    fun fromDiagnostic(diagnosticId: Long, task: RetipyTask): RetipyEvaluation
+
+    /**
+     * Gets all [RetipyEvaluation] that are marked as pending.
+     */
+    fun getPendingEvaluations(): List<RetipyEvaluation>
 }

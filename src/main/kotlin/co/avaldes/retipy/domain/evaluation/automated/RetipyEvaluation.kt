@@ -21,7 +21,7 @@ package co.avaldes.retipy.domain.evaluation.automated
 
 import co.avaldes.retipy.domain.diagnostic.Roi
 import co.avaldes.retipy.persistence.evaluation.retinal.RetipyEvaluationBean
-import co.avaldes.retipy.persistence.evaluation.retinal.RetinalEvaluationStatus
+import co.avaldes.retipy.persistence.evaluation.retinal.RetipyEvaluationStatus
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -31,10 +31,10 @@ import kotlin.collections.ArrayList
 data class RetipyEvaluation(
     var id: Long = 0L,
     var diagnosticId: Long,
-    var name: String = "",
+    var name: RetipyTask = RetipyTask.None,
     var image: String = "",
     var rois: List<Roi> = ArrayList(),
-    var status: RetinalEvaluationStatus = RetinalEvaluationStatus.PENDING,
+    var status: RetipyEvaluationStatus = RetipyEvaluationStatus.Pending,
     var creationDate: Date = Date(),
     var updateDate: Date = Date()
 )
@@ -44,7 +44,7 @@ data class RetipyEvaluation(
         fun toPersistence(retipyEvaluation: RetipyEvaluation) = RetipyEvaluationBean(
             retipyEvaluation.id,
             retipyEvaluation.diagnosticId,
-            retipyEvaluation.name,
+            retipyEvaluation.name.name,
             retipyEvaluation.image,
             Roi.toPersistence(retipyEvaluation.rois),
             retipyEvaluation.status,
@@ -52,15 +52,15 @@ data class RetipyEvaluation(
             retipyEvaluation.updateDate
         )
 
-        fun fromPersistence(retinalEvaluationBean: RetipyEvaluationBean) = RetipyEvaluation(
-            retinalEvaluationBean.id,
-            retinalEvaluationBean.diagnosticId,
-            retinalEvaluationBean.name,
-            retinalEvaluationBean.image,
-            Roi.fromPersistence(retinalEvaluationBean.rois),
-            retinalEvaluationBean.status,
-            retinalEvaluationBean.creationDate,
-            retinalEvaluationBean.updateDate
+        fun fromPersistence(retipyEvaluationBean: RetipyEvaluationBean) = RetipyEvaluation(
+            retipyEvaluationBean.id,
+            retipyEvaluationBean.diagnosticId,
+            RetipyTask.valueOf(retipyEvaluationBean.name),
+            retipyEvaluationBean.image,
+            Roi.fromPersistence(retipyEvaluationBean.rois),
+            retipyEvaluationBean.status,
+            retipyEvaluationBean.creationDate,
+            retipyEvaluationBean.updateDate
         )
     }
 }

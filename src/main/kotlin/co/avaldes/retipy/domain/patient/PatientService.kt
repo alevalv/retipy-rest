@@ -90,7 +90,7 @@ class PatientService(
         // recover data from backend if its missing
         val id = diagnostic.id
         val currentDiagnostic = diagnosticService.find(id)
-        if (currentDiagnostic != null && diagnostic.image == null)
+        if (currentDiagnostic != null && diagnostic.image.isBlank())
         {
             diagnostic.image = currentDiagnostic.image
         }

@@ -19,7 +19,9 @@
 
 package co.avaldes.retipy.domain.evaluation.automated
 
+import co.avaldes.retipy.domain.diagnostic.IDiagnosticService
 import co.avaldes.retipy.persistence.evaluation.retinal.IRetinalEvaluationRepository
+import co.avaldes.retipy.persistence.evaluation.retinal.RetipyEvaluationStatus
 import co.avaldes.retipy.rest.common.IncorrectInputException
 import org.springframework.stereotype.Service
 
@@ -30,7 +32,8 @@ import org.springframework.stereotype.Service
  */
 @Service
 internal class RetipyEvaluationService(
-    private val retinalEvaluationRepository: IRetinalEvaluationRepository)
+    private val retinalEvaluationRepository: IRetinalEvaluationRepository,
+    private val diagnosticService: IDiagnosticService)
     : IRetipyEvaluationService
 {
     override fun find(id: Long): RetipyEvaluation?
@@ -65,8 +68,24 @@ internal class RetipyEvaluationService(
         retinalEvaluationRepository.deleteById(id)
     }
 
-    override fun processImage(image: String, algorithm: String): RetipyEvaluation?
+    override fun findByDiagnostic(diagnosticId: Long): List<RetipyEvaluation> =
+        retinalEvaluationRepository
+            .findByDiagnosticId(diagnosticId).map { RetipyEvaluation.fromPersistence(it) }
+
+    override fun getPendingEvaluations(): List<RetipyEvaluation>
     {
-        TODO("Need to write the task backend before tackling this method")
+        return retinalEvaluationRepository
+            .findByStatus(RetipyEvaluationStatus.Pending)
+            .map { RetipyEvaluation.fromPersistence(it) }
+    }
+
+    override fun fromDiagnostic(diagnosticId: Long, task: RetipyTask): RetipyEvaluation
+    {
+        if (task == RetipyTask.None)
+            throw IncorrectInputException("You cannot create a new RetipyEvaluation with None name")
+        val diagnostic = diagnosticService.get(diagnosticId)
+        val retipyEvaluation =
+            RetipyEvaluation(diagnosticId = diagnosticId, name = task, image = diagnostic.image)
+        return save(retipyEvaluation)
     }
 }

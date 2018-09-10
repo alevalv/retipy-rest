@@ -20,7 +20,8 @@
 package co.avaldes.retipy.rest.dto
 
 import co.avaldes.retipy.domain.evaluation.automated.RetipyEvaluation
-import co.avaldes.retipy.persistence.evaluation.retinal.RetinalEvaluationStatus
+import co.avaldes.retipy.domain.evaluation.automated.RetipyTask
+import co.avaldes.retipy.persistence.evaluation.retinal.RetipyEvaluationStatus
 import java.util.*
 
 data class RetipyEvaluationDTO(
@@ -29,7 +30,7 @@ data class RetipyEvaluationDTO(
     val name: String,
     val image: String,
     val rois: List<RoiDTO>,
-    val status: RetinalEvaluationStatus,
+    val status: RetipyEvaluationStatus,
     val creationDate: Date,
     val updateDate: Date)
 {
@@ -38,7 +39,7 @@ data class RetipyEvaluationDTO(
         fun fromDomain(retipyEvaluation: RetipyEvaluation) = RetipyEvaluationDTO(
             retipyEvaluation.id,
             retipyEvaluation.diagnosticId,
-            retipyEvaluation.name,
+            retipyEvaluation.name.name,
             retipyEvaluation.image,
             retipyEvaluation.rois.map { RoiDTO.fromDomain(it) },
             retipyEvaluation.status,
@@ -49,7 +50,7 @@ data class RetipyEvaluationDTO(
         fun toDomain(retipyEvaluationDTO: RetipyEvaluationDTO) = RetipyEvaluation(
             retipyEvaluationDTO.id,
             retipyEvaluationDTO.diagnosticId,
-            retipyEvaluationDTO.name,
+            RetipyTask.valueOf(retipyEvaluationDTO.name),
             retipyEvaluationDTO.image,
             retipyEvaluationDTO.rois.map { RoiDTO.toDomain(it) },
             retipyEvaluationDTO.status,
