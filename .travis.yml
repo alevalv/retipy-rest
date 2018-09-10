@@ -25,3 +25,4 @@ deploy:
  overwrite: true
  on:
    branch: master
+   condition: "$VERSION =~ .*SNAPSHOT"
