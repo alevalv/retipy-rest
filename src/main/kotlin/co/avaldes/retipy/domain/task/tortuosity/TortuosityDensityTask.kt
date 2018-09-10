@@ -7,6 +7,6 @@ class TortuosityDensityTask(
     retipyEvaluation: RetipyEvaluation
 ) : AbstractTortuosityTask(
     retipyUri,
-    retipyEvaluation,
-    "/tortuosity/density"
+    "/tortuosity/density",
+    retipyEvaluation
 )

@@ -16,8 +16,8 @@ import org.springframework.web.reactive.function.client.WebClientException
  */
 abstract class AbstractTortuosityTask(
     retipyUri: String,
-    private val retipyEvaluation: RetipyEvaluation,
-    uri: String
+    uri: String,
+    private val retipyEvaluation: RetipyEvaluation
     // private val inputProperties: Map<String, String> = emptyMap() TODO
 ) : AbstractRESTTask<RetipyEvaluation>(
     "TortuosityDensityRESTTask",
@@ -50,7 +50,7 @@ abstract class AbstractTortuosityTask(
             retipyEvaluation.status = RetipyEvaluationStatus.Complete
             logger.info("Completed")
         }
-        catch(webClientException: WebClientException)
+        catch(webClientException: Exception) // TODO make this exception more specific
         {
             retipyEvaluation.status = RetipyEvaluationStatus.Error
             logger.info("Failed $webClientException")

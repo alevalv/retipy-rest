@@ -7,6 +7,6 @@ class TortuosityFractalTask(
     retipyEvaluation: RetipyEvaluation
 ) : AbstractTortuosityTask(
     retipyUri,
-    retipyEvaluation,
-    "/tortuosity/fractal"
+    "/tortuosity/fractal",
+    retipyEvaluation
 )
