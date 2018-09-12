@@ -2,7 +2,7 @@ package co.avaldes.retipy.domain.task.system
 
 import co.avaldes.retipy.domain.task.AbstractRESTTask
 import org.springframework.http.HttpMethod
-import org.springframework.web.reactive.function.client.WebClientException
+import org.springframework.http.MediaType
 
 /**
  * Task to verify if the retipy server is running.
@@ -13,14 +13,15 @@ class StatusTask(
 {
     override fun execute(): Boolean
     {
-        return try
-            {
-                getRequest(HttpMethod.GET).retrieve()
-                true
-            }
-            catch(webClientException: WebClientException)
-            {
-                false
-            }
+        var status = false
+        try
+        {
+            getRequest(HttpMethod.GET, MediaType.ALL).exchange().doOnSuccess { status = true }.doOnError { status = false }
+        }
+        catch(webClientException: Exception)
+        {
+            status = false
+        }
+        return status
     }
 }

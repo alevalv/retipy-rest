@@ -1,0 +1,2 @@
+GET {{host}}/retipy/status
+Authorization: {{token}}

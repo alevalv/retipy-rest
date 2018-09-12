@@ -1,5 +1,6 @@
 package co.avaldes.retipy.domain.task
 
+import co.avaldes.retipy.domain.IStatusService
 import co.avaldes.retipy.domain.evaluation.automated.IRetipyEvaluationService
 import co.avaldes.retipy.domain.evaluation.automated.RetipyEvaluation
 import co.avaldes.retipy.domain.evaluation.automated.RetipyTask
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service
 @Service
 class ScheduledTaskRunnerService(
     private val retipyEvaluationService: IRetipyEvaluationService,
+    private val statusService: IStatusService,
     @Value("\${retipy.python.backend.url}") private val retipyUri: String
 )
 {
@@ -29,7 +31,9 @@ class ScheduledTaskRunnerService(
     @Scheduled(fixedDelay = 120000) // wait 2 minutes to start again
     fun runPendingTasks()
     {
-        if (statusTask.execute())
+        val status = statusTask.execute()
+        statusService.setBackendStatus(status)
+        if (status)
         {
             logger.info("Processing scheduled pending RetipyEvaluation tasks")
             val pendingEvaluations = retipyEvaluationService.getPendingEvaluations()
