@@ -30,7 +30,7 @@ internal class DiagnosticBeanTest
     private val image = "a text image?"
     private val diagnostic = "some diagnostic"
     private val rois = "[]"
-    private val status = DiagnosticStatus.COMPLETED
+    private val status = DiagnosticStatus.Completed
     private val creationDate = Date()
     private val updateDate = Date()
 
@@ -42,7 +42,7 @@ internal class DiagnosticBeanTest
     {
         testInstance.onCreate()
         assertNotEquals(creationDate, testInstance.creationDate)
-        assertEquals(DiagnosticStatus.CREATED, testInstance.status)
+        assertEquals(DiagnosticStatus.Created, testInstance.status)
     }
 
     @Test

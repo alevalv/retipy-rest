@@ -21,7 +21,6 @@ package co.avaldes.retipy.domain.diagnostic
 
 import co.avaldes.retipy.persistence.diagnostic.DiagnosticBean
 import co.avaldes.retipy.persistence.diagnostic.DiagnosticStatus
-import co.avaldes.retipy.rest.common.IncorrectInputException
 import java.util.*
 
 data class Diagnostic(
@@ -29,7 +28,7 @@ data class Diagnostic(
     var image: String = "",
     var diagnostic: String = "",
     var rois: List<Roi> = emptyList(),
-    var status: DiagnosticStatus = DiagnosticStatus.CREATED,
+    var status: DiagnosticStatus = DiagnosticStatus.Created,
     var creationDate: Date = Date(),
     var updateDate: Date = Date())
 {

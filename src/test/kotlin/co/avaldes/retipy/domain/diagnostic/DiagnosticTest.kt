@@ -38,7 +38,7 @@ internal class DiagnosticTest
     fun setUp()
     {
         testInstance = Diagnostic(
-            diagnosticId, image, diagnostic, listOf(roi), DiagnosticStatus.CREATED)
+            diagnosticId, image, diagnostic, listOf(roi), DiagnosticStatus.Created)
     }
 
     @Test

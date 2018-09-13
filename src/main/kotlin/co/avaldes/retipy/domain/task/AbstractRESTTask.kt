@@ -1,7 +1,5 @@
 package co.avaldes.retipy.domain.task
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
@@ -30,8 +28,10 @@ abstract class AbstractRESTTask<R>(
         return mutableMap
     }
 
-    protected fun getRequest(method: HttpMethod): WebClient.RequestBodySpec =
-        webClient.method(method).uri(uri).accept(MediaType.APPLICATION_JSON)
+    protected fun getRequest(
+        method: HttpMethod,
+        mediaType: MediaType = MediaType.APPLICATION_JSON): WebClient.RequestBodySpec =
+        webClient.method(method).uri(uri).accept(mediaType)
 
     abstract override fun execute(): R?
 }

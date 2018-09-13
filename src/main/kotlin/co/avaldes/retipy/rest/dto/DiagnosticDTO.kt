@@ -51,7 +51,7 @@ data class DiagnosticDTO(
             diagnosticDTO.image ?: "",
             diagnosticDTO.diagnostic,
             diagnosticDTO.rois.map { RoiDTO.toDomain(it) },
-            diagnosticDTO.status ?: DiagnosticStatus.CREATED,
+            diagnosticDTO.status ?: DiagnosticStatus.Created,
             diagnosticDTO.creationDate ?: Date(),
             diagnosticDTO.updateDate ?: Date())
     }

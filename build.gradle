@@ -19,8 +19,8 @@
 
 buildscript {
     ext {
-        kotlinVersion = '1.2.61'
-        springBootVersion = '2.0.4.RELEASE'
+        kotlinVersion = '1.2.70'
+        springBootVersion = '2.0.5.RELEASE'
         jjwtVersion = '0.10.5'
     }
     repositories {
@@ -47,7 +47,7 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'jacoco'
 
 ext {
-    junitVersion = '5.3.0'
+    junitVersion = '5.3.1'
     jacocoVersion = '0.8.2'
 }
 

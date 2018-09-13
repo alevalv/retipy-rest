@@ -54,12 +54,8 @@ internal class RetipyEvaluationEndpoint(
     data class RetipyEvaluationBasicDTO(val id: Long, val name: String, val status: RetipyEvaluationStatus)
 
     @GetMapping("/retipy/evaluation/{id}")
-    fun getEvaluation(@PathVariable id: Long): RetipyEvaluationDTO
-    {
-        val evaluation = retipyEvaluationService.find(id)
-            ?: throw  ResourceNotFoundException("$id is not a valid evaluation")
-        return RetipyEvaluationDTO.fromDomain(evaluation)
-    }
+    fun getEvaluation(@PathVariable id: Long): RetipyEvaluationDTO =
+        RetipyEvaluationDTO.fromDomain(retipyEvaluationService.get(id))
 
     @Secured(ROLE_WORKER)
     @GetMapping("/retipy/evaluation/Pending")

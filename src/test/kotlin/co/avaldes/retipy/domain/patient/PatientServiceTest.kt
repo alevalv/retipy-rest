@@ -62,7 +62,7 @@ internal class PatientServiceTest
         listOf(opticalEvaluationBean),
         "")
 
-    private val diagnosticBean = DiagnosticBean(diagnosticId, image, "", "{}", DiagnosticStatus.CREATED, Date(), Date())
+    private val diagnosticBean = DiagnosticBean(diagnosticId, image, "", "{}", DiagnosticStatus.Created, Date(), Date())
 
     val opticalEvaluationBeanUpdated = opticalEvaluationBean.copy(diagnostics = listOf(diagnosticBean))
 

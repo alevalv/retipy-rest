@@ -46,7 +46,7 @@ data class DiagnosticBean(
     @PrePersist
     internal fun onCreate()
     {
-        status = DiagnosticStatus.CREATED
+        status = DiagnosticStatus.Created
         creationDate = Date()
     }
 

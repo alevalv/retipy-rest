@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 import org.springframework.http.HttpMethod
+import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.server.HandlerFunction
@@ -30,7 +31,7 @@ internal class AbstractRESTTaskTest
 
         fun getRequestTestAccess(httpMethod: HttpMethod): WebClient.RequestBodySpec
         {
-            return super.getRequest(httpMethod)
+            return super.getRequest(httpMethod, MediaType.APPLICATION_JSON)
         }
 
 

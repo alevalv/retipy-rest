@@ -21,7 +21,7 @@ package co.avaldes.retipy.persistence.diagnostic
 
 enum class DiagnosticStatus
 {
-    CREATED,
-    UPDATED,
-    COMPLETED
+    Created,
+    Updated,
+    Completed
 }
