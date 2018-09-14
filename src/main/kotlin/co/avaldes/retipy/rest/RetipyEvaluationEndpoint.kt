@@ -51,7 +51,9 @@ internal class RetipyEvaluationEndpoint(
     private val retipyEvaluationService: IRetipyEvaluationService,
     private val diagnosticService: IDiagnosticService)
 {
-    data class RetipyEvaluationBasicDTO(val id: Long, val name: String, val status: RetipyEvaluationStatus)
+    data class RetipyEvaluationBasicDTO(
+        val id: Long, val name: String, val status: RetipyEvaluationStatus)
+    data class RetipyEvaluationListDTO(val evaluationList: List<RetipyEvaluationBasicDTO>)
 
     @GetMapping("/retipy/evaluation/{id}")
     fun getEvaluation(@PathVariable id: Long): RetipyEvaluationDTO =
@@ -63,10 +65,11 @@ internal class RetipyEvaluationEndpoint(
         retipyEvaluationService.getPendingEvaluations().map { RetipyEvaluationDTO.fromDomain(it) }
 
     @GetMapping("/retipy/diagnostic/{id}/evaluation")
-    fun getEvaluationsByDiagnostic(@PathVariable id: Long): List<RetipyEvaluationBasicDTO> =
-        retipyEvaluationService
+    fun getEvaluationsByDiagnostic(@PathVariable id: Long): RetipyEvaluationListDTO =
+        RetipyEvaluationListDTO(retipyEvaluationService
             .findByDiagnostic(id)
-            .map { RetipyEvaluationBasicDTO(it.id, it.name.name, it.status) }
+            .map { RetipyEvaluationBasicDTO(it.id, it.name.name, it.status) })
+
 
     @PostMapping("/retipy/diagnostic/{id}/evaluation")
     fun createNewEvaluation(@PathVariable id: Long, @RequestBody name: String)

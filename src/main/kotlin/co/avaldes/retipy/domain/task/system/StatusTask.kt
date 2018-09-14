@@ -2,6 +2,7 @@ package co.avaldes.retipy.domain.task.system
 
 import co.avaldes.retipy.domain.task.AbstractRESTTask
 import org.springframework.http.HttpMethod
+import org.springframework.http.HttpStatus
 import org.springframework.web.reactive.function.client.WebClientException
 
 /**
@@ -13,14 +14,16 @@ class StatusTask(
 {
     override fun execute(): Boolean
     {
-        return try
-            {
-                getRequest(HttpMethod.GET).retrieve()
-                true
-            }
-            catch(webClientException: WebClientException)
-            {
-                false
-            }
+        var isRunning: Boolean = false
+        try
+        {
+            getRequest(HttpMethod.GET).exchange().doOnSuccess { isRunning = true }.block()
+        }
+        catch(webClientException: Exception)
+        {
+            isRunning = false
+        }
+
+        return isRunning
     }
 }

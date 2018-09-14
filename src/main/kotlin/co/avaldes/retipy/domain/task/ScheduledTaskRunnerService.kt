@@ -31,15 +31,18 @@ class ScheduledTaskRunnerService(
     {
         if (statusTask.execute())
         {
-            logger.info("Processing scheduled pending RetipyEvaluation tasks")
             val pendingEvaluations = retipyEvaluationService.getPendingEvaluations()
             val tasks = pendingEvaluations.map { createRetipyTask(it) }
-            val results = tasks.map { it.execute() }
-            results.forEach { if (it != null) retipyEvaluationService.save(it) }
+            if (!tasks.isEmpty())
+            {
+                logger.info("Processing scheduled pending RetipyEvaluation tasks")
+                val results = tasks.map { it.execute() }
+                results.forEach { if (it != null) retipyEvaluationService.save(it) }
+            }
         }
         else
         {
-            logger.error("Retipy processing server '$retipyUri' is currently offline")
+            logger.warn("Retipy processing server '$retipyUri' is currently offline")
         }
     }
 
