@@ -79,7 +79,7 @@ internal class UserService(
             user.name,
             user.username,
             passwordEncoder.encode(user.password),
-            mutableSetOf(Role.Resident),
+            if (user.roles.isEmpty()) mutableSetOf(Role.Resident) else user.roles,
             false,
             false,
             false)
