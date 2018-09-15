@@ -3,6 +3,7 @@ package co.avaldes.retipy.domain.task
 import co.avaldes.retipy.domain.evaluation.automated.IRetipyEvaluationService
 import co.avaldes.retipy.domain.evaluation.automated.RetipyEvaluation
 import co.avaldes.retipy.domain.evaluation.automated.RetipyTask
+import co.avaldes.retipy.domain.task.landmarks.ClassificationTask
 import co.avaldes.retipy.domain.task.system.EmptyTask
 import co.avaldes.retipy.domain.task.system.StatusTask
 import co.avaldes.retipy.domain.task.tortuosity.TortuosityDensityTask
@@ -51,6 +52,7 @@ class ScheduledTaskRunnerService(
         {
             RetipyTask.TortuosityDensity -> TortuosityDensityTask(retipyUri, retipyEvaluation)
             RetipyTask.TortuosityFractal -> TortuosityFractalTask(retipyUri, retipyEvaluation)
+            RetipyTask.LandmarksClassification -> ClassificationTask(retipyUri, retipyEvaluation)
             else ->
             {
                 EmptyTask()

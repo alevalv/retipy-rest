@@ -42,7 +42,7 @@ abstract class AbstractTortuosityTask(
                 TortuosityDensityRequest(
                     retipyEvaluation.image)))
 
-        try{
+        try {
             val response = requestWithBody.retrieve()
                 .bodyToMono(TortuosityDensityResponse::class.java)
                 .block()!!
