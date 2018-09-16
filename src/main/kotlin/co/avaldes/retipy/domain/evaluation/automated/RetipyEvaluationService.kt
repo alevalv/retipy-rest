@@ -84,6 +84,14 @@ internal class RetipyEvaluationService(
         if (task == RetipyTask.None)
             throw IncorrectInputException("You cannot create a new RetipyEvaluation with None name")
         val diagnostic = diagnosticService.get(diagnosticId)
+        val existingEvaluations =
+            retinalEvaluationRepository.findByDiagnosticIdAndName(diagnosticId, task.name)
+        if (existingEvaluations.isNotEmpty()
+            && existingEvaluations.filterNot { it.status == RetipyEvaluationStatus.Error }.isNotEmpty())
+        {
+            throw IncorrectInputException(
+                "A task with $task type cannot be created for this diagnostic")
+        }
         val retipyEvaluation =
             RetipyEvaluation(diagnosticId = diagnosticId, name = task, image = diagnostic.image)
         return save(retipyEvaluation)

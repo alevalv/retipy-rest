@@ -90,7 +90,7 @@ class PatientMapper(private val userService: IUserService): IMapper<PatientBean,
     private fun parseListToString(list:List<String>): String
     {
         val builder = StringBuilder()
-        if (!list.isEmpty())
+        if (list.isNotEmpty())
         {
             list.forEach {
                 builder.append(it)

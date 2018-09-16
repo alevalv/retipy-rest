@@ -17,14 +17,15 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.domain.diagnostic
+package co.avaldes.retipy.domain.common.roi
 
 import com.fasterxml.jackson.databind.ObjectMapper
 
 data class Roi(
     var x: List<Int> = emptyList(),
     var y: List<Int> = emptyList(),
-    var notes: String = "")
+    var notes: String = "",
+    var color: String = "black")
 {
     override fun toString(): String
     {
@@ -60,11 +61,6 @@ data class Roi(
                 }
             }
             return stringBuilder.toString()
-        }
-
-        fun fromString(string: String): Roi {
-            val objectMapper = ObjectMapper()
-            return objectMapper.readValue(string, Roi::class.java)
         }
     }
 }

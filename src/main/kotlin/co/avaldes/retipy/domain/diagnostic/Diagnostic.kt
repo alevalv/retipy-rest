@@ -19,6 +19,7 @@
 
 package co.avaldes.retipy.domain.diagnostic
 
+import co.avaldes.retipy.domain.common.roi.Roi
 import co.avaldes.retipy.persistence.diagnostic.DiagnosticBean
 import co.avaldes.retipy.persistence.diagnostic.DiagnosticStatus
 import java.util.*

@@ -19,6 +19,7 @@
 
 package co.avaldes.retipy.domain.diagnostic
 
+import co.avaldes.retipy.domain.common.roi.Roi
 import co.avaldes.retipy.persistence.diagnostic.DiagnosticStatus
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
@@ -29,7 +30,8 @@ internal class DiagnosticTest
     private val diagnosticId = 3L
     private val diagnostic = "a diagnostic"
     private val image = "some image"
-    private val roi = Roi(listOf(1, 2, 3), listOf(1, 2, 3), "sample text")
+    private val roi =
+        Roi(listOf(1, 2, 3), listOf(1, 2, 3), "sample text")
 
     private lateinit var testInstance: Diagnostic
 

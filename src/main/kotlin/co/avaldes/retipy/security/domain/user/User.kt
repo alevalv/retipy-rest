@@ -63,7 +63,7 @@ data class User(
         fun toPersistence(user: User): UserBean
         {
             val builder = StringBuilder()
-            if (!user.roles.isEmpty())
+            if (user.roles.isNotEmpty())
             {
                 user.roles.forEach{
                     builder.append(it)

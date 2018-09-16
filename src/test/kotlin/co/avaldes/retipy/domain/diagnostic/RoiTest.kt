@@ -19,6 +19,7 @@
 
 package co.avaldes.retipy.domain.diagnostic
 
+import co.avaldes.retipy.domain.common.roi.Roi
 import org.junit.Assert
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
@@ -29,20 +30,21 @@ internal class RoiTest
     private val roi_x = listOf(1, 3, 4, 5, 6)
     private val roi_y = listOf(1, 2, 4, 7, 6)
     private val notes = "this is a test roi"
+    private val color = "black"
 
     private lateinit var testInstance: Roi
 
     @BeforeEach
     fun setUp()
     {
-        testInstance = Roi(roi_x, roi_y, notes)
+        testInstance = Roi(roi_x, roi_y, notes, color)
     }
 
     @Test
     fun test_toString()
     {
         Assertions.assertEquals(
-            "{\"x\":[1,3,4,5,6],\"y\":[1,2,4,7,6],\"notes\":\"this is a test roi\"}",
+            "{\"x\":[1,3,4,5,6],\"y\":[1,2,4,7,6],\"notes\":\"this is a test roi\",\"color\":\"black\"}",
             testInstance.toString())
     }
 

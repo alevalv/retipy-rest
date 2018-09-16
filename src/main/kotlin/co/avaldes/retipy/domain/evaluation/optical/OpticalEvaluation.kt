@@ -95,7 +95,7 @@ data class OpticalEvaluation(
         private fun biomicroscopyToString(biomicroscopy: Map<String, String>): String
         {
             val builder = StringBuilder()
-            if (!biomicroscopy.entries.isEmpty())
+            if (biomicroscopy.entries.isNotEmpty())
             {
                 biomicroscopy.entries.forEach{
                     builder.append(it.key)

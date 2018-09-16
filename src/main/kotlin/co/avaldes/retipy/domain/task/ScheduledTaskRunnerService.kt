@@ -34,7 +34,7 @@ class ScheduledTaskRunnerService(
         {
             val pendingEvaluations = retipyEvaluationService.getPendingEvaluations()
             val tasks = pendingEvaluations.map { createRetipyTask(it) }
-            if (!tasks.isEmpty())
+            if (tasks.isNotEmpty())
             {
                 logger.info("Processing scheduled pending RetipyEvaluation tasks")
                 val results = tasks.map { it.execute() }

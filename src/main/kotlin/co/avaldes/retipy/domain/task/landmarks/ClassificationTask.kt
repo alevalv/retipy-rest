@@ -19,7 +19,7 @@
 
 package co.avaldes.retipy.domain.task.landmarks
 
-import co.avaldes.retipy.domain.diagnostic.Roi
+import co.avaldes.retipy.domain.common.roi.Roi
 import co.avaldes.retipy.domain.evaluation.automated.RetipyEvaluation
 import co.avaldes.retipy.domain.evaluation.automated.RetipyTask
 import co.avaldes.retipy.domain.task.AbstractRESTTask
@@ -61,11 +61,11 @@ class ClassificationTask(
                 x.add(it[2])
                 x.add(it[2])
                 val y = ArrayList<Int>()
-                y.add(it[1] - 3)
-                y.add(it[3] - 3)
-                y.add(it[3] - 3)
-                y.add(it[1] - 3)
-                rois.add(Roi(x, y, "Bifurcation")) }
+                y.add(it[1])
+                y.add(it[3])
+                y.add(it[3])
+                y.add(it[1])
+                rois.add(Roi(x, y, "Bifurcation", "red")) }
 
             response.crossings.forEach {
                 val x = ArrayList<Int>()
@@ -78,7 +78,7 @@ class ClassificationTask(
                 y.add(it[3])
                 y.add(it[3])
                 y.add(it[1])
-                rois.add(Roi(x, y, "Crossing")) }
+                rois.add(Roi(x, y, "Crossing", "blue")) }
             retipyEvaluation.rois = rois
             retipyEvaluation.status = RetipyEvaluationStatus.Complete
             logger.info("Completed Successfully")

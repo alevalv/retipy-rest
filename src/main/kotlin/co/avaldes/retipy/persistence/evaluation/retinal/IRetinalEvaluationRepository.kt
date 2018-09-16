@@ -30,4 +30,6 @@ interface IRetinalEvaluationRepository :
     fun findByDiagnosticId(diagnosticId: Long): Collection<RetipyEvaluationBean>
 
     fun findByStatus(status: RetipyEvaluationStatus): Collection<RetipyEvaluationBean>
+
+    fun findByDiagnosticIdAndName(diagnosticId: Long, name: String): Collection<RetipyEvaluationBean>
 }

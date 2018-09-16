@@ -19,7 +19,7 @@
 
 package co.avaldes.retipy.domain.evaluation.automated
 
-import co.avaldes.retipy.domain.diagnostic.Roi
+import co.avaldes.retipy.domain.common.roi.Roi
 import co.avaldes.retipy.persistence.evaluation.retinal.RetipyEvaluationBean
 import co.avaldes.retipy.persistence.evaluation.retinal.RetipyEvaluationStatus
 import java.util.*

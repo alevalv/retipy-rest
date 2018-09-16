@@ -1,6 +1,6 @@
 package co.avaldes.retipy.domain.task.tortuosity
 
-import co.avaldes.retipy.domain.diagnostic.Roi
+import co.avaldes.retipy.domain.common.roi.Roi
 import co.avaldes.retipy.domain.evaluation.automated.RetipyEvaluation
 import co.avaldes.retipy.domain.task.AbstractRESTTask
 import co.avaldes.retipy.persistence.evaluation.retinal.RetipyEvaluationStatus
@@ -8,7 +8,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpMethod
 import org.springframework.web.reactive.function.BodyInserters
-import org.springframework.web.reactive.function.client.WebClientException
 
 /**
  * Abstract class that access the retipy backend and obtains a tortuosity measure given a segmented
@@ -47,6 +46,7 @@ abstract class AbstractTortuosityTask(
                 .bodyToMono(TortuosityDensityResponse::class.java)
                 .block()!!
             retipyEvaluation.rois = response.data
+            retipyEvaluation.rois.forEach { it.color = "white" }
             retipyEvaluation.status = RetipyEvaluationStatus.Complete
             logger.info("Completed")
         }

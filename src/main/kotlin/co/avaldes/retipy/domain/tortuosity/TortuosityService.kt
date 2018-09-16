@@ -19,7 +19,7 @@
 
 package co.avaldes.retipy.domain.tortuosity
 
-import co.avaldes.retipy.domain.diagnostic.Roi
+import co.avaldes.retipy.domain.common.roi.Roi
 import co.avaldes.retipy.domain.evaluation.automated.RetipyEvaluation
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
