@@ -9,8 +9,8 @@ import java.util.*
 abstract class AbstractRESTTask<R>(
     val taskName: String,
     val uri: String,
-    val retipyUri: String,
-    val defaultConfiguration: Map<String, String>
+    retipyUri: String,
+    private val defaultConfiguration: Map<String, String>
 ): ITask<R>
 {
     protected val webClient: WebClient =  WebClient.builder()
@@ -30,7 +30,8 @@ abstract class AbstractRESTTask<R>(
 
     protected fun getRequest(
         method: HttpMethod,
-        mediaType: MediaType = MediaType.APPLICATION_JSON): WebClient.RequestBodySpec =
+        mediaType: MediaType = MediaType.APPLICATION_JSON,
+        uri: String = this.uri): WebClient.RequestBodySpec =
         webClient.method(method).uri(uri).accept(mediaType)
 
     abstract override fun execute(): R?

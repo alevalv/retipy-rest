@@ -24,5 +24,6 @@ enum class RetipyTask
     TortuosityDensity,
     TortuosityFractal,
     LandmarksClassification,
+    Segmentation,
     None,
 }

@@ -92,8 +92,25 @@ internal class RetipyEvaluationService(
             throw IncorrectInputException(
                 "A task with $task type cannot be created for this diagnostic")
         }
+        val image: String =
+            if (task == RetipyTask.LandmarksClassification
+                || task == RetipyTask.TortuosityFractal
+                || task == RetipyTask.TortuosityDensity)
+            {
+                val segmentation = retinalEvaluationRepository.findByDiagnosticIdAndName(
+                    diagnosticId, RetipyTask.Segmentation.name)
+                if (segmentation.isEmpty())
+                {
+                    throw IncorrectInputException(
+                        "A segmentation must exist to add a new $task for this diagnostic")
+                }
+                segmentation.first().image
+            }
+            else {
+                diagnostic.image
+            }
         val retipyEvaluation =
-            RetipyEvaluation(diagnosticId = diagnosticId, name = task, image = diagnostic.image)
+            RetipyEvaluation(diagnosticId = diagnosticId, name = task, image = image)
         return save(retipyEvaluation)
     }
 }

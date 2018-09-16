@@ -85,7 +85,7 @@ class ClassificationTask(
         }
         catch (exception: Exception)
         {
-            // retipyEvaluation.status = RetipyEvaluationStatus.Error
+            retipyEvaluation.status = RetipyEvaluationStatus.Error
             logger.info("Failed $exception")
         }
         return retipyEvaluation

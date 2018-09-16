@@ -28,7 +28,6 @@ import co.avaldes.retipy.rest.dto.RetipyEvaluationDTO
 import co.avaldes.retipy.security.persistence.user.ROLE_ADMINISTRATOR
 import co.avaldes.retipy.security.persistence.user.ROLE_DOCTOR
 import co.avaldes.retipy.security.persistence.user.ROLE_WORKER
-import org.springframework.data.rest.webmvc.ResourceNotFoundException
 import org.springframework.security.access.annotation.Secured
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.DeleteMapping

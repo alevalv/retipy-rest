@@ -2,8 +2,6 @@ package co.avaldes.retipy.domain.task.system
 
 import co.avaldes.retipy.domain.task.AbstractRESTTask
 import org.springframework.http.HttpMethod
-import org.springframework.http.HttpStatus
-import org.springframework.web.reactive.function.client.WebClientException
 
 /**
  * Task to verify if the retipy server is running.
