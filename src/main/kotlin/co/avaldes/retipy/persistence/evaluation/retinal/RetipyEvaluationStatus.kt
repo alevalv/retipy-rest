@@ -26,6 +26,7 @@ package co.avaldes.retipy.persistence.evaluation.retinal
 enum class RetipyEvaluationStatus
 {
     Pending,
+    Running,
     Complete,
     Error
 }

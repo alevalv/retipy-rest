@@ -20,6 +20,7 @@
 package co.avaldes.retipy.domain.evaluation.automated
 
 import co.avaldes.retipy.common.ICRUDService
+import co.avaldes.retipy.persistence.evaluation.retinal.RetipyEvaluationStatus
 
 interface IRetipyEvaluationService: ICRUDService<RetipyEvaluation>
 {
@@ -34,4 +35,13 @@ interface IRetipyEvaluationService: ICRUDService<RetipyEvaluation>
      * Gets all [RetipyEvaluation] that are marked as pending.
      */
     fun getPendingEvaluations(): List<RetipyEvaluation>
+
+    /**
+     * Get all [RetipyEvaluation] that has the given [status].
+     *
+     * @param status a [RetipyEvaluationStatus].
+     *
+     * @return a [List] of [RetipyEvaluation], will return empty if no evaluation is found.
+     */
+    fun getEvaluationsByStatus(status: RetipyEvaluationStatus): List<RetipyEvaluation>
 }

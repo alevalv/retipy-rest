@@ -9,6 +9,7 @@ import co.avaldes.retipy.domain.task.system.EmptyTask
 import co.avaldes.retipy.domain.task.system.StatusTask
 import co.avaldes.retipy.domain.task.tortuosity.TortuosityDensityTask
 import co.avaldes.retipy.domain.task.tortuosity.TortuosityFractalTask
+import co.avaldes.retipy.persistence.evaluation.retinal.RetipyEvaluationStatus
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -20,7 +21,7 @@ import org.springframework.stereotype.Service
  * execution is done.
  */
 @Service
-class ScheduledTaskRunnerService(
+internal class ScheduledTaskRunnerService(
     private val retipyEvaluationService: IRetipyEvaluationService,
     @Value("\${retipy.python.backend.url}") private val retipyUri: String
 )
@@ -34,13 +35,26 @@ class ScheduledTaskRunnerService(
         if (statusTask.execute())
         {
             val pendingEvaluations = retipyEvaluationService.getPendingEvaluations()
+            // set all pending evaluations as running
+            pendingEvaluations.forEach{
+                it.status = RetipyEvaluationStatus.Running
+                retipyEvaluationService.save(it)
+            }
             val tasks = pendingEvaluations.map { createRetipyTask(it) }
             if (tasks.isNotEmpty())
             {
                 logger.info("Processing scheduled pending RetipyEvaluation tasks")
-                val results = tasks.map { it.execute() }
+                val results = tasks.map {
+                    it.execute() }
                 results.forEach { if (it != null) retipyEvaluationService.save(it) }
             }
+            // validate that no running evaluations exists after running, if there is, mark them as Error
+            retipyEvaluationService
+                .getEvaluationsByStatus(RetipyEvaluationStatus.Running)
+                .forEach {
+                    it.status = RetipyEvaluationStatus.Error
+                    retipyEvaluationService.save(it)
+                }
         }
         else
         {

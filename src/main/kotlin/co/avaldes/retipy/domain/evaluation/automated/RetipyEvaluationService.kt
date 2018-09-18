@@ -20,7 +20,7 @@
 package co.avaldes.retipy.domain.evaluation.automated
 
 import co.avaldes.retipy.domain.diagnostic.IDiagnosticService
-import co.avaldes.retipy.persistence.evaluation.retinal.IRetinalEvaluationRepository
+import co.avaldes.retipy.persistence.evaluation.retinal.IRetipyEvaluationRepository
 import co.avaldes.retipy.persistence.evaluation.retinal.RetipyEvaluationStatus
 import co.avaldes.retipy.rest.common.IncorrectInputException
 import org.springframework.stereotype.Service
@@ -32,13 +32,13 @@ import org.springframework.stereotype.Service
  */
 @Service
 internal class RetipyEvaluationService(
-    private val retinalEvaluationRepository: IRetinalEvaluationRepository,
+    private val retipyEvaluationRepository: IRetipyEvaluationRepository,
     private val diagnosticService: IDiagnosticService)
     : IRetipyEvaluationService
 {
     override fun find(id: Long): RetipyEvaluation?
     {
-        val bean = retinalEvaluationRepository.findById(id)
+        val bean = retipyEvaluationRepository.findById(id)
         var retipyEvaluation: RetipyEvaluation? = null
         if (bean.isPresent)
             retipyEvaluation = RetipyEvaluation.fromPersistence(bean.get())
@@ -53,31 +53,41 @@ internal class RetipyEvaluationService(
 
     override fun save(obj: RetipyEvaluation): RetipyEvaluation
     {
-        val savedBean = retinalEvaluationRepository.save(
+        val savedBean = retipyEvaluationRepository.save(
             RetipyEvaluation.toPersistence(obj))
         return RetipyEvaluation.fromPersistence(savedBean)
     }
 
     override fun delete(obj: RetipyEvaluation)
     {
-        retinalEvaluationRepository.delete(RetipyEvaluation.toPersistence(obj))
+        retipyEvaluationRepository.delete(RetipyEvaluation.toPersistence(obj))
     }
 
     override fun delete(id: Long)
     {
-        retinalEvaluationRepository.deleteById(id)
+        val evaluation = get(id)
+        if (evaluation.status != RetipyEvaluationStatus.Running
+            && evaluation.status != RetipyEvaluationStatus.Pending)
+        {
+            retipyEvaluationRepository.deleteById(id)
+        }
+        else
+        {
+            throw IncorrectInputException("Can only delete evaluation with Complete or Error")
+        }
     }
 
     override fun findByDiagnostic(diagnosticId: Long): List<RetipyEvaluation> =
-        retinalEvaluationRepository
+        retipyEvaluationRepository
             .findByDiagnosticId(diagnosticId).map { RetipyEvaluation.fromPersistence(it) }
 
-    override fun getPendingEvaluations(): List<RetipyEvaluation>
-    {
-        return retinalEvaluationRepository
-            .findByStatus(RetipyEvaluationStatus.Pending)
+    override fun getEvaluationsByStatus(status: RetipyEvaluationStatus): List<RetipyEvaluation> =
+        retipyEvaluationRepository
+            .findByStatus(status)
             .map { RetipyEvaluation.fromPersistence(it) }
-    }
+
+    override fun getPendingEvaluations(): List<RetipyEvaluation> =
+        getEvaluationsByStatus(RetipyEvaluationStatus.Pending)
 
     override fun fromDiagnostic(diagnosticId: Long, task: RetipyTask): RetipyEvaluation
     {
@@ -85,7 +95,7 @@ internal class RetipyEvaluationService(
             throw IncorrectInputException("You cannot create a new RetipyEvaluation with None name")
         val diagnostic = diagnosticService.get(diagnosticId)
         val existingEvaluations =
-            retinalEvaluationRepository.findByDiagnosticIdAndName(diagnosticId, task.name)
+            retipyEvaluationRepository.findByDiagnosticIdAndName(diagnosticId, task.name)
         if (existingEvaluations.isNotEmpty()
             && existingEvaluations.filterNot { it.status == RetipyEvaluationStatus.Error }.isNotEmpty())
         {
@@ -97,9 +107,10 @@ internal class RetipyEvaluationService(
                 || task == RetipyTask.TortuosityFractal
                 || task == RetipyTask.TortuosityDensity)
             {
-                val segmentation = retinalEvaluationRepository.findByDiagnosticIdAndName(
+                val segmentation = retipyEvaluationRepository.findByDiagnosticIdAndName(
                     diagnosticId, RetipyTask.Segmentation.name)
-                if (segmentation.isEmpty())
+                if (segmentation.isEmpty()
+                    || segmentation.first().status != RetipyEvaluationStatus.Complete)
                 {
                     throw IncorrectInputException(
                         "A segmentation must exist to add a new $task for this diagnostic")
