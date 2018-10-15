@@ -19,7 +19,7 @@
 
 buildscript {
     ext {
-        kotlinVersion = '1.2.70'
+        kotlinVersion = '1.2.71'
         springBootVersion = '2.0.5.RELEASE'
         jjwtVersion = '0.10.5'
     }
@@ -71,7 +71,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-webflux')
     compile('org.projectreactor:reactor-spring:1.0.1.RELEASE')
     compile("io.jsonwebtoken:jjwt-api:${jjwtVersion}")
-    compile('com.fasterxml.jackson.module:jackson-module-kotlin')
+    compile('com.fasterxml.jackson.module:jackson-module-kotlin:2.9.7')
     compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     compile("org.jetbrains.kotlin:kotlin-reflect")
 //    compile('org.mariadb.jdbc:mariadb-java-client:2.3.0')
@@ -84,7 +84,7 @@ dependencies {
     testCompile('org.springframework.security:spring-security-test')
     testCompile("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testCompile("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
-    testCompile("io.mockk:mockk:1.8.7")
+    testCompile("io.mockk:mockk:1.8.9")
 }
 
 check {

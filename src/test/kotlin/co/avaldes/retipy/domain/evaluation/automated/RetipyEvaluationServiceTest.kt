@@ -144,6 +144,6 @@ internal class RetipyEvaluationServiceTest
     @Test
     fun fromDiagnostic()
     {
-        val saved = retipyEvaluationService.fromDiagnostic(diagnosticId, RetipyTask.Segmentation)
+        retipyEvaluationService.fromDiagnostic(diagnosticId, RetipyTask.Segmentation)
     }
 }
