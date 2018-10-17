@@ -22,6 +22,7 @@ package co.avaldes.retipy.persistence.diagnostic
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Test
+import java.time.Instant
 import java.util.*
 
 internal class DiagnosticBeanTest
@@ -31,7 +32,7 @@ internal class DiagnosticBeanTest
     private val diagnostic = "some diagnostic"
     private val rois = "[]"
     private val status = DiagnosticStatus.Completed
-    private val creationDate = Date()
+    private val creationDate = Date.from(Instant.EPOCH)
     private val updateDate = Date()
 
     private val testInstance =

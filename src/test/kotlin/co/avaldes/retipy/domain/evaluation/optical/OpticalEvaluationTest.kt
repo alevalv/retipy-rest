@@ -47,7 +47,7 @@ internal class OpticalEvaluationTest
             0,
             0,
             mutableMapOf(Pair("Iris", "some")),
-            "",
+            10,
             listOf(Diagnostic()))
     }
 

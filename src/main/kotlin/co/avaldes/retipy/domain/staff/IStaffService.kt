@@ -17,26 +17,27 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.rest.dto.patient
+package co.avaldes.retipy.domain.staff
 
-import java.util.*
+import co.avaldes.retipy.domain.common.Person
 
-data class OpticalEvaluationDTO(
-    val id: Long,
-    val version: Long,
-    val creationDate: Date?,
-    val updateDate: Date?,
-    val visualLeftEye: String,
-    val visualRightEye: String,
-    val visualLeftPh: String,
-    val visualRightPh: String,
-    val pupilLeftEyeRD: Int,
-    val pupilLeftEyeRC: Int,
-    val pupilLeftEyeDPA: Int,
-    val pupilRightEyeRD: Int,
-    val pupilRightEyeRC: Int,
-    val pupilRightEyeDPA: Int,
-    val biomicroscopy: Map<String, String>,
-    val intraocularPressure: Int,
-    val diagnostics: List<Long>
-)
+/**
+ * Interface that exposes operations to handle extra data related with the users.
+ */
+interface IStaffService
+{
+    /**
+     * Gets the list of residents that are assigned to the given doctor.
+     */
+    fun getDoctorAssignedResidents(doctorId: Long): List<Person>
+
+    /**
+     * Sets the given list of residents to the given doctor.
+     */
+    fun setDoctorAssignedResidents(doctorId: Long, residentIdList: List<Long>)
+
+    /**
+     * Gets the doctors which have the given resident assigned to them.
+     */
+    fun getDoctorsFromResident(residentId: Long): List<Long>
+}

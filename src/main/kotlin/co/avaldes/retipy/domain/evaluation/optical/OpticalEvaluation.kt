@@ -40,7 +40,7 @@ data class OpticalEvaluation(
     var pupilRightEyeRC: Int = 1,
     var pupilRightEyeDPA: Int = 1,
     var biomicroscopy: MutableMap<String, String> = emptyMap<String, String>().toMutableMap(),
-    var ocularIntraPressure: String = "",
+    var ocularIntraPressure: Int = 10,
     private var diagnostics: List<Diagnostic> = emptyList())
 {
     private val diagnosticMap: MutableMap<Long, Diagnostic> = HashMap()
@@ -75,9 +75,9 @@ data class OpticalEvaluation(
     {
         val BIOMICROSCOPY_REQUIRED: List<String> = listOf("Cornea", "Iris", "Cristalino", "Camara Anterior")
 
-        val BIOMICROSCOPY_SEPARATOR = "#"
+        private const val BIOMICROSCOPY_SEPARATOR = "#"
 
-        val BIOMICROSCOPY_TUPLE_SEPARATOR = "|"
+        private const val BIOMICROSCOPY_TUPLE_SEPARATOR = "|"
 
         private fun parseBiomicroscopy(string: String): MutableMap<String, String>
         {

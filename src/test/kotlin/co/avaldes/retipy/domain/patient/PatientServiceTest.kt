@@ -19,8 +19,8 @@
 
 package co.avaldes.retipy.domain.patient
 
-import co.avaldes.retipy.common.nm.Education
-import co.avaldes.retipy.common.nm.Sex
+import co.avaldes.retipy.common.Education
+import co.avaldes.retipy.common.Sex
 import co.avaldes.retipy.domain.diagnostic.IDiagnosticService
 import co.avaldes.retipy.domain.evaluation.optical.OpticalEvaluation
 import co.avaldes.retipy.persistence.diagnostic.DiagnosticBean
@@ -45,7 +45,7 @@ internal class PatientServiceTest
     val image = "this is an image"
 
     private val opticalEvaluationBean = OpticalEvaluationBean(
-        opticalEvaluationId, 1, Date(), Date(), "", "", "", "", 1, 1, 1, 1, 1, 1, "", "")
+        opticalEvaluationId, 1, Date(), Date(), "", "", "", "", 1, 1, 1, 1, 1, 1, "", 10)
 
     private val patientBean = PatientBean(
         patientId,
@@ -60,7 +60,7 @@ internal class PatientServiceTest
         "",
         "",
         listOf(opticalEvaluationBean),
-        "")
+        listOf())
 
     private val diagnosticBean = DiagnosticBean(diagnosticId, image, "", "{}", DiagnosticStatus.Created, Date(), Date())
 

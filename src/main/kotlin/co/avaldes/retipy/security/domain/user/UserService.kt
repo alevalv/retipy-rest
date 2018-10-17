@@ -24,6 +24,7 @@ import co.avaldes.retipy.rest.common.IncorrectInputException
 import co.avaldes.retipy.security.domain.common.NoOpPasswordValidator
 import co.avaldes.retipy.security.persistence.user.IUserRepository
 import co.avaldes.retipy.security.persistence.user.Role
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -80,7 +81,7 @@ internal class UserService(
             user.username,
             passwordEncoder.encode(user.password),
             if (user.roles.isEmpty()) mutableSetOf(Role.Resident) else user.roles,
-            false,
+            true,
             false,
             false)
 
@@ -151,5 +152,11 @@ internal class UserService(
     {
         val beans = userRepository.findByRolesContaining(role.toString())
         return beans.map { Person(it.id, it.identity, it.name) }
+    }
+
+    override fun getCurrentAuthenticatedUser(): User?
+    {
+        val authentication = SecurityContextHolder.getContext().authentication
+        return findByUsername(authentication.name)
     }
 }

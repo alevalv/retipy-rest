@@ -33,10 +33,16 @@ interface IPatientService: ICRUDService<Patient>
     fun saveOpticalEvaluation(patientId: Long, opticalEvaluation: OpticalEvaluation): OpticalEvaluation
 
     /**
-     * Returns a list of triplets with the patient unique id, its identity and its name, sorted by
+     * Returns a list of [Person] the patient unique id, its identity and its name, sorted by
      * their identity.
      */
     fun getAllPatients(): List<Person>
+
+    /**
+     * Returns a list of [Person] with the patient information, filtered by the assignedDoctors
+     * that has any value present in the given [doctorIds].
+     */
+    fun getAllPatientsByDoctorIds(doctorIds: List<Long>): List<Person>
 
     /**
      * Adds a new optical evaluation to the given patient.

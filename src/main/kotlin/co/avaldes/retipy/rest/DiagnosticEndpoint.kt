@@ -20,6 +20,8 @@
 package co.avaldes.retipy.rest
 
 import co.avaldes.retipy.domain.diagnostic.IDiagnosticService
+import co.avaldes.retipy.domain.staff.IStaffAuditingService
+import co.avaldes.retipy.persistence.staff.AuditingOperation
 import co.avaldes.retipy.rest.dto.DiagnosticDTO
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
@@ -32,11 +34,15 @@ import org.springframework.web.bind.annotation.RestController
  */
 @CrossOrigin
 @RestController
-internal class DiagnosticEndpoint(private val diagnosticService: IDiagnosticService)
+internal class DiagnosticEndpoint(
+    private val diagnosticService: IDiagnosticService,
+    private val auditingService: IStaffAuditingService)
 {
     @GetMapping("/retipy/diagnostic/{id}")
     fun getPatient(@PathVariable id: Long): DiagnosticDTO
     {
-        return DiagnosticDTO.fromDomain(diagnosticService.get(id))
+        val diagnostic = DiagnosticDTO.fromDomain(diagnosticService.get(id))
+        auditingService.audit(diagnostic.id, AuditingOperation.DiagnosticRead)
+        return diagnostic
     }
 }

@@ -25,4 +25,5 @@ import org.springframework.data.repository.PagingAndSortingRepository
 interface IPatientRepository : PagingAndSortingRepository<PatientBean, Long>, JpaSpecificationExecutor<PatientBean>
 {
     fun findByIdentity(identity: String): PatientBean?
+    fun findByAssignedDoctorsIn(assignedDoctors: List<Long>): List<PatientBean>
 }

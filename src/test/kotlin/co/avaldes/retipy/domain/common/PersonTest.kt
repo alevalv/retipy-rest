@@ -17,26 +17,33 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.rest.dto.patient
+package co.avaldes.retipy.domain.common
 
-import java.util.*
+import co.avaldes.retipy.security.domain.user.User
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.BeforeEach
 
-data class OpticalEvaluationDTO(
-    val id: Long,
-    val version: Long,
-    val creationDate: Date?,
-    val updateDate: Date?,
-    val visualLeftEye: String,
-    val visualRightEye: String,
-    val visualLeftPh: String,
-    val visualRightPh: String,
-    val pupilLeftEyeRD: Int,
-    val pupilLeftEyeRC: Int,
-    val pupilLeftEyeDPA: Int,
-    val pupilRightEyeRD: Int,
-    val pupilRightEyeRC: Int,
-    val pupilRightEyeDPA: Int,
-    val biomicroscopy: Map<String, String>,
-    val intraocularPressure: Int,
-    val diagnostics: List<Long>
-)
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Test
+
+internal class PersonTest
+{
+    private val name = "a name"
+    private val identity = "991h31"
+    private val id = 8123L
+    private val user = User(id, identity, name, "username", "password")
+
+    private lateinit var person : Person
+
+    @BeforeEach
+    fun setUp()
+    {
+        person = Person(id, identity, name)
+    }
+
+    @Test
+    fun fromPerson()
+    {
+        assertEquals(person, Person.fromUser(user), "Person object does not match")
+    }
+}

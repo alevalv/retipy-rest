@@ -45,7 +45,7 @@ internal class UserEndpoint(
     private val userService: IUserService, private val tokenService: TokenService)
 {
     internal data class LoginRequest(val username: String, val password: String)
-    internal data class PasswordChangeRequestDTO(val oldpassword: String, val newpassword: String)
+    internal data class PasswordChangeRequestDTO(val oldPassword: String, val newPassword: String)
 
     /**
      * Unsecured uri
@@ -70,8 +70,7 @@ internal class UserEndpoint(
     @GetMapping("/retipy/user")
     fun getCurrentUser(): UserDTO
     {
-        val authentication = SecurityContextHolder.getContext().authentication
-        val user = userService.findByUsername(authentication.name)
+        val user = userService.getCurrentAuthenticatedUser()
         if (user != null)
         {
             return UserDTO.fromDomain(user)
@@ -85,8 +84,7 @@ internal class UserEndpoint(
     @PostMapping("/retipy/user")
     fun updateUser(@RequestBody userDTO: UserDTO): UserDTO
     {
-        val authentication = SecurityContextHolder.getContext().authentication
-        val user = userService.findByUsername(authentication.name)
+        val user = userService.getCurrentAuthenticatedUser()
         if (user != null)
         {
             if (user.username != userDTO.username)
@@ -136,13 +134,12 @@ internal class UserEndpoint(
     @PostMapping("/retipy/user/password")
     fun updatePassword(@RequestBody passwordChangeRequestDTO: PasswordChangeRequestDTO)
     {
-        val authentication = SecurityContextHolder.getContext().authentication
-        val user = userService.findByUsername(authentication.name)
+        val user = userService.getCurrentAuthenticatedUser()
         if (user != null)
         {
-            if (userService.login(user.username, passwordChangeRequestDTO.oldpassword) != null)
+            if (userService.login(user.username, passwordChangeRequestDTO.oldPassword) != null)
             {
-                userService.updatePassword(user, passwordChangeRequestDTO.newpassword)
+                userService.updatePassword(user, passwordChangeRequestDTO.newPassword)
             }
             else
             {

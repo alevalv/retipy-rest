@@ -38,9 +38,10 @@ interface IUserService: ICRUDService<User>
     /**
      * Creates a new [User]. The method expects that the [User.id] is set to 0L and that the
      * username is unique, if any of those conditions are not met, a [IncorrectInputException]
-     * will be thrown. Returns the persisted object.
+     * will be thrown. If the [User.roles] has no values, the method will set [Role.Resident] as the
+     * user roles.
      *
-     * Note that the [User.password] should be plain text.
+     * Note that the [User.password] should be in plain text since this method will encrypt it.
      *
      * @param user the [User] to persist
      * @return a [User] with possible changes from the persistence
@@ -81,4 +82,10 @@ interface IUserService: ICRUDService<User>
      * Gets all users that belongs to a given role.
      */
     fun getUsersByRole(role: Role): List<Person>
+
+    /**
+     * Gets the current [User] that is accessing the application. If no [User] is found, null will be
+     * returned
+     */
+    fun getCurrentAuthenticatedUser(): User?
 }

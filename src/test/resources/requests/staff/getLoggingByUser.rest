@@ -1,0 +1,3 @@
+GET {{host}}/retipy/log/resource/2
+Content-Type: application/json
+Authorization: {{token}}

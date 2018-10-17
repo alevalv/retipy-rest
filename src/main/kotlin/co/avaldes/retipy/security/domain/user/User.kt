@@ -31,10 +31,10 @@ data class User(
     var name: String,
     private var username: String,
     private var password: String,
-    var roles: MutableSet<Role>,
-    var enabled: Boolean,
-    var locked: Boolean,
-    var expired: Boolean
+    var roles: MutableSet<Role> = mutableSetOf(Role.Resident),
+    var enabled: Boolean = true,
+    var locked: Boolean = false,
+    var expired: Boolean = false
 ) : UserDetails
 {
     companion object

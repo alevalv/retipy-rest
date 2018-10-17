@@ -19,8 +19,8 @@
 
 package co.avaldes.retipy.domain.patient
 
-import co.avaldes.retipy.common.nm.Education
-import co.avaldes.retipy.common.nm.Sex
+import co.avaldes.retipy.common.Education
+import co.avaldes.retipy.common.Sex
 import co.avaldes.retipy.domain.common.Person
 import co.avaldes.retipy.domain.evaluation.optical.OpticalEvaluation
 import java.util.*

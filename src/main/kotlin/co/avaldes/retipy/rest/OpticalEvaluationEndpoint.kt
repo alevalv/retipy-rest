@@ -20,6 +20,8 @@
 package co.avaldes.retipy.rest
 
 import co.avaldes.retipy.domain.evaluation.optical.IOpticalEvaluationService
+import co.avaldes.retipy.domain.staff.IStaffAuditingService
+import co.avaldes.retipy.persistence.staff.AuditingOperation
 import co.avaldes.retipy.rest.dto.patient.OpticalEvaluationDTO
 import co.avaldes.retipy.rest.dto.patient.OpticalEvaluationDTOMapper
 import org.springframework.web.bind.annotation.CrossOrigin
@@ -34,11 +36,14 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class OpticalEvaluationEndpoint(
     private val opticalEvaluationService: IOpticalEvaluationService,
+    private val auditingService: IStaffAuditingService,
     private val opticalEvaluationDTOMapper: OpticalEvaluationDTOMapper)
 {
     @GetMapping("/retipy/opticalevaluation/{id}")
     fun getOpticalEvaluation(@PathVariable id: Long): OpticalEvaluationDTO
     {
-        return opticalEvaluationDTOMapper.fromDomain(opticalEvaluationService.get(id))
+        val opticalEvaluation = opticalEvaluationDTOMapper.fromDomain(opticalEvaluationService.get(id))
+        auditingService.audit(opticalEvaluation.id, AuditingOperation.OpticalEvaluationRead)
+        return opticalEvaluation
     }
 }

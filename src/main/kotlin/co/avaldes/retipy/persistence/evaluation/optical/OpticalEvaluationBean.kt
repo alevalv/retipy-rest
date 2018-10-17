@@ -51,7 +51,7 @@ data class OpticalEvaluationBean(
     val pupilRightEyeDPA: Int,
     @Lob
     val biomicroscopy: String,
-    val ocularIntraPressure: String,
+    val ocularIntraPressure: Int,
     @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "diagnostic_id")
     var diagnostics: List<DiagnosticBean> = emptyList())

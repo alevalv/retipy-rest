@@ -19,8 +19,8 @@
 
 package co.avaldes.retipy.rest.dto.patient
 
-import co.avaldes.retipy.common.nm.Education
-import co.avaldes.retipy.common.nm.Sex
+import co.avaldes.retipy.common.Education
+import co.avaldes.retipy.common.Sex
 import java.util.*
 
 

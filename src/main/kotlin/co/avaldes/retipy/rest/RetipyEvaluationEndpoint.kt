@@ -47,8 +47,7 @@ import javax.validation.Valid
 @CrossOrigin
 @RestController
 internal class RetipyEvaluationEndpoint(
-    private val retipyEvaluationService: IRetipyEvaluationService,
-    private val diagnosticService: IDiagnosticService)
+    private val retipyEvaluationService: IRetipyEvaluationService)
 {
     data class RetipyEvaluationBasicDTO(
         val id: Long, val name: String, val status: RetipyEvaluationStatus)

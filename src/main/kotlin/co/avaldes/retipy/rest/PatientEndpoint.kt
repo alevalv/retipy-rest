@@ -20,12 +20,18 @@
 package co.avaldes.retipy.rest
 
 import co.avaldes.retipy.domain.patient.IPatientService
+import co.avaldes.retipy.domain.staff.IStaffAuditingService
+import co.avaldes.retipy.domain.staff.IStaffService
+import co.avaldes.retipy.persistence.staff.AuditingOperation
+import co.avaldes.retipy.rest.common.IncorrectInputException
 import co.avaldes.retipy.rest.dto.DiagnosticDTO
 import co.avaldes.retipy.rest.dto.patient.OpticalEvaluationDTO
 import co.avaldes.retipy.rest.dto.patient.OpticalEvaluationDTOMapper
 import co.avaldes.retipy.rest.dto.patient.PatientDTO
 import co.avaldes.retipy.rest.dto.patient.PatientDTOMapper
 import co.avaldes.retipy.rest.dto.patient.PersonDTO
+import co.avaldes.retipy.security.domain.user.IUserService
+import co.avaldes.retipy.security.persistence.user.Role
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
@@ -41,6 +47,9 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class PatientEndpoint(
     private val patientService: IPatientService,
+    private val auditingService: IStaffAuditingService,
+    private val userService: IUserService,
+    private val staffService: IStaffService,
     private val opticalEvaluationDTOMapper: OpticalEvaluationDTOMapper,
     private val patientDTOMapper: PatientDTOMapper)
 {
@@ -49,38 +58,58 @@ internal class PatientEndpoint(
     @GetMapping("/retipy/patient/{id}")
     fun getPatient(@PathVariable id: Long): PatientDTO
     {
-        return patientDTOMapper.fromDomain(patientService.get(id))
+        val patient = patientDTOMapper.fromDomain(patientService.get(id))
+        auditingService.audit(id, AuditingOperation.PatientRead)
+        return patient
     }
 
     @GetMapping("/retipy/patient/list")
     fun listPatient(): PatientListDTO
     {
-        return PatientListDTO(patientService.getAllPatients().map { PersonDTO.fromDomain(it) })
+        val user = userService.getCurrentAuthenticatedUser() ?: throw IncorrectInputException("User should exist")
+        if (user.roles.contains(Role.Resident))
+        {
+            return PatientListDTO(
+                patientService
+                    .getAllPatientsByDoctorIds(staffService.getDoctorsFromResident(user.id))
+                    .map { PersonDTO.fromDomain(it) })
+        }
+        else
+        {
+            return PatientListDTO(patientService.getAllPatients().map { PersonDTO.fromDomain(it) })
+        }
     }
 
     @PostMapping("/retipy/patient")
     fun savePatient(@RequestBody patientDTO: PatientDTO) : PatientDTO
     {
-        return patientDTOMapper.fromDomain(
+        val savedPatient = patientDTOMapper.fromDomain(
             patientService.save(patientDTOMapper.toDomain(patientDTO)))
+        auditingService.audit(savedPatient.id, AuditingOperation.PatientEdit)
+        return savedPatient
     }
 
     @PostMapping("/retipy/patient/{id}/opticalevaluation")
     fun saveOpticalEvaluation(@PathVariable id: Long, @RequestBody opticalEvaluationDTO: OpticalEvaluationDTO): OpticalEvaluationDTO
     {
-        return opticalEvaluationDTOMapper.fromDomain(
+        val savedOpticalEvaluation = opticalEvaluationDTOMapper.fromDomain(
             patientService.saveOpticalEvaluation(
                 id, opticalEvaluationDTOMapper.toDomain(opticalEvaluationDTO)))
+        auditingService.audit(savedOpticalEvaluation.id,AuditingOperation.OpticalEvaluationEdit)
+        return savedOpticalEvaluation
     }
 
     @PostMapping("/retipy/patient/{patientId}/opticalevaluation/{opticalEvaluationId}/diagnostic")
     fun saveDiagnostic(
         @PathVariable patientId: Long,
         @PathVariable opticalEvaluationId: Long,
-        @RequestBody diagnosticDTO: DiagnosticDTO): DiagnosticDTO {
-        return DiagnosticDTO.fromDomain(
+        @RequestBody diagnosticDTO: DiagnosticDTO): DiagnosticDTO
+    {
+        val savedDiagnostic = DiagnosticDTO.fromDomain(
             patientService.saveDiagnostic(
                 patientId, opticalEvaluationId, DiagnosticDTO.toDomain(diagnosticDTO)))
+        auditingService.audit(savedDiagnostic.id, AuditingOperation.DiagnosticEdit)
+        return savedDiagnostic
     }
 
     @PostMapping(
@@ -89,8 +118,11 @@ internal class PatientEndpoint(
     fun saveDiagnosticByImage(
         @PathVariable patientId: Long,
         @PathVariable opticalEvaluationId: Long,
-        @RequestBody image: String): DiagnosticDTO {
-        return DiagnosticDTO.fromDomain(
+        @RequestBody image: String): DiagnosticDTO
+    {
+        val savedDiagnostic = DiagnosticDTO.fromDomain(
             patientService.saveDiagnosticByImage(patientId, opticalEvaluationId, image))
+        auditingService.audit(savedDiagnostic.id, AuditingOperation.DiagnosticEdit)
+        return savedDiagnostic
     }
 }

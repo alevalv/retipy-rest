@@ -52,17 +52,18 @@ class PatientMapper(private val userService: IUserService): IMapper<PatientBean,
             parseListToString(domainObject.familiarPast),
             parseListToString(domainObject.medicines),
             domainObject.getOpticalEvaluations().map { OpticalEvaluation.toPersistence(it) },
-            parseListToString(domainObject.assignedDoctors.map { it.id.toString() })
+            domainObject.assignedDoctors.map { it.id }
         )
     }
 
     override fun fromPersistence(bean: PatientBean): Patient
     {
-        val doctorsId: List<Long> = parseListFromString(bean.assignedDoctors).map { it.toLong() }
         val doctors: List<Person> =
-            doctorsId
+            bean.assignedDoctors
+                .asSequence()
                 .map { userService.get(it) }
                 .map { Person(it.id, it.identity, it.name) }
+                .toList()
 
         return Patient(
             bean.id,

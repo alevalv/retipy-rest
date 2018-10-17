@@ -40,16 +40,16 @@ class TokenService
     fun createToken(user: User): String
     {
         val currentTime = Instant.now()
-        val token = Jwts.builder()
+        return Jwts.builder()
             .setIssuer(issuer)
             .setSubject(user.username)
             .claim("identity", user.identity)
-            .claim("scope", "users")
+            .claim("name", user.name)
+            .claim("scope", user.roles)
             .setIssuedAt(Date.from(currentTime))
             .setExpiration(Date.from(currentTime.plus(48, ChronoUnit.HOURS)))
             .signWith(key)
             .compact()
-        return token
     }
 
     fun renewToken(token: String): String
@@ -59,7 +59,6 @@ class TokenService
         {
             val claims = Jwts.parser()
                 .requireIssuer(issuer)
-                .require("scope", "users")
                 .setSigningKey(key)
                 .parseClaimsJws(token)
             return Jwts.builder()
@@ -92,7 +91,6 @@ class TokenService
         {
             Jwts.parser()
                 .requireIssuer(issuer)
-                .require("scope", "users")
                 .setSigningKey(key)
                 .parseClaimsJws(token)
             isValid = true

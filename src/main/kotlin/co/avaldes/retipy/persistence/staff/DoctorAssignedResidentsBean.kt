@@ -17,26 +17,20 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.rest.dto.patient
+package co.avaldes.retipy.persistence.staff
 
-import java.util.*
+import javax.persistence.CascadeType
+import javax.persistence.ElementCollection
+import javax.persistence.Entity
+import javax.persistence.FetchType
+import javax.persistence.Id
+import javax.persistence.OneToMany
+import javax.persistence.Table
 
-data class OpticalEvaluationDTO(
-    val id: Long,
-    val version: Long,
-    val creationDate: Date?,
-    val updateDate: Date?,
-    val visualLeftEye: String,
-    val visualRightEye: String,
-    val visualLeftPh: String,
-    val visualRightPh: String,
-    val pupilLeftEyeRD: Int,
-    val pupilLeftEyeRC: Int,
-    val pupilLeftEyeDPA: Int,
-    val pupilRightEyeRD: Int,
-    val pupilRightEyeRC: Int,
-    val pupilRightEyeDPA: Int,
-    val biomicroscopy: Map<String, String>,
-    val intraocularPressure: Int,
-    val diagnostics: List<Long>
+@Entity @Table(name = "doctors_residents")
+data class DoctorAssignedResidentsBean(
+    @Id
+    val doctorId: Long,
+    @ElementCollection(fetch = FetchType.EAGER)
+    val residentIds: List<Long>
 )

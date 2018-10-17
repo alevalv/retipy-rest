@@ -17,15 +17,14 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.common.nm
+package co.avaldes.retipy.persistence.staff
 
-enum class Education
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor
+import org.springframework.data.repository.PagingAndSortingRepository
+
+interface IStaffAccessAuditingRepository : PagingAndSortingRepository<StaffAccessAuditingBean, Long>, JpaSpecificationExecutor<StaffAccessAuditingBean>
 {
-    None,
-    Primary,
-    HighSchool,
-    Bachelor,
-    Master,
-    Doctorate,
-    PostDoctorate
+    fun findByAuditingOperation(auditingOperation: AuditingOperation): List<StaffAccessAuditingBean>
+    fun findByResourceId(resourceId: Long): List<StaffAccessAuditingBean>
+    fun findByUserId(userId: Long): List<StaffAccessAuditingBean>
 }

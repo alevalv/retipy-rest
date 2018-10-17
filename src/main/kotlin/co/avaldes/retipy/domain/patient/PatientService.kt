@@ -132,4 +132,13 @@ class PatientService(
 
         return patientList
     }
+
+    override fun getAllPatientsByDoctorIds(doctorIds: List<Long>): List<Person>
+    {
+        return patientRepository.findByAssignedDoctorsIn(doctorIds)
+            .asSequence()
+            .sortedBy { it.identity }
+            .map { Person(it.id, it.identity, it.name) }
+            .toList()
+    }
 }

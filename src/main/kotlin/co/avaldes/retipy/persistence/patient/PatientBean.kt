@@ -19,11 +19,14 @@
 
 package co.avaldes.retipy.persistence.patient
 
-import co.avaldes.retipy.common.nm.Education
-import co.avaldes.retipy.common.nm.Sex
+import co.avaldes.retipy.common.Education
+import co.avaldes.retipy.common.Sex
 import co.avaldes.retipy.persistence.evaluation.optical.OpticalEvaluationBean
+import org.hibernate.annotations.LazyCollection
+import org.hibernate.annotations.LazyCollectionOption
 import java.util.*
 import javax.persistence.CascadeType
+import javax.persistence.ElementCollection
 import javax.persistence.Entity
 import javax.persistence.FetchType
 import javax.persistence.GeneratedValue
@@ -55,5 +58,7 @@ data class PatientBean(
     @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "medicalrecord_id")
     var opticalEvaluations: List<OpticalEvaluationBean> = emptyList(),
-    val assignedDoctors: String
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ElementCollection
+    val assignedDoctors: List<Long>
 )

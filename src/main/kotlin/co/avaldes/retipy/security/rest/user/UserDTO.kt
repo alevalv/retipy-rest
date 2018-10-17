@@ -26,7 +26,7 @@ data class UserDTO(
     val username: String,
     val identity: String,
     val password: String,
-    val roles: Set<Role>,
+    val role: Role,
     val name: String)
 {
     companion object
@@ -38,12 +38,12 @@ data class UserDTO(
                 userDTO.name,
                 userDTO.username,
                 userDTO.password,
-                userDTO.roles.toMutableSet(),
+                mutableSetOf(userDTO.role),
                 false, // a login request should be disabled/locked/expired by default.
                 true,
                 true)
 
         fun fromDomain(user: User) =
-            UserDTO(user.username, user.identity, "", user.roles, user.name)
+            UserDTO(user.username, user.identity, "", user.roles.first(), user.name)
     }
 }

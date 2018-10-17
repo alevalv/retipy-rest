@@ -17,10 +17,22 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.common.nm
+package co.avaldes.retipy.persistence.staff
 
-enum class Sex
-{
-    Male,
-    Female
-}
+import java.util.*
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
+import javax.persistence.Table
+
+@Entity @Table(name = "staff_auditing")
+data class StaffAccessAuditingBean(
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    val id: Long,
+    val resourceId: Long,
+    val auditingOperation: AuditingOperation,
+    val userId: Long,
+    val username: String,
+    val date: Date
+)

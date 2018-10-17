@@ -19,8 +19,8 @@
 
 package co.avaldes.retipy.domain.patient
 
-import co.avaldes.retipy.common.nm.Education
-import co.avaldes.retipy.common.nm.Sex
+import co.avaldes.retipy.common.Education
+import co.avaldes.retipy.common.Sex
 import co.avaldes.retipy.domain.evaluation.optical.OpticalEvaluation
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
@@ -30,9 +30,9 @@ import java.util.*
 internal class PatientTest
 {
     private val opticalEvaluation1 =
-        OpticalEvaluation(1, 1, Date(), Date(), "", "", "", "", 0, 0, 0, 0, 0, 0, emptyMap<String, String>().toMutableMap(), "", emptyList())
+        OpticalEvaluation(1, 1, Date(), Date(), "", "", "", "", 0, 0, 0, 0, 0, 0, emptyMap<String, String>().toMutableMap(), 10, emptyList())
     private val opticalEvaluation2 =
-        OpticalEvaluation(2, 3, Date(), Date(), "", "", "", "", 0, 0, 0, 0, 0, 0, emptyMap<String, String>().toMutableMap(), "", emptyList())
+        OpticalEvaluation(2, 3, Date(), Date(), "", "", "", "", 0, 0, 0, 0, 0, 0, emptyMap<String, String>().toMutableMap(), 10, emptyList())
 
     private lateinit var testInstance : Patient
 
@@ -91,7 +91,24 @@ internal class PatientTest
             opticalEvaluation1, testInstance.getOpticalEvaluations()[0], "patient order is incorrect")
         Assertions.assertEquals(
             opticalEvaluation2, testInstance.getOpticalEvaluations()[1], "patient order is incorrect")
-        val medicalRecord3 = OpticalEvaluation(2, 2, Date(), Date(), "", "", "", "", 0, 0, 0, 0, 0, 0, emptyMap<String, String>().toMutableMap(), "", emptyList())
+        val medicalRecord3 = OpticalEvaluation(
+            2,
+            2,
+            Date(),
+            Date(),
+            "",
+            "",
+            "",
+            "",
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            emptyMap<String, String>().toMutableMap(),
+            10,
+            emptyList())
         testInstance.addOpticalEvaluation(medicalRecord3)
         Assertions.assertEquals(
             medicalRecord3, testInstance.getOpticalEvaluations()[1], "patient order is incorrect")
