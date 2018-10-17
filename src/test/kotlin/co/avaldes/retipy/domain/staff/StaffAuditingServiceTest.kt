@@ -41,9 +41,10 @@ internal class StaffAuditingServiceTest
     private val resourceId  = 109083L
     private val userId = 2308L
     private val username = "a username"
+    private val date = Date.from(Instant.EPOCH)
     private val savedBean =
         StaffAccessAuditingBean(
-            1L, resourceId, AuditingOperation.DiagnosticDelete, userId, username, Date.from(Instant.EPOCH))
+            1L, resourceId, AuditingOperation.DiagnosticDelete, userId, username, date)
     private val user = User(userId, "193123", "a name", username, "ui1312")
 
     private val mockAuditingRepository: IStaffAccessAuditingRepository = mockk(relaxed = true)
@@ -105,7 +106,7 @@ internal class StaffAuditingServiceTest
             logs.size,
             "only one audit message expected")
         Assertions.assertEquals(
-            "[Diagnostic Deleted - 109083]:Wed Dec 31 19:00:00 COT 1969 - user:a username",
+            "[Diagnostic Deleted - 109083]:$date - user:a username",
             logs.first(),
             "audit does not match")
     }
@@ -120,7 +121,7 @@ internal class StaffAuditingServiceTest
             logs.size,
             "only one audit message expected")
         Assertions.assertEquals(
-            "[Diagnostic Deleted - 109083]:Wed Dec 31 19:00:00 COT 1969 - user:a username",
+            "[Diagnostic Deleted - 109083]:$date - user:a username",
             logs.first(),
             "audit does not match")
     }

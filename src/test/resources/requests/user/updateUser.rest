@@ -6,5 +6,6 @@ Content-Type: application/json
   "username": "alevalv",
   "identity": "987654321",
   "password": "123123123",
-  "name": "Alejandro"
+  "name": "Alejandro",
+  "role": "Resident"
 }

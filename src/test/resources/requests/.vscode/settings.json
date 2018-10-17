@@ -1,12 +1,13 @@
 {
     "rest-client.environmentVariables": {
+        "$shared": {
+            "token": ""
+        },
         "local": {
-            "host": "http://localhost:8080",
-            "token": "eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJyZXRpcHkiLCJzdWIiOiJhbGV2YWx2IiwiaWRlbnRpdHkiOiIxMTExMTExMSIsInNjb3BlIjoidXNlcnMiLCJpYXQiOjE1Mzk1NjkzMTQsImV4cCI6MTUzOTc0MjExNH0.4leJRNYTtVE0f2BCY005JLOyDNJ1y6B9Hi5-GfWHm2A"
+            "host": "http://localhost:8080"
         },
         "production": {
-            "host": "https://retipy-rest.avaldes.co",
-            "token": "SET TOKEN BEFORE"
+            "host": "https://retipy-rest.avaldes.co"
         }
     }
 
