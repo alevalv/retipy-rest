@@ -20,6 +20,7 @@
 package co.avaldes.retipy.rest
 
 import co.avaldes.retipy.domain.patient.IPatientService
+import co.avaldes.retipy.domain.patient.Patient
 import co.avaldes.retipy.domain.staff.IStaffAuditingService
 import co.avaldes.retipy.domain.staff.IStaffService
 import co.avaldes.retipy.persistence.staff.AuditingOperation
@@ -31,6 +32,7 @@ import co.avaldes.retipy.rest.dto.patient.PatientDTO
 import co.avaldes.retipy.rest.dto.patient.PatientDTOMapper
 import co.avaldes.retipy.rest.dto.patient.PersonDTO
 import co.avaldes.retipy.security.domain.user.IUserService
+import co.avaldes.retipy.security.domain.user.User
 import co.avaldes.retipy.security.persistence.user.Role
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.CrossOrigin
@@ -66,25 +68,32 @@ internal class PatientEndpoint(
     @GetMapping("/retipy/patient/list")
     fun listPatient(): PatientListDTO
     {
-        val user = userService.getCurrentAuthenticatedUser() ?: throw IncorrectInputException("User should exist")
-        if (user.roles.contains(Role.Resident))
+        val user = getUser()
+        return if (user.roles.contains(Role.Resident))
         {
-            return PatientListDTO(
+            PatientListDTO(
                 patientService
                     .getAllPatientsByDoctorIds(staffService.getDoctorsFromResident(user.id))
                     .map { PersonDTO.fromDomain(it) })
         }
         else
         {
-            return PatientListDTO(patientService.getAllPatients().map { PersonDTO.fromDomain(it) })
+            PatientListDTO(patientService.getAllPatients().map { PersonDTO.fromDomain(it) })
         }
     }
 
     @PostMapping("/retipy/patient")
     fun savePatient(@RequestBody patientDTO: PatientDTO) : PatientDTO
     {
-        val savedPatient = patientDTOMapper.fromDomain(
-            patientService.save(patientDTOMapper.toDomain(patientDTO)))
+        val patientToSave: Patient = patientDTOMapper.toDomain(patientDTO)
+        if (getUser().roles.contains(Role.Resident))
+        {
+            // we can't allow a resident to change the doctors assigned to a patient
+            // this also have an excellent side effect, a resident cannot create a new patient.
+            val existingPatient = patientService.get(patientDTO.id)
+            patientToSave.assignedDoctors = existingPatient.assignedDoctors
+        }
+        val savedPatient = patientDTOMapper.fromDomain(patientService.save(patientToSave))
         auditingService.audit(savedPatient.id, AuditingOperation.PatientEdit)
         return savedPatient
     }
@@ -125,4 +134,7 @@ internal class PatientEndpoint(
         auditingService.audit(savedDiagnostic.id, AuditingOperation.DiagnosticEdit)
         return savedDiagnostic
     }
+
+    private fun getUser(): User =
+        userService.getCurrentAuthenticatedUser() ?: throw IncorrectInputException("User should exist")
 }
