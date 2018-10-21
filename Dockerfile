@@ -1,10 +1,14 @@
-FROM openjdk:8-jdk-alpine
+#build the retipy-rest jar
+FROM gradle:latest as builder
+USER gradle
+RUN mkdir /home/gradle/project
+WORKDIR /home/gradle/project
+COPY --chown=gradle:gradle . /home/gradle/project
+RUN gradle clean bootJar
 
+#deploy image
+FROM openjdk:8-alpine
 LABEL maintainer="Alejandro Valdes <alejandrovaldes@live.com>"
-
-VOLUME /tmp
-ADD build/libs/retipy-rest-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=builder /home/gradle/project/build/libs/*.jar /app.jar
+EXPOSE 8080
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
-
-
-
