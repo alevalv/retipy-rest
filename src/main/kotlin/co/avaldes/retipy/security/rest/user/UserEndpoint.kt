@@ -134,6 +134,10 @@ internal class UserEndpoint(
     @PostMapping("/retipy/user/password")
     fun updatePassword(@RequestBody passwordChangeRequestDTO: PasswordChangeRequestDTO)
     {
+        if (passwordChangeRequestDTO.newPassword.length > 54)
+        {
+            throw IncorrectInputException("Password lenght must be less than 54 characters")
+        }
         val user = userService.getCurrentAuthenticatedUser()
         if (user != null)
         {
