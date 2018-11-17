@@ -19,8 +19,8 @@
 
 buildscript {
     ext {
-        kotlinVersion = '1.2.71'
-        springBootVersion = '2.0.6.RELEASE'
+        kotlinVersion = '1.3.10'
+        springBootVersion = '2.1.0.RELEASE'
         jjwtVersion = '0.10.5'
     }
     repositories {
@@ -84,7 +84,7 @@ dependencies {
     testCompile('org.springframework.security:spring-security-test')
     testCompile("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testCompile("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
-    testCompile("io.mockk:mockk:1.8.9")
+    testCompile("io.mockk:mockk:1.8.13")
 }
 
 check {
