@@ -24,4 +24,6 @@ interface IDiagnosticService
     fun find(id: Long): Diagnostic?
 
     fun get(id: Long): Diagnostic
+
+    fun delete(id: Long)
 }

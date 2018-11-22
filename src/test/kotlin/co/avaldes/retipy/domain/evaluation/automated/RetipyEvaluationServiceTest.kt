@@ -28,6 +28,7 @@ import co.avaldes.retipy.rest.common.IncorrectInputException
 import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import org.junit.Assert
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions
@@ -145,5 +146,12 @@ internal class RetipyEvaluationServiceTest
     fun fromDiagnostic()
     {
         retipyEvaluationService.fromDiagnostic(diagnosticId, RetipyTask.Segmentation)
+    }
+
+    @Test
+    fun deleteByDiagnostic()
+    {
+        retipyEvaluationService.deleteByDiagnostic(diagnosticId)
+        verify { mockRetipyRepository.deleteByDiagnosticId(diagnosticId) }
     }
 }

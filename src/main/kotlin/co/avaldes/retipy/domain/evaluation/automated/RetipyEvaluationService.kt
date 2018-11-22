@@ -124,4 +124,9 @@ internal class RetipyEvaluationService(
             RetipyEvaluation(diagnosticId = diagnosticId, name = task, image = image)
         return save(retipyEvaluation)
     }
+
+    override fun deleteByDiagnostic(diagnosticId: Long)
+    {
+        retipyEvaluationRepository.deleteByDiagnosticId(diagnosticId)
+    }
 }

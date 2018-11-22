@@ -20,10 +20,13 @@
 package co.avaldes.retipy.rest
 
 import co.avaldes.retipy.domain.diagnostic.IDiagnosticService
+import co.avaldes.retipy.domain.evaluation.automated.IRetipyEvaluationService
 import co.avaldes.retipy.domain.staff.IStaffAuditingService
 import co.avaldes.retipy.persistence.staff.AuditingOperation
 import co.avaldes.retipy.rest.dto.DiagnosticDTO
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.CrossOrigin
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RestController
@@ -36,13 +39,23 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 internal class DiagnosticEndpoint(
     private val diagnosticService: IDiagnosticService,
+    private val retipyEvaluationService: IRetipyEvaluationService,
     private val auditingService: IStaffAuditingService)
 {
     @GetMapping("/retipy/diagnostic/{id}")
-    fun getPatient(@PathVariable id: Long): DiagnosticDTO
+    fun getDiagnostic(@PathVariable id: Long): DiagnosticDTO
     {
         val diagnostic = DiagnosticDTO.fromDomain(diagnosticService.get(id))
         auditingService.audit(diagnostic.id, AuditingOperation.DiagnosticRead)
         return diagnostic
     }
+
+    @Transactional
+    @DeleteMapping("/retipy/diagnostic/{id}")
+    fun deleteDiagnostic(@PathVariable id: Long)
+    {
+        retipyEvaluationService.deleteByDiagnostic(id)
+        diagnosticService.delete(id)
+    }
+
 }

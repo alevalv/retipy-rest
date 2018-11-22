@@ -44,4 +44,9 @@ interface IRetipyEvaluationService: ICRUDService<RetipyEvaluation>
      * @return a [List] of [RetipyEvaluation], will return empty if no evaluation is found.
      */
     fun getEvaluationsByStatus(status: RetipyEvaluationStatus): List<RetipyEvaluation>
+
+    /**
+     * Deletes all evaluations that belongs to the given [diagnosticId].
+     */
+    fun deleteByDiagnostic(diagnosticId: Long)
 }

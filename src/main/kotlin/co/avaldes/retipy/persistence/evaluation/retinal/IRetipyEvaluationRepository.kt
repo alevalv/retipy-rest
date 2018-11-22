@@ -32,4 +32,6 @@ interface IRetipyEvaluationRepository :
     fun findByStatus(status: RetipyEvaluationStatus): Collection<RetipyEvaluationBean>
 
     fun findByDiagnosticIdAndName(diagnosticId: Long, name: String): Collection<RetipyEvaluationBean>
+
+    fun deleteByDiagnosticId(diagnosticId: Long)
 }
