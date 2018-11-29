@@ -66,6 +66,14 @@ class PatientService(
                     "Patient with identity ${obj.identity} already exists")
             }
         }
+        if (obj.identity.isBlank())
+        {
+            throw IncorrectInputException("Patient identity cannot be empty")
+        }
+        if (obj.name.isBlank())
+        {
+            throw IncorrectInputException("Patient name cannot be empty")
+        }
         val savedPatient = patientRepository.save(patientMapper.toPersistence(obj))
         return patientMapper.fromPersistence(savedPatient)
     }

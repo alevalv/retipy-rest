@@ -4,7 +4,7 @@ Authorization: {{token}}
 
 {
     "id": 0,
-    "identity": 123456,
+    "identity": "",
     "name": "New Patient",
     "birthDate": "654739200",
     "sex": "Male",
@@ -15,6 +15,7 @@ Authorization: {{token}}
     "pathologicalPast": ["1past", "2past", "3past"],
     "familiarPast": ["1fam", "2fam", "3fam"],
     "medicines": [],
+    "assignedDoctors": [],
     "opticalEvaluations": [
         {
             "id": 0,
@@ -34,7 +35,7 @@ Authorization: {{token}}
             "biomicroscopy": {
                 "Cornea": "asdasd"
             },
-            "intraocularPressure": "texttexttext",
+            "intraocularPressure": 2,
             "diagnostics": []
         }
     ]

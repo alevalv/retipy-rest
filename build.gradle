@@ -47,7 +47,7 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'jacoco'
 
 ext {
-    junitVersion = '5.3.1'
+    junitVersion = '5.3.2'
     jacocoVersion = '0.8.2'
 }
 

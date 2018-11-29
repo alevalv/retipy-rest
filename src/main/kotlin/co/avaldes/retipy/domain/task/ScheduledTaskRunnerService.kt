@@ -58,7 +58,7 @@ internal class ScheduledTaskRunnerService(
         }
         else
         {
-            logger.warn("Retipy processing server '$retipyUri' is currently offline")
+            logger.debug("Retipy processing server '$retipyUri' is currently offline")
         }
     }
 

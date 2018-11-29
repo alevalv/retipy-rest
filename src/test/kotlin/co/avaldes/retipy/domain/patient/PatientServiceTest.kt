@@ -28,6 +28,7 @@ import co.avaldes.retipy.persistence.diagnostic.DiagnosticStatus
 import co.avaldes.retipy.persistence.evaluation.optical.OpticalEvaluationBean
 import co.avaldes.retipy.persistence.patient.IPatientRepository
 import co.avaldes.retipy.persistence.patient.PatientBean
+import co.avaldes.retipy.rest.common.IncorrectInputException
 import co.avaldes.retipy.security.domain.user.IUserService
 import io.mockk.clearMocks
 import io.mockk.every
@@ -35,6 +36,7 @@ import io.mockk.mockk
 import org.junit.Assert
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.util.*
 
 internal class PatientServiceTest
@@ -50,12 +52,13 @@ internal class PatientServiceTest
     private val patientBean = PatientBean(
         patientId,
         "12123123",
-        "", Date(),
-        Sex.Female, "",
+        "patientName",
+        Date(),
+        Sex.Female,
+        "",
         "",
         Education.Bachelor,
         "",
-
         "",
         "",
         "",
@@ -111,5 +114,53 @@ internal class PatientServiceTest
             "opticalEvaluationId does not match",
             opticalEvaluationBean.id,
             opticalEvaluation.id)
+    }
+
+    @Test
+    fun save_noIdentity()
+    {
+        assertThrows<IncorrectInputException>
+        {
+            testInstance.save(
+                Patient(
+                    1234L,
+                    "",
+                    "",
+                    Date(),
+                    Sex.Female,
+                    "",
+                    "",
+                    Education.Bachelor,
+                    "",
+                    emptyList(),
+                    emptyList(),
+                    emptyList(),
+                    emptyList(),
+                    emptyList()))
+        }
+    }
+
+    @Test
+    fun save_noName()
+    {
+        assertThrows<IncorrectInputException>
+        {
+            testInstance.save(
+                Patient(
+                    1234L,
+                    "123123123",
+                    "",
+                    Date(),
+                    Sex.Female,
+                    "",
+                    "",
+                    Education.Bachelor,
+                    "",
+                    emptyList(),
+                    emptyList(),
+                    emptyList(),
+                    emptyList(),
+                    emptyList()))
+        }
     }
 }
