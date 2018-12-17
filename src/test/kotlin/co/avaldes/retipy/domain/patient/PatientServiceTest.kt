@@ -44,7 +44,7 @@ internal class PatientServiceTest
     val patientId = 1L
     val opticalEvaluationId = 2L
     val diagnosticId = 3L
-    val image = "this is an image"
+    val image = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z/C/HgAGgwJ/lK3Q6wAAAABJRU5ErkJggg=="
 
     private val opticalEvaluationBean = OpticalEvaluationBean(
         opticalEvaluationId, 1, Date(), Date(), "", "", "", "", 1, 1, 1, 1, 1, 1, "", 10)

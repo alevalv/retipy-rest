@@ -49,6 +49,7 @@ apply plugin: 'jacoco'
 ext {
     junitVersion = '5.3.2'
     jacocoVersion = '0.8.2'
+    twelveMonkeysVersion = '3.4.1'
 }
 
 sourceCompatibility = 1.8
@@ -71,9 +72,14 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-webflux')
     compile('org.projectreactor:reactor-spring:1.0.1.RELEASE')
     compile("io.jsonwebtoken:jjwt-api:${jjwtVersion}")
-    compile('com.fasterxml.jackson.module:jackson-module-kotlin:2.9.7')
+    compile('com.fasterxml.jackson.module:jackson-module-kotlin:2.9.8')
     compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     compile("org.jetbrains.kotlin:kotlin-reflect")
+    compile("com.twelvemonkeys.imageio:imageio-bmp:${twelveMonkeysVersion}")
+    compile("com.twelvemonkeys.imageio:imageio-tga:${twelveMonkeysVersion}")
+    compile("com.twelvemonkeys.imageio:imageio-pnm:${twelveMonkeysVersion}")
+    compile("com.twelvemonkeys.imageio:imageio-jpeg:${twelveMonkeysVersion}")
+    compile("com.twelvemonkeys.imageio:imageio-tga:${twelveMonkeysVersion}")
 //    compile('org.mariadb.jdbc:mariadb-java-client:2.3.0')
     runtime('org.springframework.boot:spring-boot-devtools')
     runtime('com.h2database:h2')

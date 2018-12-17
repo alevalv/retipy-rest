@@ -23,6 +23,7 @@ import co.avaldes.retipy.domain.common.Person
 import co.avaldes.retipy.domain.diagnostic.Diagnostic
 import co.avaldes.retipy.domain.diagnostic.IDiagnosticService
 import co.avaldes.retipy.domain.evaluation.optical.OpticalEvaluation
+import co.avaldes.retipy.domain.image.ImageService
 import co.avaldes.retipy.persistence.patient.IPatientRepository
 import co.avaldes.retipy.rest.common.IncorrectInputException
 import org.springframework.stereotype.Service
@@ -34,6 +35,8 @@ class PatientService(
     private val diagnosticService: IDiagnosticService,
     private val patientMapper: PatientMapper) : IPatientService
 {
+    private val imageService = ImageService()
+
     override fun find(id: Long): Patient?
     {
         var patient : Patient? = null
@@ -127,7 +130,8 @@ class PatientService(
     override fun saveDiagnosticByImage(
         patientId: Long, opticalEvaluationId: Long, image: String): Diagnostic
     {
-        return saveDiagnostic(patientId, opticalEvaluationId, Diagnostic(image=image))
+        return saveDiagnostic(
+            patientId, opticalEvaluationId, Diagnostic(image=imageService.toPNG(image)))
     }
 
     override fun getAllPatients(): List<Person>
