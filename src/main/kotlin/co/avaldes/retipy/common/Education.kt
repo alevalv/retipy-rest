@@ -19,8 +19,7 @@
 
 package co.avaldes.retipy.common
 
-enum class Education
-{
+enum class Education {
     None,
     Primary,
     HighSchool,

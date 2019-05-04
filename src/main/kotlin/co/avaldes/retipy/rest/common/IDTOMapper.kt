@@ -22,8 +22,7 @@ package co.avaldes.retipy.rest.common
 /**
  * Interface that represents the rest layer mapper operations against the domain layer.
  */
-interface IDTOMapper<T, D>
-{
+interface IDTOMapper<T, D> {
     fun toDomain(dto: D): T
 
     fun fromDomain(domainObject: T): D

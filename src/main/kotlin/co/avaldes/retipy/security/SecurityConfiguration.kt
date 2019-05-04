@@ -38,8 +38,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true, jsr250Enabled = true, securedEnabled = true)
-class SecurityConfiguration : WebSecurityConfigurerAdapter()
-{
+class SecurityConfiguration : WebSecurityConfigurerAdapter() {
     @Autowired @Lazy
     private lateinit var userDetailsService: UserDetailsServiceImpl
 
@@ -55,8 +54,7 @@ class SecurityConfiguration : WebSecurityConfigurerAdapter()
     @Bean
     override fun authenticationManagerBean(): AuthenticationManager = super.authenticationManagerBean()
 
-    override fun configure(http: HttpSecurity)
-    {
+    override fun configure(http: HttpSecurity) {
         http
             .cors().and().csrf().disable()
             .exceptionHandling().authenticationEntryPoint(defaultEntryPoint).and()
@@ -72,8 +70,7 @@ class SecurityConfiguration : WebSecurityConfigurerAdapter()
             .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
     }
 
-    override fun configure(auth: AuthenticationManagerBuilder)
-    {
+    override fun configure(auth: AuthenticationManagerBuilder) {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder)
     }
 }

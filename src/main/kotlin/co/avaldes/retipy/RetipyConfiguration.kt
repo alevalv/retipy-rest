@@ -6,5 +6,3 @@ import org.springframework.scheduling.annotation.EnableScheduling
 @Configuration
 @EnableScheduling
 class RetipyConfiguration
-{
-}

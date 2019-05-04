@@ -22,8 +22,7 @@ package co.avaldes.retipy.domain.evaluation.automated
 import co.avaldes.retipy.domain.common.roi.Roi
 import co.avaldes.retipy.persistence.evaluation.retinal.RetipyEvaluationBean
 import co.avaldes.retipy.persistence.evaluation.retinal.RetipyEvaluationStatus
-import java.util.*
-import kotlin.collections.ArrayList
+import java.util.Date
 
 /**
  * Class that represents a automated evaluation performed by the retipy backend.
@@ -37,10 +36,8 @@ data class RetipyEvaluation(
     var status: RetipyEvaluationStatus = RetipyEvaluationStatus.Pending,
     var creationDate: Date = Date(),
     var updateDate: Date = Date()
-)
-{
-    companion object
-    {
+) {
+    companion object {
         fun toPersistence(retipyEvaluation: RetipyEvaluation) = RetipyEvaluationBean(
             retipyEvaluation.id,
             retipyEvaluation.diagnosticId,

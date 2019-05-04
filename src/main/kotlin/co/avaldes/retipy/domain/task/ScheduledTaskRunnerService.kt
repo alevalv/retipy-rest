@@ -24,25 +24,21 @@ import org.springframework.stereotype.Service
 internal class ScheduledTaskRunnerService(
     private val retipyEvaluationService: IRetipyEvaluationService,
     @Value("\${retipy.python.backend.url}") private val retipyUri: String
-)
-{
+) {
     private val logger: Logger = LoggerFactory.getLogger(ScheduledTaskRunnerService::class.java)
     private val statusTask: StatusTask = StatusTask(retipyUri)
 
     @Scheduled(fixedDelay = 120000) // wait 2 minutes to start again
-    fun runPendingTasks()
-    {
-        if (statusTask.execute())
-        {
+    fun runPendingTasks() {
+        if (statusTask.execute()) {
             val pendingEvaluations = retipyEvaluationService.getPendingEvaluations()
             // set all pending evaluations as running
-            pendingEvaluations.forEach{
+            pendingEvaluations.forEach {
                 it.status = RetipyEvaluationStatus.Running
                 retipyEvaluationService.save(it)
             }
             val tasks = pendingEvaluations.map { createRetipyTask(it) }
-            if (tasks.isNotEmpty())
-            {
+            if (tasks.isNotEmpty()) {
                 logger.info("Processing scheduled pending RetipyEvaluation tasks")
                 val results = tasks.map {
                     it.execute() }
@@ -55,22 +51,18 @@ internal class ScheduledTaskRunnerService(
                     it.status = RetipyEvaluationStatus.Error
                     retipyEvaluationService.save(it)
                 }
-        }
-        else
-        {
+        } else {
             logger.debug("Retipy processing server '$retipyUri' is currently offline")
         }
     }
 
     private fun createRetipyTask(retipyEvaluation: RetipyEvaluation): ITask<RetipyEvaluation> =
-        when (retipyEvaluation.name)
-        {
+        when (retipyEvaluation.name) {
             RetipyTask.TortuosityDensity -> TortuosityDensityTask(retipyUri, retipyEvaluation)
             RetipyTask.TortuosityFractal -> TortuosityFractalTask(retipyUri, retipyEvaluation)
             RetipyTask.LandmarksClassification -> ClassificationTask(retipyUri, retipyEvaluation)
             RetipyTask.Segmentation -> SegmentationTask(retipyUri, retipyEvaluation = retipyEvaluation)
-            else ->
-            {
+            else -> {
                 EmptyTask()
             }
         }

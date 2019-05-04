@@ -23,8 +23,7 @@ package co.avaldes.retipy.security.domain.common
  * Interface to validate a given string as password. If the password does not follow the rules, a
  * exception will be thrown.
  */
-interface IPasswordValidator
-{
+interface IPasswordValidator {
     /**
      * Validates the given [password]. If the password is not correct
      */

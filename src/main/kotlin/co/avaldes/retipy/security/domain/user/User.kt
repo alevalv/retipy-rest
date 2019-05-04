@@ -35,17 +35,13 @@ data class User(
     var enabled: Boolean = true,
     var locked: Boolean = false,
     var expired: Boolean = false
-) : UserDetails
-{
-    companion object
-    {
+) : UserDetails {
+    companion object {
         val ROLES_SEPARATOR = ","
 
-        fun fromPersistence(userBean: UserBean): User
-        {
+        fun fromPersistence(userBean: UserBean): User {
             val roles = HashSet<Role>()
-            if (userBean.roles.isNotBlank())
-            {
+            if (userBean.roles.isNotBlank()) {
                 userBean.roles.split(ROLES_SEPARATOR).forEach { roles.add(Role.valueOf(it)) }
             }
             return User(
@@ -60,12 +56,10 @@ data class User(
                 userBean.expired)
         }
 
-        fun toPersistence(user: User): UserBean
-        {
+        fun toPersistence(user: User): UserBean {
             val builder = StringBuilder()
-            if (user.roles.isNotEmpty())
-            {
-                user.roles.forEach{
+            if (user.roles.isNotEmpty()) {
+                user.roles.forEach {
                     builder.append(it)
                     builder.append(ROLES_SEPARATOR)
                 }

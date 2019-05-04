@@ -23,15 +23,13 @@ import co.avaldes.retipy.persistence.evaluation.retinal.RetipyEvaluationStatus
 import org.junit.Assert
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.util.*
+import java.util.Date
 
-internal class RetipyEvaluationTest
-{
+internal class RetipyEvaluationTest {
     private lateinit var retipyEvaluation: RetipyEvaluation
 
     @BeforeEach
-    fun setUp()
-    {
+    fun setUp() {
         retipyEvaluation = RetipyEvaluation(
             123L,
             123545L,
@@ -44,8 +42,7 @@ internal class RetipyEvaluationTest
     }
 
     @Test
-    fun test_mapping()
-    {
+    fun test_mapping() {
         val bean = RetipyEvaluation.toPersistence(retipyEvaluation)
         val domain = RetipyEvaluation.fromPersistence(bean)
         Assert.assertEquals("mapping failed for RetipyEvaluation", retipyEvaluation, domain)

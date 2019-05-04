@@ -25,15 +25,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Component
 
 @Component
-class UserDetailsServiceImpl(private val userService: IUserService) : UserDetailsService
-{
-    override fun loadUserByUsername(username: String?): UserDetails
-    {
-        if (username != null)
-        {
+class UserDetailsServiceImpl(private val userService: IUserService) : UserDetailsService {
+    override fun loadUserByUsername(username: String?): UserDetails {
+        if (username != null) {
             val user = userService.findByUsername(username)
-            if (user != null)
-            {
+            if (user != null) {
                 return user
             }
         }

@@ -19,8 +19,7 @@
 
 package co.avaldes.retipy.domain.evaluation.optical
 
-interface IOpticalEvaluationService
-{
+interface IOpticalEvaluationService {
     fun find(id: Long): OpticalEvaluation?
 
     fun get(id: Long): OpticalEvaluation

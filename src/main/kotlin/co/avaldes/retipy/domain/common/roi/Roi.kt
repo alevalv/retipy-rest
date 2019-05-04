@@ -25,16 +25,14 @@ data class Roi(
     var x: List<Int> = emptyList(),
     var y: List<Int> = emptyList(),
     var notes: String = "",
-    var color: String = "black")
-{
-    override fun toString(): String
-    {
+    var color: String = "black"
+) {
+    override fun toString(): String {
         val objectMapper = ObjectMapper()
         return objectMapper.writeValueAsString(this)
     }
 
-    companion object
-    {
+    companion object {
         const val SEPARATOR = "|||"
 
         fun fromPersistence(string: String): List<Roi> {
@@ -42,8 +40,7 @@ data class Roi(
             val roiStrings = string.split(SEPARATOR)
             val roi: MutableList<Roi> = ArrayList(roiStrings.size)
             roiStrings.forEach {
-                if (it.isNotBlank())
-                {
+                if (it.isNotBlank()) {
                     roi.add(objectMapper.readValue(it, Roi::class.java))
                 }
             }
@@ -52,11 +49,9 @@ data class Roi(
 
         fun toPersistence(rois: List<Roi>): String {
             val stringBuilder = StringBuilder()
-            for (i in rois.indices)
-            {
+            for (i in rois.indices) {
                 stringBuilder.append(rois[i].toString())
-                if (i < rois.size - 1)
-                {
+                if (i < rois.size - 1) {
                     stringBuilder.append(SEPARATOR)
                 }
             }

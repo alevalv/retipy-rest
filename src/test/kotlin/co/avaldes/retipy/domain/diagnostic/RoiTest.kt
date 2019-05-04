@@ -25,8 +25,7 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-internal class RoiTest
-{
+internal class RoiTest {
     private val roi_x = listOf(1, 3, 4, 5, 6)
     private val roi_y = listOf(1, 2, 4, 7, 6)
     private val notes = "this is a test roi"
@@ -35,14 +34,12 @@ internal class RoiTest
     private lateinit var testInstance: Roi
 
     @BeforeEach
-    fun setUp()
-    {
+    fun setUp() {
         testInstance = Roi(roi_x, roi_y, notes, color)
     }
 
     @Test
-    fun test_toString()
-    {
+    fun test_toString() {
         Assertions.assertEquals(
             "{\"x\":[1,3,4,5,6],\"y\":[1,2,4,7,6],\"notes\":\"this is a test roi\",\"color\":\"black\"}",
             testInstance.toString())
@@ -57,8 +54,7 @@ internal class RoiTest
     }
 
     @Test
-    fun test_emptyRoiMapper()
-    {
+    fun test_emptyRoiMapper() {
         val bean = Roi.toPersistence(listOf())
         val domain = Roi.fromPersistence(bean)
 

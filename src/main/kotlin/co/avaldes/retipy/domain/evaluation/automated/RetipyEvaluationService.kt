@@ -33,11 +33,9 @@ import org.springframework.stereotype.Service
 @Service
 internal class RetipyEvaluationService(
     private val retipyEvaluationRepository: IRetipyEvaluationRepository,
-    private val diagnosticService: IDiagnosticService)
-    : IRetipyEvaluationService
-{
-    override fun find(id: Long): RetipyEvaluation?
-    {
+    private val diagnosticService: IDiagnosticService
+) : IRetipyEvaluationService {
+    override fun find(id: Long): RetipyEvaluation? {
         val bean = retipyEvaluationRepository.findById(id)
         var retipyEvaluation: RetipyEvaluation? = null
         if (bean.isPresent)
@@ -45,34 +43,27 @@ internal class RetipyEvaluationService(
         return retipyEvaluation
     }
 
-    override fun get(id: Long): RetipyEvaluation
-    {
+    override fun get(id: Long): RetipyEvaluation {
         return find(id)
             ?: throw IncorrectInputException("automated evaluation with id $id does not exist")
     }
 
-    override fun save(obj: RetipyEvaluation): RetipyEvaluation
-    {
+    override fun save(obj: RetipyEvaluation): RetipyEvaluation {
         val savedBean = retipyEvaluationRepository.save(
             RetipyEvaluation.toPersistence(obj))
         return RetipyEvaluation.fromPersistence(savedBean)
     }
 
-    override fun delete(obj: RetipyEvaluation)
-    {
+    override fun delete(obj: RetipyEvaluation) {
         retipyEvaluationRepository.delete(RetipyEvaluation.toPersistence(obj))
     }
 
-    override fun delete(id: Long)
-    {
+    override fun delete(id: Long) {
         val evaluation = get(id)
-        if (evaluation.status != RetipyEvaluationStatus.Running
-            && evaluation.status != RetipyEvaluationStatus.Pending)
-        {
+        if (evaluation.status != RetipyEvaluationStatus.Running &&
+            evaluation.status != RetipyEvaluationStatus.Pending) {
             retipyEvaluationRepository.deleteById(id)
-        }
-        else
-        {
+        } else {
             throw IncorrectInputException("Can only delete evaluation with Complete or Error")
         }
     }
@@ -89,35 +80,30 @@ internal class RetipyEvaluationService(
     override fun getPendingEvaluations(): List<RetipyEvaluation> =
         getEvaluationsByStatus(RetipyEvaluationStatus.Pending)
 
-    override fun fromDiagnostic(diagnosticId: Long, task: RetipyTask): RetipyEvaluation
-    {
+    override fun fromDiagnostic(diagnosticId: Long, task: RetipyTask): RetipyEvaluation {
         if (task == RetipyTask.None)
             throw IncorrectInputException("You cannot create a new RetipyEvaluation with None name")
         val diagnostic = diagnosticService.get(diagnosticId)
         val existingEvaluations =
             retipyEvaluationRepository.findByDiagnosticIdAndName(diagnosticId, task.name)
-        if (existingEvaluations.isNotEmpty()
-            && existingEvaluations.filterNot { it.status == RetipyEvaluationStatus.Error }.isNotEmpty())
-        {
+        if (existingEvaluations.isNotEmpty() &&
+            existingEvaluations.filterNot { it.status == RetipyEvaluationStatus.Error }.isNotEmpty()) {
             throw IncorrectInputException(
                 "A task with $task type cannot be created for this diagnostic")
         }
         val image: String =
-            if (task == RetipyTask.LandmarksClassification
-                || task == RetipyTask.TortuosityFractal
-                || task == RetipyTask.TortuosityDensity)
-            {
+            if (task == RetipyTask.LandmarksClassification ||
+                task == RetipyTask.TortuosityFractal ||
+                task == RetipyTask.TortuosityDensity) {
                 val segmentation = retipyEvaluationRepository.findByDiagnosticIdAndName(
                     diagnosticId, RetipyTask.Segmentation.name)
-                if (segmentation.isEmpty()
-                    || segmentation.first().status != RetipyEvaluationStatus.Complete)
-                {
+                if (segmentation.isEmpty() ||
+                    segmentation.first().status != RetipyEvaluationStatus.Complete) {
                     throw IncorrectInputException(
                         "A segmentation must exist to add a new $task for this diagnostic")
                 }
                 segmentation.first().image
-            }
-            else {
+            } else {
                 diagnostic.image
             }
         val retipyEvaluation =
@@ -125,8 +111,7 @@ internal class RetipyEvaluationService(
         return save(retipyEvaluation)
     }
 
-    override fun deleteByDiagnostic(diagnosticId: Long)
-    {
+    override fun deleteByDiagnostic(diagnosticId: Long) {
         retipyEvaluationRepository.deleteByDiagnosticId(diagnosticId)
     }
 }

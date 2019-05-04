@@ -27,17 +27,19 @@ import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
-import java.util.*
+import java.util.Date
+import java.util.Optional
 
 /**
  * Test class for [DiagnosticService].
  */
-internal class DiagnosticServiceTest
-{
+internal class DiagnosticServiceTest {
     private val diagnosticId = 123L
 
     private lateinit var diagnosticService: DiagnosticService
@@ -46,8 +48,7 @@ internal class DiagnosticServiceTest
         diagnosticId, "", "", "", DiagnosticStatus.Created, Date(), Date())
 
     @BeforeEach
-    fun setUp()
-    {
+    fun setUp() {
         clearMocks(mockDiagnosticRepository)
 
         every { mockDiagnosticRepository.findById(diagnosticId) } returns Optional.of(diagnosticBean)
@@ -56,36 +57,31 @@ internal class DiagnosticServiceTest
     }
 
     @Test
-    fun find()
-    {
+    fun find() {
         val diagnostic = diagnosticService.find(diagnosticId)
         assertNotNull(diagnostic, "diagnostic cannot be null")
         assertEquals(diagnostic!!.id, diagnosticId, "diagnostic id does not match")
     }
 
     @Test
-    fun find_notfound()
-    {
+    fun find_notfound() {
         val diagnostic = diagnosticService.find(7486435)
         assertNull(diagnostic, "diagnostic must be null")
     }
 
     @Test
-    fun get()
-    {
+    fun get() {
         val diagnostic = diagnosticService.get(diagnosticId)
         assertEquals(diagnostic.id, diagnosticId, "diagnostic id does not match")
     }
 
     @Test
-    fun get_notfound()
-    {
-        assertThrows(IncorrectInputException::class.java) {diagnosticService.get(7486435)}
+    fun get_notfound() {
+        assertThrows(IncorrectInputException::class.java) { diagnosticService.get(7486435) }
     }
 
     @Test
-    fun delete()
-    {
+    fun delete() {
         diagnosticService.delete(diagnosticId)
         verify { mockDiagnosticRepository.deleteById(diagnosticId) }
     }

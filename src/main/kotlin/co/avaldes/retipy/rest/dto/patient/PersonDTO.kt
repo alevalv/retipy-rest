@@ -25,10 +25,11 @@ import co.avaldes.retipy.domain.common.Person
  * Simple DTO representing the basic info of a person.
  */
 data class PersonDTO(
-    val id: Long, val identity: String, val name: String)
-{
-    companion object
-    {
+    val id: Long,
+    val identity: String,
+    val name: String
+) {
+    companion object {
         fun fromDomain(person: Person) = PersonDTO(person.id, person.identity, person.name)
 
         fun toDomain(personDTO: PersonDTO) =

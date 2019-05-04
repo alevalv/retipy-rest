@@ -40,11 +40,10 @@ import org.springframework.web.bind.annotation.RestController
 internal class DiagnosticEndpoint(
     private val diagnosticService: IDiagnosticService,
     private val retipyEvaluationService: IRetipyEvaluationService,
-    private val auditingService: IStaffAuditingService)
-{
+    private val auditingService: IStaffAuditingService
+) {
     @GetMapping("/retipy/diagnostic/{id}")
-    fun getDiagnostic(@PathVariable id: Long): DiagnosticDTO
-    {
+    fun getDiagnostic(@PathVariable id: Long): DiagnosticDTO {
         val diagnostic = DiagnosticDTO.fromDomain(diagnosticService.get(id))
         auditingService.audit(diagnostic.id, AuditingOperation.DiagnosticRead)
         return diagnostic
@@ -52,10 +51,8 @@ internal class DiagnosticEndpoint(
 
     @Transactional
     @DeleteMapping("/retipy/diagnostic/{id}")
-    fun deleteDiagnostic(@PathVariable id: Long)
-    {
+    fun deleteDiagnostic(@PathVariable id: Long) {
         retipyEvaluationService.deleteByDiagnostic(id)
         diagnosticService.delete(id)
     }
-
 }

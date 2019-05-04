@@ -19,7 +19,7 @@
 
 package co.avaldes.retipy.persistence.diagnostic
 
-import java.util.*
+import java.util.Date
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
@@ -41,18 +41,16 @@ data class DiagnosticBean(
     @Lob val rois: String,
     var status: DiagnosticStatus,
     @Temporal(TemporalType.TIMESTAMP) var creationDate: Date,
-    @Temporal(TemporalType.TIMESTAMP) var updateDate: Date)
-{
+    @Temporal(TemporalType.TIMESTAMP) var updateDate: Date
+) {
     @PrePersist
-    internal fun onCreate()
-    {
+    internal fun onCreate() {
         status = DiagnosticStatus.Created
         creationDate = Date()
     }
 
     @PreUpdate
-    internal fun onUpdate()
-    {
+    internal fun onUpdate() {
         updateDate = Date()
     }
 }

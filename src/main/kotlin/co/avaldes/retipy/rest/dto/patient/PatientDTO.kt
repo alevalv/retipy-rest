@@ -21,8 +21,7 @@ package co.avaldes.retipy.rest.dto.patient
 
 import co.avaldes.retipy.common.Education
 import co.avaldes.retipy.common.Sex
-import java.util.*
-
+import java.util.Date
 
 data class PatientDTO(
     val id: Long,

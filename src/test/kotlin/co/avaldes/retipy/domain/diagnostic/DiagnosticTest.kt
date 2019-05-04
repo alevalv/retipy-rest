@@ -25,8 +25,7 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-internal class DiagnosticTest
-{
+internal class DiagnosticTest {
     private val diagnosticId = 3L
     private val diagnostic = "a diagnostic"
     private val image = "some image"
@@ -35,18 +34,15 @@ internal class DiagnosticTest
 
     private lateinit var testInstance: Diagnostic
 
-
     @BeforeEach
-    fun setUp()
-    {
+    fun setUp() {
         testInstance = Diagnostic(
             diagnosticId, image, diagnostic, listOf(roi), DiagnosticStatus.Created)
     }
 
     @Test
-    fun test_mappers()
-    {
-        val bean =  Diagnostic.toPersistence(testInstance)
+    fun test_mappers() {
+        val bean = Diagnostic.toPersistence(testInstance)
         val domain = Diagnostic.fromPersistence(bean)
 
         Assertions.assertEquals(testInstance, domain)

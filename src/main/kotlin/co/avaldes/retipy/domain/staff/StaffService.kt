@@ -31,13 +31,10 @@ import org.springframework.stereotype.Service
 internal class StaffService(
     private val doctorResidentsRepository: IDoctorAssignedResidentsRepository,
     private val userService: IUserService
-) : IStaffService
-{
-    override fun getDoctorAssignedResidents(doctorId: Long): List<Person>
-    {
+) : IStaffService {
+    override fun getDoctorAssignedResidents(doctorId: Long): List<Person> {
         val doctor = userService.get(doctorId)
-        if (!doctor.roles.contains(Role.Doctor))
-        {
+        if (!doctor.roles.contains(Role.Doctor)) {
             throw IncorrectInputException("Invalid doctor id")
         }
         val assignedResidents = ArrayList<Person>()
@@ -45,10 +42,8 @@ internal class StaffService(
         if (doctorResidents.isPresent)
             doctorResidents.get().residentIds.forEach {
                 val resident = userService.find(it)
-                if (resident != null)
-                {
-                    if (resident.roles.contains(Role.Resident))
-                    {
+                if (resident != null) {
+                    if (resident.roles.contains(Role.Resident)) {
                         assignedResidents.add(Person.fromUser(resident))
                     }
                 }
@@ -56,11 +51,9 @@ internal class StaffService(
         return assignedResidents
     }
 
-    override fun setDoctorAssignedResidents(doctorId: Long, residentIdList: List<Long>)
-    {
+    override fun setDoctorAssignedResidents(doctorId: Long, residentIdList: List<Long>) {
         val doctor = userService.get(doctorId)
-        if (!doctor.roles.contains(Role.Doctor))
-        {
+        if (!doctor.roles.contains(Role.Doctor)) {
             throw IncorrectInputException("Invalid doctor id")
         }
         val filteredResidentList = residentIdList.filter {
@@ -70,8 +63,7 @@ internal class StaffService(
         doctorResidentsRepository.save(DoctorAssignedResidentsBean(doctorId, filteredResidentList))
     }
 
-    override fun getDoctorsFromResident(residentId: Long): List<Long>
-    {
+    override fun getDoctorsFromResident(residentId: Long): List<Long> {
         return doctorResidentsRepository.findDoctorIdByResidentId(residentId).map { it.doctorId }
     }
 }

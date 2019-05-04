@@ -24,7 +24,7 @@ import co.avaldes.retipy.common.Sex
 import co.avaldes.retipy.persistence.evaluation.optical.OpticalEvaluationBean
 import org.hibernate.annotations.LazyCollection
 import org.hibernate.annotations.LazyCollectionOption
-import java.util.*
+import java.util.Date
 import javax.persistence.CascadeType
 import javax.persistence.ElementCollection
 import javax.persistence.Entity
@@ -40,7 +40,7 @@ import javax.persistence.Table
 @Entity @Table(name = "patient")
 data class PatientBean(
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    val id:Long,
+    val id: Long,
     val identity: String,
     val name: String,
     val birthDate: Date,

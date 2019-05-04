@@ -22,8 +22,7 @@ package co.avaldes.retipy.persistence.staff
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 import org.springframework.data.repository.PagingAndSortingRepository
 
-interface IStaffAccessAuditingRepository : PagingAndSortingRepository<StaffAccessAuditingBean, Long>, JpaSpecificationExecutor<StaffAccessAuditingBean>
-{
+interface IStaffAccessAuditingRepository : PagingAndSortingRepository<StaffAccessAuditingBean, Long>, JpaSpecificationExecutor<StaffAccessAuditingBean> {
     fun findByAuditingOperation(auditingOperation: AuditingOperation): List<StaffAccessAuditingBean>
     fun findByResourceId(resourceId: Long): List<StaffAccessAuditingBean>
     fun findByUserId(userId: Long): List<StaffAccessAuditingBean>

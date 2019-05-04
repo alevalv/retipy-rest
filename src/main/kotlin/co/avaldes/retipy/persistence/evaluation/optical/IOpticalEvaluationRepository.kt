@@ -24,4 +24,4 @@ import org.springframework.data.repository.PagingAndSortingRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface  IOpticalEvaluationRepository : PagingAndSortingRepository<OpticalEvaluationBean, Long>, JpaSpecificationExecutor<OpticalEvaluationBean>
+interface IOpticalEvaluationRepository : PagingAndSortingRepository<OpticalEvaluationBean, Long>, JpaSpecificationExecutor<OpticalEvaluationBean>

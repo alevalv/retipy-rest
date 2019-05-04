@@ -19,7 +19,7 @@
 
 package co.avaldes.retipy.persistence.evaluation.retinal
 
-import java.util.*
+import java.util.Date
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
@@ -30,7 +30,7 @@ import javax.persistence.PreUpdate
 import javax.persistence.Table
 
 @Entity
-@Table(name="retipy_evaluation")
+@Table(name = "retipy_evaluation")
 data class RetipyEvaluationBean(
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Long,
@@ -43,17 +43,14 @@ data class RetipyEvaluationBean(
     val status: RetipyEvaluationStatus,
     var creationDate: Date = Date(),
     var updateDate: Date = Date()
-)
-{
+) {
     @PrePersist
-    internal fun onCreate()
-    {
+    internal fun onCreate() {
         creationDate = Date()
     }
 
     @PreUpdate
-    internal fun onUpdate()
-    {
+    internal fun onUpdate() {
         updateDate = Date()
     }
 }

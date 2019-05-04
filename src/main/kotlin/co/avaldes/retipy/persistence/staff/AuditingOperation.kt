@@ -19,8 +19,7 @@
 
 package co.avaldes.retipy.persistence.staff
 
-enum class AuditingOperation(val operation: String)
-{
+enum class AuditingOperation(val operation: String) {
     PatientRead("Patient Opened"),
     PatientEdit("Patient Modified"),
     OpticalEvaluationRead("Optical Evaluation Opened"),

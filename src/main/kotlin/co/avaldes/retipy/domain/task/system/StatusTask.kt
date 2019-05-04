@@ -8,17 +8,12 @@ import org.springframework.http.HttpMethod
  */
 class StatusTask(
     retipyUri: String
-) : AbstractRESTTask<Boolean>("StatusTask", "/status", retipyUri, emptyMap())
-{
-    override fun execute(): Boolean
-    {
+) : AbstractRESTTask<Boolean>("StatusTask", "/status", retipyUri, emptyMap()) {
+    override fun execute(): Boolean {
         var isRunning: Boolean = false
-        try
-        {
+        try {
             getRequest(HttpMethod.GET).exchange().doOnSuccess { isRunning = true }.block()
-        }
-        catch(webClientException: Exception)
-        {
+        } catch (webClientException: Exception) {
             isRunning = false
         }
 

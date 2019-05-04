@@ -24,8 +24,7 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.PagingAndSortingRepository
 import org.springframework.data.repository.query.Param
 
-interface IDoctorAssignedResidentsRepository : PagingAndSortingRepository<DoctorAssignedResidentsBean, Long>, JpaSpecificationExecutor<DoctorAssignedResidentsBean>
-{
+interface IDoctorAssignedResidentsRepository : PagingAndSortingRepository<DoctorAssignedResidentsBean, Long>, JpaSpecificationExecutor<DoctorAssignedResidentsBean> {
     @Query("SELECT t FROM DoctorAssignedResidentsBean t join t.residentIds r WHERE r = :residentId")
     fun findDoctorIdByResidentId(@Param("residentId") residentId: Long): List<DoctorAssignedResidentsBean>
 }

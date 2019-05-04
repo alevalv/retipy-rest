@@ -19,8 +19,8 @@
 
 package co.avaldes.retipy.domain.staff
 
-import co.avaldes.retipy.persistence.staff.IStaffAccessAuditingRepository
 import co.avaldes.retipy.persistence.staff.AuditingOperation
+import co.avaldes.retipy.persistence.staff.IStaffAccessAuditingRepository
 import co.avaldes.retipy.persistence.staff.StaffAccessAuditingBean
 import co.avaldes.retipy.security.domain.user.IUserService
 import co.avaldes.retipy.security.domain.user.User
@@ -34,11 +34,10 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Instant
-import java.util.*
+import java.util.Date
 
-internal class StaffAuditingServiceTest
-{
-    private val resourceId  = 109083L
+internal class StaffAuditingServiceTest {
+    private val resourceId = 109083L
     private val userId = 2308L
     private val username = "a username"
     private val date = Date.from(Instant.EPOCH)
@@ -48,14 +47,13 @@ internal class StaffAuditingServiceTest
     private val user = User(userId, "193123", "a name", username, "ui1312")
 
     private val mockAuditingRepository: IStaffAccessAuditingRepository = mockk(relaxed = true)
-    private val mockUserService : IUserService = mockk(relaxed = true)
+    private val mockUserService: IUserService = mockk(relaxed = true)
     private val slot = slot<StaffAccessAuditingBean>()
 
     private lateinit var staffAuditingService: StaffAuditingService
 
     @BeforeEach
-    fun setUp()
-    {
+    fun setUp() {
         clearMocks(mockAuditingRepository, mockUserService)
         every {
             mockAuditingRepository.save(capture(slot))
@@ -71,8 +69,7 @@ internal class StaffAuditingServiceTest
     }
 
     @Test
-    fun log_userInput()
-    {
+    fun log_userInput() {
         val auditingOperation = AuditingOperation.DiagnosticDelete
         staffAuditingService.audit(resourceId, auditingOperation, userId, username)
         verify(exactly = 1) { mockAuditingRepository.save(allAny<StaffAccessAuditingBean>()) }
@@ -84,8 +81,7 @@ internal class StaffAuditingServiceTest
     }
 
     @Test
-    fun log_currentUser()
-    {
+    fun log_currentUser() {
         val auditingOperation = AuditingOperation.DiagnosticRead
         staffAuditingService.audit(resourceId, auditingOperation)
         verify(exactly = 1) { mockAuditingRepository.save(allAny<StaffAccessAuditingBean>()) }
@@ -97,8 +93,7 @@ internal class StaffAuditingServiceTest
     }
 
     @Test
-    fun getLogsByUser()
-    {
+    fun getLogsByUser() {
         val logs = staffAuditingService.getLogsByUser(userId)
 
         Assertions.assertEquals(
@@ -112,8 +107,7 @@ internal class StaffAuditingServiceTest
     }
 
     @Test
-    fun getLogsByResource()
-    {
+    fun getLogsByResource() {
         val logs = staffAuditingService.getLogsByResource(resourceId)
 
         Assertions.assertEquals(

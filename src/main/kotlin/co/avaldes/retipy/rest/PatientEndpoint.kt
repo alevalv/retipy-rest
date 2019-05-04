@@ -53,41 +53,34 @@ internal class PatientEndpoint(
     private val userService: IUserService,
     private val staffService: IStaffService,
     private val opticalEvaluationDTOMapper: OpticalEvaluationDTOMapper,
-    private val patientDTOMapper: PatientDTOMapper)
-{
+    private val patientDTOMapper: PatientDTOMapper
+) {
     data class PatientListDTO(val patientList: List<PersonDTO>)
 
     @GetMapping("/retipy/patient/{id}")
-    fun getPatient(@PathVariable id: Long): PatientDTO
-    {
+    fun getPatient(@PathVariable id: Long): PatientDTO {
         val patient = patientDTOMapper.fromDomain(patientService.get(id))
         auditingService.audit(id, AuditingOperation.PatientRead)
         return patient
     }
 
     @GetMapping("/retipy/patient/list")
-    fun listPatient(): PatientListDTO
-    {
+    fun listPatient(): PatientListDTO {
         val user = getUser()
-        return if (user.roles.contains(Role.Resident))
-        {
+        return if (user.roles.contains(Role.Resident)) {
             PatientListDTO(
                 patientService
                     .getAllPatientsByDoctorIds(staffService.getDoctorsFromResident(user.id))
                     .map { PersonDTO.fromDomain(it) })
-        }
-        else
-        {
+        } else {
             PatientListDTO(patientService.getAllPatients().map { PersonDTO.fromDomain(it) })
         }
     }
 
     @PostMapping("/retipy/patient")
-    fun savePatient(@RequestBody patientDTO: PatientDTO) : PatientDTO
-    {
+    fun savePatient(@RequestBody patientDTO: PatientDTO): PatientDTO {
         val patientToSave: Patient = patientDTOMapper.toDomain(patientDTO)
-        if (getUser().roles.contains(Role.Resident))
-        {
+        if (getUser().roles.contains(Role.Resident)) {
             // we can't allow a resident to change the doctors assigned to a patient
             // this also have an excellent side effect, a resident cannot create a new patient.
             val existingPatient = patientService.get(patientDTO.id)
@@ -99,12 +92,11 @@ internal class PatientEndpoint(
     }
 
     @PostMapping("/retipy/patient/{id}/opticalevaluation")
-    fun saveOpticalEvaluation(@PathVariable id: Long, @RequestBody opticalEvaluationDTO: OpticalEvaluationDTO): OpticalEvaluationDTO
-    {
+    fun saveOpticalEvaluation(@PathVariable id: Long, @RequestBody opticalEvaluationDTO: OpticalEvaluationDTO): OpticalEvaluationDTO {
         val savedOpticalEvaluation = opticalEvaluationDTOMapper.fromDomain(
             patientService.saveOpticalEvaluation(
                 id, opticalEvaluationDTOMapper.toDomain(opticalEvaluationDTO)))
-        auditingService.audit(savedOpticalEvaluation.id,AuditingOperation.OpticalEvaluationEdit)
+        auditingService.audit(savedOpticalEvaluation.id, AuditingOperation.OpticalEvaluationEdit)
         return savedOpticalEvaluation
     }
 
@@ -112,8 +104,8 @@ internal class PatientEndpoint(
     fun saveDiagnostic(
         @PathVariable patientId: Long,
         @PathVariable opticalEvaluationId: Long,
-        @RequestBody diagnosticDTO: DiagnosticDTO): DiagnosticDTO
-    {
+        @RequestBody diagnosticDTO: DiagnosticDTO
+    ): DiagnosticDTO {
         val savedDiagnostic = DiagnosticDTO.fromDomain(
             patientService.saveDiagnostic(
                 patientId, opticalEvaluationId, DiagnosticDTO.toDomain(diagnosticDTO)))
@@ -127,8 +119,8 @@ internal class PatientEndpoint(
     fun saveDiagnosticByImage(
         @PathVariable patientId: Long,
         @PathVariable opticalEvaluationId: Long,
-        @RequestBody image: String): DiagnosticDTO
-    {
+        @RequestBody image: String
+    ): DiagnosticDTO {
         val savedDiagnostic = DiagnosticDTO.fromDomain(
             patientService.saveDiagnosticByImage(patientId, opticalEvaluationId, image))
         auditingService.audit(savedDiagnostic.id, AuditingOperation.DiagnosticEdit)

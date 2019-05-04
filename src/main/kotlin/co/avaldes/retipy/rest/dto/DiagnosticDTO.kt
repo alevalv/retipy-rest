@@ -21,7 +21,7 @@ package co.avaldes.retipy.rest.dto
 
 import co.avaldes.retipy.domain.diagnostic.Diagnostic
 import co.avaldes.retipy.persistence.diagnostic.DiagnosticStatus
-import java.util.*
+import java.util.Date
 
 /**
  * DTO class to transfer a diagnostic with on the rest layer.
@@ -33,15 +33,14 @@ data class DiagnosticDTO(
     val rois: List<RoiDTO>,
     val status: DiagnosticStatus?,
     val creationDate: Date?,
-    val updateDate: Date?)
-{
-    companion object
-    {
+    val updateDate: Date?
+) {
+    companion object {
         fun fromDomain(diagnostic: Diagnostic) = DiagnosticDTO(
             diagnostic.id,
             diagnostic.image,
             diagnostic.diagnostic,
-            diagnostic.rois.map {RoiDTO.fromDomain(it)},
+            diagnostic.rois.map { RoiDTO.fromDomain(it) },
             diagnostic.status,
             diagnostic.creationDate,
             diagnostic.updateDate)

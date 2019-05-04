@@ -22,7 +22,7 @@ package co.avaldes.retipy.rest.dto
 import co.avaldes.retipy.domain.evaluation.automated.RetipyEvaluation
 import co.avaldes.retipy.domain.evaluation.automated.RetipyTask
 import co.avaldes.retipy.persistence.evaluation.retinal.RetipyEvaluationStatus
-import java.util.*
+import java.util.Date
 
 data class RetipyEvaluationDTO(
     val id: Long,
@@ -32,10 +32,9 @@ data class RetipyEvaluationDTO(
     val rois: List<RoiDTO>,
     val status: RetipyEvaluationStatus,
     val creationDate: Date,
-    val updateDate: Date)
-{
-    companion object
-    {
+    val updateDate: Date
+) {
+    companion object {
         fun fromDomain(retipyEvaluation: RetipyEvaluation) = RetipyEvaluationDTO(
             retipyEvaluation.id,
             retipyEvaluation.diagnosticId,

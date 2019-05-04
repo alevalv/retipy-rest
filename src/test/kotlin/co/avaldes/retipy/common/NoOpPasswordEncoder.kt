@@ -21,15 +21,12 @@ package co.avaldes.retipy.common
 
 import org.springframework.security.crypto.password.PasswordEncoder
 
-class NoOpPasswordEncoder : PasswordEncoder
-{
-    override fun encode(rawPassword: CharSequence?): String
-    {
+class NoOpPasswordEncoder : PasswordEncoder {
+    override fun encode(rawPassword: CharSequence?): String {
         return rawPassword.toString()
     }
 
-    override fun matches(rawPassword: CharSequence?, encodedPassword: String?): Boolean
-    {
+    override fun matches(rawPassword: CharSequence?, encodedPassword: String?): Boolean {
         return rawPassword == encodedPassword!!.subSequence(0, encodedPassword.lastIndex)
     }
 }

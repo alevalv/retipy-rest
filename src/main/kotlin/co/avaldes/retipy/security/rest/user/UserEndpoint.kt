@@ -25,7 +25,6 @@ import co.avaldes.retipy.security.domain.user.IUserService
 import co.avaldes.retipy.security.persistence.user.ROLE_ADMINISTRATOR
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.annotation.Secured
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
@@ -42,8 +41,9 @@ import org.springframework.web.bind.annotation.RestController
 @CrossOrigin
 @RestController
 internal class UserEndpoint(
-    private val userService: IUserService, private val tokenService: TokenService)
-{
+    private val userService: IUserService,
+    private val tokenService: TokenService
+) {
     internal data class LoginRequest(val username: String, val password: String)
     internal data class PasswordChangeRequestDTO(val oldPassword: String, val newPassword: String)
 
@@ -51,8 +51,7 @@ internal class UserEndpoint(
      * Unsecured uri
      */
     @PostMapping("/retipy/user/login")
-    fun login(@RequestBody loginRequest: LoginRequest): String
-    {
+    fun login(@RequestBody loginRequest: LoginRequest): String {
         val user = userService.login(loginRequest.username, loginRequest.password)
             ?: throw UsernameNotFoundException("Incorrect username or password")
         return tokenService.createToken(user)
@@ -62,66 +61,51 @@ internal class UserEndpoint(
      * Unsecured uri
      */
     @PostMapping("retipy/user/token")
-    fun renewToken(@RequestBody token: String): String
-    {
+    fun renewToken(@RequestBody token: String): String {
         return tokenService.renewToken(token)
     }
 
     @GetMapping("/retipy/user")
-    fun getCurrentUser(): UserDTO
-    {
+    fun getCurrentUser(): UserDTO {
         val user = userService.getCurrentAuthenticatedUser()
-        if (user != null)
-        {
+        if (user != null) {
             return UserDTO.fromDomain(user)
-        }
-        else
-        {
+        } else {
             throw IncorrectInputException("username not found")
         }
     }
 
     @PostMapping("/retipy/user")
-    fun updateUser(@RequestBody userDTO: UserDTO): UserDTO
-    {
+    fun updateUser(@RequestBody userDTO: UserDTO): UserDTO {
         val user = userService.getCurrentAuthenticatedUser()
-        if (user != null)
-        {
-            if (user.username != userDTO.username)
-            {
+        if (user != null) {
+            if (user.username != userDTO.username) {
                 throw IncorrectInputException("cannot modify other users")
-            }
-            else
-            {
+            } else {
                 if (userDTO.identity != user.identity)
                     user.identity = userDTO.identity
                 if (userDTO.name != user.name)
                     user.name = userDTO.name
                 return UserDTO.fromDomain(userService.save(user))
             }
-        }
-        else
-        {
+        } else {
             throw IncorrectInputException("username not found")
         }
     }
 
     @Secured(ROLE_ADMINISTRATOR)
     @PostMapping("/retipy/user/new")
-    fun createUser(@RequestBody userDTO: UserDTO): UserDTO
-    {
+    fun createUser(@RequestBody userDTO: UserDTO): UserDTO {
         val user = userService.createUser(UserDTO.toDomain(userDTO))
         return UserDTO.fromDomain(user)
     }
 
     @Secured(ROLE_ADMINISTRATOR)
     @PostMapping("/retipy/user/enable")
-    fun enableUser(@RequestBody username:String): ResponseEntity<Any>
-    {
+    fun enableUser(@RequestBody username: String): ResponseEntity<Any> {
         val user = userService.findByUsername(username)
         var success = false
-        if (user != null && !user.enabled)
-        {
+        if (user != null && !user.enabled) {
             user.enabled = true
             user.expired = false
             user.locked = false
@@ -132,28 +116,19 @@ internal class UserEndpoint(
     }
 
     @PostMapping("/retipy/user/password")
-    fun updatePassword(@RequestBody passwordChangeRequestDTO: PasswordChangeRequestDTO)
-    {
-        if (passwordChangeRequestDTO.newPassword.length > 54)
-        {
+    fun updatePassword(@RequestBody passwordChangeRequestDTO: PasswordChangeRequestDTO) {
+        if (passwordChangeRequestDTO.newPassword.length > 54) {
             throw IncorrectInputException("Password lenght must be less than 54 characters")
         }
         val user = userService.getCurrentAuthenticatedUser()
-        if (user != null)
-        {
-            if (userService.login(user.username, passwordChangeRequestDTO.oldPassword) != null)
-            {
+        if (user != null) {
+            if (userService.login(user.username, passwordChangeRequestDTO.oldPassword) != null) {
                 userService.updatePassword(user, passwordChangeRequestDTO.newPassword)
-            }
-            else
-            {
+            } else {
                 throw IncorrectInputException("old password does not match")
             }
-        }
-        else
-        {
+        } else {
             throw IncorrectInputException("username not found")
         }
     }
-
 }

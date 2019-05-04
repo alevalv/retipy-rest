@@ -21,10 +21,8 @@ package co.avaldes.retipy.domain.common
 
 import co.avaldes.retipy.security.domain.user.User
 
-data class Person(val id: Long, val identity: String, val name: String)
-{
-    companion object
-    {
+data class Person(val id: Long, val identity: String, val name: String) {
+    companion object {
         fun fromUser(user: User): Person = Person(user.id, user.identity, user.name)
     }
 }

@@ -32,20 +32,18 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import java.util.*
+import java.util.Optional
 
-internal class UserServiceTest
-{
-    private val userId : Long = 1
+internal class UserServiceTest {
+    private val userId: Long = 1
     private val username = "beanu"
-    private val userBean = UserBean(userId, "111111", "bean", username, "beanp", "",true, false, false)
+    private val userBean = UserBean(userId, "111111", "bean", username, "beanp", "", true, false, false)
 
     private val mockUserRepository: IUserRepository = mockk(relaxed = true)
-    private lateinit var testInstance : UserService
+    private lateinit var testInstance: UserService
 
     @BeforeEach
-    fun init()
-    {
+    fun init() {
         clearMocks(mockUserRepository)
         testInstance = UserService(mockUserRepository, NoOpPasswordEncoder())
         every { mockUserRepository.findByUsername(any()) } returns userBean
@@ -53,42 +51,37 @@ internal class UserServiceTest
     }
 
     @Test
-    fun findById()
-    {
+    fun findById() {
         val user = testInstance.find(userId)
         Assertions.assertEquals(userId, user!!.id, "user id does not match")
     }
 
     @Test
-    fun findByUsername()
-    {
+    fun findByUsername() {
         val user = testInstance.findByUsername(username)
         Assertions.assertEquals(username, user!!.username, "username does not match")
     }
 
     @Test
-    fun createUser()
-    {
+    fun createUser() {
         every { mockUserRepository.save<UserBean>(any()) } returns userBean
         every { mockUserRepository.findByUsername(username) } returns null
         val savedUser = testInstance.createUser(
-            User(0, username, username, username, username, mutableSetOf(),true, false , false))
+            User(0, username, username, username, username, mutableSetOf(), true, false, false))
         verify(exactly = 1) { mockUserRepository.save<UserBean>(any()) }
         Assertions.assertEquals(
             savedUser, User.fromPersistence(userBean), "returned user object does not match")
     }
 
     @Test
-    fun createUser_Exception()
-    {
+    fun createUser_Exception() {
         assertThrows<IncorrectInputException> {
             testInstance.createUser(
-                User(userId, username, username, username, username, mutableSetOf(),true, false , false)) }
+                User(userId, username, username, username, username, mutableSetOf(), true, false, false)) }
     }
 
     @Test
-    fun delete()
-    {
+    fun delete() {
         testInstance.delete(User.fromPersistence(userBean))
         verifySequence { mockUserRepository.delete(any()) }
     }

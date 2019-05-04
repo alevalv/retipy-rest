@@ -24,9 +24,7 @@ import co.avaldes.retipy.domain.common.Person
 import co.avaldes.retipy.domain.diagnostic.Diagnostic
 import co.avaldes.retipy.domain.evaluation.optical.OpticalEvaluation
 
-
-interface IPatientService: ICRUDService<Patient>
-{
+interface IPatientService : ICRUDService<Patient> {
     /**
      * Add a new opticalEvaluation to the given [patientId], the opticalEvaluation will be placed last.
      */
@@ -54,7 +52,10 @@ interface IPatientService: ICRUDService<Patient>
      * Will throw error if the [Patient] or the [OpticalEvaluation] does not exist.
      */
     fun saveDiagnostic(
-        patientId: Long, opticalEvaluationId: Long, diagnostic: Diagnostic): Diagnostic
+        patientId: Long,
+        opticalEvaluationId: Long,
+        diagnostic: Diagnostic
+    ): Diagnostic
 
     /**
      * Creates a new diagnostic for the given image in base 64.

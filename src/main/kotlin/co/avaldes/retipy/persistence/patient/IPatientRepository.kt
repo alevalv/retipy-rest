@@ -22,8 +22,7 @@ package co.avaldes.retipy.persistence.patient
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 import org.springframework.data.repository.PagingAndSortingRepository
 
-interface IPatientRepository : PagingAndSortingRepository<PatientBean, Long>, JpaSpecificationExecutor<PatientBean>
-{
+interface IPatientRepository : PagingAndSortingRepository<PatientBean, Long>, JpaSpecificationExecutor<PatientBean> {
     fun findByIdentity(identity: String): PatientBean?
     fun findByAssignedDoctorsIn(assignedDoctors: List<Long>): List<PatientBean>
 }

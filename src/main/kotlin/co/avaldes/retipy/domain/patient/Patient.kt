@@ -23,8 +23,7 @@ import co.avaldes.retipy.common.Education
 import co.avaldes.retipy.common.Sex
 import co.avaldes.retipy.domain.common.Person
 import co.avaldes.retipy.domain.evaluation.optical.OpticalEvaluation
-import java.util.*
-import kotlin.collections.HashMap
+import java.util.Date
 
 data class Patient(
     var id: Long,
@@ -41,26 +40,22 @@ data class Patient(
     var medicines: List<String>,
     private val opticalEvaluations: List<OpticalEvaluation>,
     var assignedDoctors: List<Person>
-)
-{
-    private val opticalEvaluationMap : MutableMap<Long, OpticalEvaluation> = HashMap()
+) {
+    private val opticalEvaluationMap: MutableMap<Long, OpticalEvaluation> = HashMap()
 
-    init
-    {
-        this.opticalEvaluations.forEach{
+    init {
+        this.opticalEvaluations.forEach {
             opticalEvaluationMap[it.id] = it
         }
     }
 
-    fun getOpticalEvaluations() : List<OpticalEvaluation> = opticalEvaluationMap.values.toList().sortedBy { record -> record.id }
+    fun getOpticalEvaluations(): List<OpticalEvaluation> = opticalEvaluationMap.values.toList().sortedBy { record -> record.id }
 
-    fun getOpticalEvaluation(id: Long) : OpticalEvaluation? = opticalEvaluationMap[id]
+    fun getOpticalEvaluation(id: Long): OpticalEvaluation? = opticalEvaluationMap[id]
 
-    fun addOpticalEvaluation(opticalEvaluation: OpticalEvaluation)
-    {
+    fun addOpticalEvaluation(opticalEvaluation: OpticalEvaluation) {
         val existingOpticalEvaluation = opticalEvaluationMap[opticalEvaluation.id]
-        if (existingOpticalEvaluation != null)
-        {
+        if (existingOpticalEvaluation != null) {
             opticalEvaluation.version = existingOpticalEvaluation.version + 1L
         }
         opticalEvaluationMap[opticalEvaluation.id] = opticalEvaluation

@@ -28,8 +28,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 /**
  * Test class for [User]
  */
-internal class UserTest
-{
+internal class UserTest {
     private val id = 111L
     private val identity = "123456"
     private val name = "A name"
@@ -43,21 +42,18 @@ internal class UserTest
     private lateinit var testInstance: User
 
     @BeforeEach
-    fun setUp()
-    {
+    fun setUp() {
         testInstance = User(id, identity, name, username, password, roles, enabled, locked, expired)
     }
 
     @Test
-    fun getAuthorities()
-    {
+    fun getAuthorities() {
         val authorities = roles.map { SimpleGrantedAuthority(it.authority) }
         Assert.assertEquals("authorities does not match", authorities, testInstance.authorities)
     }
 
     @Test
-    fun test_mappers()
-    {
+    fun test_mappers() {
         val bean = User.toPersistence(testInstance)
         val mappedObject = User.fromPersistence(bean)
         Assert.assertEquals("mapped object does not match", testInstance, mappedObject)

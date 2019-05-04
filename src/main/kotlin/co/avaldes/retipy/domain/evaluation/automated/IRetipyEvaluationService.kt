@@ -22,8 +22,7 @@ package co.avaldes.retipy.domain.evaluation.automated
 import co.avaldes.retipy.common.ICRUDService
 import co.avaldes.retipy.persistence.evaluation.retinal.RetipyEvaluationStatus
 
-interface IRetipyEvaluationService: ICRUDService<RetipyEvaluation>
-{
+interface IRetipyEvaluationService : ICRUDService<RetipyEvaluation> {
     fun findByDiagnostic(diagnosticId: Long): List<RetipyEvaluation>
 
     /**

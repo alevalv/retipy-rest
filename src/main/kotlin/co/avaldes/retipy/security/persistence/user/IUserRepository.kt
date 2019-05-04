@@ -24,8 +24,7 @@ import org.springframework.data.repository.PagingAndSortingRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface IUserRepository: PagingAndSortingRepository<UserBean, Long>, JpaSpecificationExecutor<UserBean>
-{
+interface IUserRepository : PagingAndSortingRepository<UserBean, Long>, JpaSpecificationExecutor<UserBean> {
     fun findByUsername(username: String?): UserBean?
 
     fun findByRolesContaining(role: String): List<UserBean>

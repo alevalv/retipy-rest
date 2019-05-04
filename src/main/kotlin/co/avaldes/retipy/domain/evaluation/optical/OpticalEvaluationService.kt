@@ -27,22 +27,19 @@ import org.springframework.stereotype.Service
  * Service for retrieving [OpticalEvaluation].
  */
 @Service
-internal class OpticalEvaluationService(private var opticalEvaluationRepository: IOpticalEvaluationRepository)
-    : IOpticalEvaluationService
-{
-    override fun find(id: Long): OpticalEvaluation?
-    {
+internal class OpticalEvaluationService(
+    private var opticalEvaluationRepository: IOpticalEvaluationRepository
+) : IOpticalEvaluationService {
+    override fun find(id: Long): OpticalEvaluation? {
         var opticalEvaluation: OpticalEvaluation? = null
         val persistedBean = opticalEvaluationRepository.findById(id)
-        if (persistedBean.isPresent)
-        {
+        if (persistedBean.isPresent) {
             opticalEvaluation = OpticalEvaluation.fromPersistence(persistedBean.get())
         }
         return opticalEvaluation
     }
 
-    override fun get(id: Long): OpticalEvaluation
-    {
+    override fun get(id: Long): OpticalEvaluation {
         return find(id) ?: throw IncorrectInputException("Optical Evaluation with id $id not found")
     }
 }

@@ -25,8 +25,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class PatientDTOMapper(
-    private val opticalEvaluationDTOMapper: OpticalEvaluationDTOMapper): IDTOMapper<Patient, PatientDTO>
-{
+    private val opticalEvaluationDTOMapper: OpticalEvaluationDTOMapper
+) : IDTOMapper<Patient, PatientDTO> {
     override fun fromDomain(domainObject: Patient) = PatientDTO(
         domainObject.id,
         domainObject.identity,

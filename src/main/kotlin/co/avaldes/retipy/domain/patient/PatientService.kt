@@ -27,54 +27,46 @@ import co.avaldes.retipy.domain.image.ImageService
 import co.avaldes.retipy.persistence.patient.IPatientRepository
 import co.avaldes.retipy.rest.common.IncorrectInputException
 import org.springframework.stereotype.Service
-import java.util.*
+import java.util.ArrayList
 
 @Service
 class PatientService(
     private val patientRepository: IPatientRepository,
     private val diagnosticService: IDiagnosticService,
-    private val patientMapper: PatientMapper) : IPatientService
-{
+    private val patientMapper: PatientMapper
+) : IPatientService {
     private val imageService = ImageService()
 
-    override fun find(id: Long): Patient?
-    {
-        var patient : Patient? = null
+    override fun find(id: Long): Patient? {
+        var patient: Patient? = null
         val savedPatientBean = patientRepository.findById(id)
         if (savedPatientBean.isPresent)
             patient = patientMapper.fromPersistence(savedPatientBean.get())
         return patient
     }
 
-    override fun delete(obj: Patient)
-    {
+    override fun delete(obj: Patient) {
         patientRepository.delete(patientMapper.toPersistence(obj))
     }
 
-    override fun delete(id: Long)
-    {
+    override fun delete(id: Long) {
         patientRepository.deleteById(id)
     }
 
-    override fun get(id: Long) : Patient =
+    override fun get(id: Long): Patient =
         find(id) ?: throw IncorrectInputException("patient with id $id not found")
 
-    override fun save(obj: Patient) : Patient
-    {
-        if (obj.id == 0L)
-        {
-            if (patientRepository.findByIdentity(obj.identity) != null)
-            {
+    override fun save(obj: Patient): Patient {
+        if (obj.id == 0L) {
+            if (patientRepository.findByIdentity(obj.identity) != null) {
                 throw IncorrectInputException(
                     "Patient with identity ${obj.identity} already exists")
             }
         }
-        if (obj.identity.isBlank())
-        {
+        if (obj.identity.isBlank()) {
             throw IncorrectInputException("Patient identity cannot be empty")
         }
-        if (obj.name.isBlank())
-        {
+        if (obj.name.isBlank()) {
             throw IncorrectInputException("Patient name cannot be empty")
         }
         val savedPatient = patientRepository.save(patientMapper.toPersistence(obj))
@@ -84,29 +76,27 @@ class PatientService(
     override fun createOpticalEvaluation(patientId: Long): OpticalEvaluation =
         saveOpticalEvaluation(patientId, OpticalEvaluation())
 
-    override fun saveOpticalEvaluation(patientId: Long, opticalEvaluation: OpticalEvaluation): OpticalEvaluation
-    {
+    override fun saveOpticalEvaluation(patientId: Long, opticalEvaluation: OpticalEvaluation): OpticalEvaluation {
         val savedPatient = get(patientId)
         val persistedIds = savedPatient.getOpticalEvaluations().map { it -> it.id }
         savedPatient.addOpticalEvaluation(opticalEvaluation)
         val persistedPatient = save(savedPatient)
         return if (opticalEvaluation.id == 0L)
-            persistedPatient.getOpticalEvaluations().filterNot {persistedIds.contains(it.id)}.first()
+            persistedPatient.getOpticalEvaluations().filterNot { persistedIds.contains(it.id) }.first()
             else persistedPatient.getOpticalEvaluation(opticalEvaluation.id)!!
     }
 
     override fun saveDiagnostic(
-        patientId: Long, opticalEvaluationId: Long, diagnostic: Diagnostic): Diagnostic
-    {
+        patientId: Long,
+        opticalEvaluationId: Long,
+        diagnostic: Diagnostic
+    ): Diagnostic {
         // recover data from backend if its missing
         val id = diagnostic.id
         val currentDiagnostic = diagnosticService.find(id)
-        if (currentDiagnostic != null && diagnostic.image.isBlank())
-        {
+        if (currentDiagnostic != null && diagnostic.image.isBlank()) {
             diagnostic.image = currentDiagnostic.image
-        }
-        else if(diagnostic.id != 0L && currentDiagnostic == null)
-        {
+        } else if (diagnostic.id != 0L && currentDiagnostic == null) {
             throw IncorrectInputException("Diagnostic id must be zero for new diagnostics")
         }
 
@@ -123,30 +113,30 @@ class PatientService(
         val savedOpticalEvaluation = save(savedPatient).getOpticalEvaluation(opticalEvaluationId)!!
         return if (diagnostic.id == 0L)
             savedOpticalEvaluation.getDiagnostics()
-                .filterNot {existingDiagnosticIds.contains(it.id)}.first()
+                .filterNot { existingDiagnosticIds.contains(it.id) }.first()
         else savedOpticalEvaluation.getDiagnostic(diagnostic.id)!!
     }
 
     override fun saveDiagnosticByImage(
-        patientId: Long, opticalEvaluationId: Long, image: String): Diagnostic
-    {
+        patientId: Long,
+        opticalEvaluationId: Long,
+        image: String
+    ): Diagnostic {
         return saveDiagnostic(
-            patientId, opticalEvaluationId, Diagnostic(image=imageService.toPNG(image)))
+            patientId, opticalEvaluationId, Diagnostic(image = imageService.toPNG(image)))
     }
 
-    override fun getAllPatients(): List<Person>
-    {
+    override fun getAllPatients(): List<Person> {
         val patientsBeans = patientRepository.findAll()
         val patientList: MutableList<Person> = ArrayList(patientsBeans.count())
         patientsBeans
             .sortedBy { patient -> patient.identity }
-            .forEach{ patient -> patientList.add(Person(patient.id, patient.identity, patient.name)) }
+            .forEach { patient -> patientList.add(Person(patient.id, patient.identity, patient.name)) }
 
         return patientList
     }
 
-    override fun getAllPatientsByDoctorIds(doctorIds: List<Long>): List<Person>
-    {
+    override fun getAllPatientsByDoctorIds(doctorIds: List<Long>): List<Person> {
         return patientRepository.findByAssignedDoctorsIn(doctorIds)
             .asSequence()
             .sortedBy { it.identity }

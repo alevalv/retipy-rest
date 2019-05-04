@@ -32,12 +32,10 @@ import org.springframework.stereotype.Component
  * This mapper will query the userService to map the doctors associated with the patient.
  */
 @Component
-class PatientMapper(private val userService: IUserService): IMapper<PatientBean, Patient>
-{
+class PatientMapper(private val userService: IUserService) : IMapper<PatientBean, Patient> {
     private val SEPARATOR = "|"
 
-    override fun toPersistence(domainObject: Patient): PatientBean
-    {
+    override fun toPersistence(domainObject: Patient): PatientBean {
         return PatientBean(
             domainObject.id,
             domainObject.identity,
@@ -56,8 +54,7 @@ class PatientMapper(private val userService: IUserService): IMapper<PatientBean,
         )
     }
 
-    override fun fromPersistence(bean: PatientBean): Patient
-    {
+    override fun fromPersistence(bean: PatientBean): Patient {
         val doctors: List<Person> =
             bean.assignedDoctors
                 .asSequence()
@@ -83,16 +80,13 @@ class PatientMapper(private val userService: IUserService): IMapper<PatientBean,
         )
     }
 
-    private fun parseListFromString(string:String): List<String>
-    {
+    private fun parseListFromString(string: String): List<String> {
         return if (string.isNotBlank()) string.split(SEPARATOR).toList() else emptyList()
     }
 
-    private fun parseListToString(list:List<String>): String
-    {
+    private fun parseListToString(list: List<String>): String {
         val builder = StringBuilder()
-        if (list.isNotEmpty())
-        {
+        if (list.isNotEmpty()) {
             list.forEach {
                 builder.append(it)
                 builder.append(SEPARATOR)

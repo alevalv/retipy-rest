@@ -19,7 +19,7 @@
 
 package co.avaldes.retipy.rest.dto.patient
 
-import java.util.*
+import java.util.Date
 
 data class OpticalEvaluationDTO(
     val id: Long,

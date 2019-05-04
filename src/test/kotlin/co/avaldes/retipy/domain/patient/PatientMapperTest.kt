@@ -30,22 +30,20 @@ import io.mockk.mockk
 import org.junit.Assert
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.util.*
+import java.util.Date
 
-internal class PatientMapperTest
-{
+internal class PatientMapperTest {
     private val doctorId = 12354L
     private val doctorIdentity = "1231231"
     private val doctorName = "Doctor D"
     private val person = Person(doctorId, doctorIdentity, doctorName)
-    private lateinit var patient : Patient
+    private lateinit var patient: Patient
     private lateinit var testInstance: PatientMapper
 
     private val mockUserService: IUserService = mockk(relaxed = true)
 
     @BeforeEach
-    fun setUp()
-    {
+    fun setUp() {
         clearMocks(mockUserService)
 
         patient = Patient(
@@ -71,7 +69,7 @@ internal class PatientMapperTest
                 doctorId,
                 doctorIdentity,
                 doctorName,
-                "" ,
+                "",
                 "",
                 mutableSetOf(),
                 true,
@@ -80,12 +78,10 @@ internal class PatientMapperTest
     }
 
     @Test
-    fun testMapping()
-    {
+    fun testMapping() {
         val bean = testInstance.toPersistence(patient)
         val domain = testInstance.fromPersistence(bean)
 
         Assert.assertEquals("Mapped patient does not match", patient, domain)
-
     }
 }

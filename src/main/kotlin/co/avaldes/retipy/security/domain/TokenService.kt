@@ -30,15 +30,13 @@ import org.springframework.security.access.AccessDeniedException
 import org.springframework.stereotype.Service
 import java.time.Instant
 import java.time.temporal.ChronoUnit
-import java.util.*
+import java.util.Date
 
 @Service
-class TokenService
-{
+class TokenService {
     private val key = Keys.secretKeyFor(SignatureAlgorithm.HS256)
     private val issuer = "retipy"
-    fun createToken(user: User): String
-    {
+    fun createToken(user: User): String {
         val currentTime = Instant.now()
         return Jwts.builder()
             .setIssuer(issuer)
@@ -52,11 +50,9 @@ class TokenService
             .compact()
     }
 
-    fun renewToken(token: String): String
-    {
+    fun renewToken(token: String): String {
         val currentTime = Instant.now()
-        try
-        {
+        try {
             val claims = Jwts.parser()
                 .requireIssuer(issuer)
                 .setSigningKey(key)
@@ -68,44 +64,36 @@ class TokenService
                 .setExpiration(Date.from(currentTime.plus(48, ChronoUnit.HOURS)))
                 .signWith(key)
                 .compact()
-        }
-        catch(e: SecurityException) {
+        } catch (e: SecurityException) {
             throw AccessDeniedException("Invalid Token")
-        }
-        catch(e: ExpiredJwtException) {
+        } catch (e: ExpiredJwtException) {
             throw AccessDeniedException("Invalid token")
-        }
-        catch(e: MalformedJwtException) {
+        } catch (e: MalformedJwtException) {
             throw AccessDeniedException("Invalid token")
         }
     }
 
-    fun isTokenValid(token: String): Boolean
-    {
-        if(token.isBlank())
-        {
+    fun isTokenValid(token: String): Boolean {
+        if (token.isBlank()) {
             return false
         }
         var isValid = false
-        try
-        {
+        try {
             Jwts.parser()
                 .requireIssuer(issuer)
                 .setSigningKey(key)
                 .parseClaimsJws(token)
             isValid = true
+        } catch (e: SecurityException) {
+        } catch (e: ExpiredJwtException) {
+        } catch (e: MalformedJwtException) {
         }
-        catch(e: SecurityException) {}
-        catch(e: ExpiredJwtException) {}
-        catch(e: MalformedJwtException) {}
         return isValid
     }
 
-    fun getTokenUsername(string: String): String
-    {
+    fun getTokenUsername(string: String): String {
         var username = ""
-        if (isTokenValid(string))
-        {
+        if (isTokenValid(string)) {
             username = Jwts.parser()
                 .setSigningKey(key)
                 .parseClaimsJws(string)

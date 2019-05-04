@@ -37,10 +37,10 @@ import org.junit.Assert
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import java.util.*
+import java.util.Date
+import java.util.Optional
 
-internal class PatientServiceTest
-{
+internal class PatientServiceTest {
     val patientId = 1L
     val opticalEvaluationId = 2L
     val diagnosticId = 3L
@@ -77,8 +77,7 @@ internal class PatientServiceTest
     private lateinit var testInstance: PatientService
 
     @BeforeEach
-    fun setUp()
-    {
+    fun setUp() {
         clearMocks(mockPatientRepository)
         clearMocks(mockDiagnosticService)
         clearMocks(mockUserService)
@@ -89,15 +88,13 @@ internal class PatientServiceTest
     }
 
     @Test
-    fun testSaveDiagnosticOnlyImage()
-    {
-        val diagnostic = testInstance.saveDiagnosticByImage(1 ,2, image)
+    fun testSaveDiagnosticOnlyImage() {
+        val diagnostic = testInstance.saveDiagnosticByImage(1, 2, image)
         Assert.assertEquals(diagnostic.id, diagnosticId)
     }
 
     @Test
-    fun test_getAllPatients()
-    {
+    fun test_getAllPatients() {
         every { mockPatientRepository.findAll() } returns listOf(patientBean)
 
         val patientList = testInstance.getAllPatients()
@@ -106,8 +103,7 @@ internal class PatientServiceTest
     }
 
     @Test
-    fun test_saveOpticalEvaluation()
-    {
+    fun test_saveOpticalEvaluation() {
         val opticalEvaluation = testInstance.saveOpticalEvaluation(
             1, OpticalEvaluation.fromPersistence(opticalEvaluationBean))
         Assert.assertEquals(
@@ -117,10 +113,8 @@ internal class PatientServiceTest
     }
 
     @Test
-    fun save_noIdentity()
-    {
-        assertThrows<IncorrectInputException>
-        {
+    fun save_noIdentity() {
+        assertThrows<IncorrectInputException> {
             testInstance.save(
                 Patient(
                     1234L,
@@ -141,10 +135,8 @@ internal class PatientServiceTest
     }
 
     @Test
-    fun save_noName()
-    {
-        assertThrows<IncorrectInputException>
-        {
+    fun save_noName() {
+        assertThrows<IncorrectInputException> {
             testInstance.save(
                 Patient(
                     1234L,

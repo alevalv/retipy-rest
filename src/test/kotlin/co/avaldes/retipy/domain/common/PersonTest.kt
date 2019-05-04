@@ -20,30 +20,25 @@
 package co.avaldes.retipy.domain.common
 
 import co.avaldes.retipy.security.domain.user.User
-import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
-
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
-internal class PersonTest
-{
+internal class PersonTest {
     private val name = "a name"
     private val identity = "991h31"
     private val id = 8123L
     private val user = User(id, identity, name, "username", "password")
 
-    private lateinit var person : Person
+    private lateinit var person: Person
 
     @BeforeEach
-    fun setUp()
-    {
+    fun setUp() {
         person = Person(id, identity, name)
     }
 
     @Test
-    fun fromPerson()
-    {
+    fun fromPerson() {
         assertEquals(person, Person.fromUser(user), "Person object does not match")
     }
 }

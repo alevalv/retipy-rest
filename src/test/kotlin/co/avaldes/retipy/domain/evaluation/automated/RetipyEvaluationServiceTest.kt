@@ -38,8 +38,7 @@ import org.junit.jupiter.api.Test
 /**
  * Test class for [RetipyEvaluationService]
  */
-internal class RetipyEvaluationServiceTest
-{
+internal class RetipyEvaluationServiceTest {
     private val diagnosticId = 91283L
 
     private val retipyEvaluationBean = RetipyEvaluationBean(
@@ -55,29 +54,26 @@ internal class RetipyEvaluationServiceTest
     private val mockDiagnosticService: IDiagnosticService = mockk(relaxed = true)
 
     @BeforeEach
-    fun setUp()
-    {
+    fun setUp() {
         retipyEvaluationService = RetipyEvaluationService(
             mockRetipyRepository, mockDiagnosticService)
         every { mockRetipyRepository.findByDiagnosticId(diagnosticId) } returns
             listOf(retipyEvaluationBean)
-        every { mockRetipyRepository.findByStatus(RetipyEvaluationStatus.Complete)} returns
+        every { mockRetipyRepository.findByStatus(RetipyEvaluationStatus.Complete) } returns
             listOf(retipyEvaluationBean)
-        every { mockRetipyRepository.save(any<RetipyEvaluationBean>())} returns
+        every { mockRetipyRepository.save(any<RetipyEvaluationBean>()) } returns
             retipyEvaluationBean
         every { mockDiagnosticService.get(diagnosticId) } returns Diagnostic()
     }
 
     @AfterEach
-    fun tearDown()
-    {
+    fun tearDown() {
         clearMocks(mockRetipyRepository)
         clearMocks(mockDiagnosticService)
     }
 
     @Test
-    fun findByDiagnostic()
-    {
+    fun findByDiagnostic() {
         Assert.assertEquals(
             "evaluations does not match",
             listOf(RetipyEvaluation.fromPersistence(retipyEvaluationBean)),
@@ -85,8 +81,7 @@ internal class RetipyEvaluationServiceTest
     }
 
     @Test
-    fun getEvaluationsByStatus()
-    {
+    fun getEvaluationsByStatus() {
         Assert.assertEquals(
             "evaluations does not match",
             listOf(RetipyEvaluation.fromPersistence(retipyEvaluationBean)),
@@ -99,58 +94,47 @@ internal class RetipyEvaluationServiceTest
     }
 
     @Test
-    fun getPendingEvaluations()
-    {
+    fun getPendingEvaluations() {
         Assert.assertTrue(
             "evaluations should be empty",
             retipyEvaluationService.getPendingEvaluations().isEmpty())
     }
 
     @Test
-    fun fromDiagnostic_RetipyTaskNone()
-    {
-        Assertions.assertThrows(IncorrectInputException::class.java)
-        { retipyEvaluationService.fromDiagnostic(diagnosticId, RetipyTask.None) }
+    fun fromDiagnostic_RetipyTaskNone() {
+        Assertions.assertThrows(IncorrectInputException::class.java) { retipyEvaluationService.fromDiagnostic(diagnosticId, RetipyTask.None) }
     }
 
     @Test
-    fun fromDiagnostic_noDiagnostic()
-    {
-        every { mockDiagnosticService.get(diagnosticId)} throws IncorrectInputException("")
-        Assertions.assertThrows(IncorrectInputException::class.java)
-        { retipyEvaluationService.fromDiagnostic(diagnosticId, RetipyTask.Segmentation) }
+    fun fromDiagnostic_noDiagnostic() {
+        every { mockDiagnosticService.get(diagnosticId) } throws IncorrectInputException("")
+        Assertions.assertThrows(IncorrectInputException::class.java) { retipyEvaluationService.fromDiagnostic(diagnosticId, RetipyTask.Segmentation) }
     }
 
     @Test
-    fun fromDiagnostic_existingComplete()
-    {
+    fun fromDiagnostic_existingComplete() {
         val task = RetipyTask.Segmentation
-        every { mockRetipyRepository.findByDiagnosticIdAndName(diagnosticId, task.name)} returns
+        every { mockRetipyRepository.findByDiagnosticIdAndName(diagnosticId, task.name) } returns
             listOf(RetipyEvaluation.toPersistence(
                 RetipyEvaluation(
                     diagnosticId = diagnosticId, status = RetipyEvaluationStatus.Complete)))
-        Assertions.assertThrows(IncorrectInputException::class.java)
-        { retipyEvaluationService.fromDiagnostic(diagnosticId, task) }
+        Assertions.assertThrows(IncorrectInputException::class.java) { retipyEvaluationService.fromDiagnostic(diagnosticId, task) }
     }
 
     @Test
-    fun fromDiagnostic_noSegmentation()
-    {
+    fun fromDiagnostic_noSegmentation() {
         every { mockRetipyRepository.findByDiagnosticIdAndName(
-            diagnosticId, RetipyTask.Segmentation.name)} returns listOf()
-        Assertions.assertThrows(IncorrectInputException::class.java)
-        { retipyEvaluationService.fromDiagnostic(diagnosticId, RetipyTask.TortuosityFractal) }
+            diagnosticId, RetipyTask.Segmentation.name) } returns listOf()
+        Assertions.assertThrows(IncorrectInputException::class.java) { retipyEvaluationService.fromDiagnostic(diagnosticId, RetipyTask.TortuosityFractal) }
     }
 
     @Test
-    fun fromDiagnostic()
-    {
+    fun fromDiagnostic() {
         retipyEvaluationService.fromDiagnostic(diagnosticId, RetipyTask.Segmentation)
     }
 
     @Test
-    fun deleteByDiagnostic()
-    {
+    fun deleteByDiagnostic() {
         retipyEvaluationService.deleteByDiagnostic(diagnosticId)
         verify { mockRetipyRepository.deleteByDiagnosticId(diagnosticId) }
     }

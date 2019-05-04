@@ -21,8 +21,7 @@ package co.avaldes.retipy.domain.tortuosity
 
 import co.avaldes.retipy.domain.evaluation.automated.RetipyEvaluation
 
-interface ITortuosityService
-{
+interface ITortuosityService {
     fun getDensity(evaluation: RetipyEvaluation): RetipyEvaluation
     fun getFractal(evaluation: RetipyEvaluation): RetipyEvaluation
 }

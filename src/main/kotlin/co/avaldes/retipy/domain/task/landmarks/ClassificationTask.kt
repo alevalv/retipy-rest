@@ -31,20 +31,21 @@ import org.springframework.web.reactive.function.BodyInserters
 
 class ClassificationTask(
     retipyUri: String,
-    private val retipyEvaluation: RetipyEvaluation) : AbstractRESTTask<RetipyEvaluation>(
+    private val retipyEvaluation: RetipyEvaluation
+) : AbstractRESTTask<RetipyEvaluation>(
     RetipyTask.LandmarksClassification.name,
     "/landmarks/classification",
     retipyUri,
-    emptyMap())
-{
+    emptyMap()) {
     private data class ClassificationTaskRequest(val image: String)
     private data class ClassificationTaskResponse(
-        val bifurcations: List<List<Int>>, val crossings: List<List<Int>>)
+        val bifurcations: List<List<Int>>,
+        val crossings: List<List<Int>>
+    )
 
     private val logger: Logger = LoggerFactory.getLogger(ClassificationTask::class.java)
 
-    override fun execute(): RetipyEvaluation
-    {
+    override fun execute(): RetipyEvaluation {
         logger.info("Starting Task")
         val requestWithBody = getRequest(HttpMethod.POST)
             .body(BodyInserters.fromObject(ClassificationTaskRequest(retipyEvaluation.image)))
@@ -82,9 +83,7 @@ class ClassificationTask(
             retipyEvaluation.rois = rois
             retipyEvaluation.status = RetipyEvaluationStatus.Complete
             logger.info("Completed Successfully")
-        }
-        catch (exception: Exception)
-        {
+        } catch (exception: Exception) {
             retipyEvaluation.status = RetipyEvaluationStatus.Error
             logger.info("Failed $exception")
         }

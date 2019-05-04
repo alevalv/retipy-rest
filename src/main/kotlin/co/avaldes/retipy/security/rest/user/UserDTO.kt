@@ -27,10 +27,9 @@ data class UserDTO(
     val identity: String,
     val password: String,
     val role: Role,
-    val name: String)
-{
-    companion object
-    {
+    val name: String
+) {
+    companion object {
         fun toDomain(userDTO: UserDTO) =
             User(
                 0L,

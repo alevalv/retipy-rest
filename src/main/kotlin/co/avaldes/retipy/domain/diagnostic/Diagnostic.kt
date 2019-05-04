@@ -22,7 +22,7 @@ package co.avaldes.retipy.domain.diagnostic
 import co.avaldes.retipy.domain.common.roi.Roi
 import co.avaldes.retipy.persistence.diagnostic.DiagnosticBean
 import co.avaldes.retipy.persistence.diagnostic.DiagnosticStatus
-import java.util.*
+import java.util.Date
 
 data class Diagnostic(
     var id: Long = 0,
@@ -31,10 +31,9 @@ data class Diagnostic(
     var rois: List<Roi> = emptyList(),
     var status: DiagnosticStatus = DiagnosticStatus.Created,
     var creationDate: Date = Date(),
-    var updateDate: Date = Date())
-{
-    companion object
-    {
+    var updateDate: Date = Date()
+) {
+    companion object {
         fun fromPersistence(diagnosticBean: DiagnosticBean) = Diagnostic(
             diagnosticBean.id,
             diagnosticBean.image,

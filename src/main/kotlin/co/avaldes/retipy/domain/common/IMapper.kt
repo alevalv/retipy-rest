@@ -22,8 +22,7 @@ package co.avaldes.retipy.domain.common
 /**
  * Interface representing the operations to transform form the persistence (beans) to domain layer.
  */
-interface IMapper<B, D>
-{
+interface IMapper<B, D> {
     /**
      * Converts the [domainObject] to its persistence counterpart
      */

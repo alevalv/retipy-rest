@@ -19,10 +19,6 @@
 
 package co.avaldes.retipy.security.domain.common
 
-class NoOpPasswordValidator : IPasswordValidator
-{
-    override fun validatePassword(password: String)
-    {
-
-    }
+class NoOpPasswordValidator : IPasswordValidator {
+    override fun validatePassword(password: String) {}
 }

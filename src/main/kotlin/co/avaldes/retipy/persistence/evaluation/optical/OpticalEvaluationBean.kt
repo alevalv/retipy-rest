@@ -20,7 +20,7 @@
 package co.avaldes.retipy.persistence.evaluation.optical
 
 import co.avaldes.retipy.persistence.diagnostic.DiagnosticBean
-import java.util.*
+import java.util.Date
 import javax.persistence.CascadeType
 import javax.persistence.Entity
 import javax.persistence.FetchType
@@ -35,7 +35,7 @@ import javax.persistence.Table
 @Entity @Table(name = "optical_evaluation")
 data class OpticalEvaluationBean(
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    val id:Long,
+    val id: Long,
     val version: Long,
     val creationDate: Date,
     val updateDate: Date,
@@ -54,4 +54,5 @@ data class OpticalEvaluationBean(
     val ocularIntraPressure: Int,
     @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "diagnostic_id")
-    var diagnostics: List<DiagnosticBean> = emptyList())
+    var diagnostics: List<DiagnosticBean> = emptyList()
+)

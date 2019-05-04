@@ -23,15 +23,13 @@ import co.avaldes.retipy.domain.diagnostic.Diagnostic
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.util.*
+import java.util.Date
 
-internal class OpticalEvaluationTest
-{
+internal class OpticalEvaluationTest {
     private lateinit var testInstance: OpticalEvaluation
 
     @BeforeEach
-    fun setUp()
-    {
+    fun setUp() {
         testInstance = OpticalEvaluation(
             1, 1,
             Date(),
@@ -52,10 +50,8 @@ internal class OpticalEvaluationTest
     }
 
     @Test
-    fun verifyConstructor()
-    {
-        for (opticalEvaluationField in OpticalEvaluation.BIOMICROSCOPY_REQUIRED)
-        {
+    fun verifyConstructor() {
+        for (opticalEvaluationField in OpticalEvaluation.BIOMICROSCOPY_REQUIRED) {
             Assertions.assertNotNull(
                 testInstance.biomicroscopy[opticalEvaluationField],
                 "$opticalEvaluationField cannot be null")
@@ -63,8 +59,7 @@ internal class OpticalEvaluationTest
     }
 
     @Test
-    fun mappers()
-    {
+    fun mappers() {
         val opticalEvaluationBean = OpticalEvaluation.toPersistence(testInstance)
         val opticalEvaluation = OpticalEvaluation.fromPersistence(opticalEvaluationBean)
         Assertions.assertEquals(testInstance, opticalEvaluation, "mapping failed")

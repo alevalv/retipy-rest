@@ -33,31 +33,24 @@ import javax.servlet.http.HttpServletResponse
 
 @Component
 class AuthenticationFilter(
-    @Value("\${retipy.auth.header}") val header:String,
+    @Value("\${retipy.auth.header}") val header: String,
     val userDetailsService: UserDetailsServiceImpl,
-    val tokenService: TokenService) : OncePerRequestFilter()
-{
-    override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain)
-    {
-        try
-        {
+    val tokenService: TokenService
+) : OncePerRequestFilter() {
+    override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
+        try {
             val username = tokenService.getTokenUsername(getAuthenticationToken(request))
-            if (username.isNotBlank())
-            {
+            if (username.isNotBlank()) {
                 val user = userDetailsService.loadUserByUsername(username)
                 val passwordAuthenticationToken = UsernamePasswordAuthenticationToken(user, null, user.authorities)
                 passwordAuthenticationToken.details = WebAuthenticationDetailsSource().buildDetails(request)
 
                 SecurityContextHolder.getContext().authentication = passwordAuthenticationToken
             }
-        }
-        catch (e: UsernameNotFoundException) {}
+        } catch (e: UsernameNotFoundException) {}
         filterChain.doFilter(request, response)
     }
 
-    private fun getAuthenticationToken(request: HttpServletRequest): String
-    {
-        return request.getHeader(header) ?: ""
-
-    }
+    private fun getAuthenticationToken(request: HttpServletRequest): String =
+        request.getHeader(header) ?: ""
 }

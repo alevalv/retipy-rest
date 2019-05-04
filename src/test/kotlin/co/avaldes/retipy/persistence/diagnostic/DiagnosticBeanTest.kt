@@ -23,11 +23,10 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Test
 import java.time.Instant
-import java.util.*
+import java.util.Date
 
-internal class DiagnosticBeanTest
-{
-    private val id:Long = 100L
+internal class DiagnosticBeanTest {
+    private val id: Long = 100L
     private val image = "a text image?"
     private val diagnostic = "some diagnostic"
     private val rois = "[]"
@@ -39,16 +38,14 @@ internal class DiagnosticBeanTest
         DiagnosticBean(id, image, diagnostic, rois, status, creationDate, updateDate)
 
     @Test
-    fun test_onCreate()
-    {
+    fun test_onCreate() {
         testInstance.onCreate()
         assertNotEquals(creationDate, testInstance.creationDate)
         assertEquals(DiagnosticStatus.Created, testInstance.status)
     }
 
     @Test
-    fun test_onUpdate()
-    {
+    fun test_onUpdate() {
         testInstance.onUpdate()
         assertNotEquals(updateDate, testInstance.updateDate)
     }

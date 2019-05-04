@@ -7,26 +7,21 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-
-internal class AbstractTortuosityTaskTest
-{
+internal class AbstractTortuosityTaskTest {
     internal class TortuosityTaskTest : AbstractTortuosityTask(
-        "http://localhost:28591","/anotherUri", RetipyEvaluation(diagnosticId = 0L))
+        "http://localhost:28591", "/anotherUri", RetipyEvaluation(diagnosticId = 0L))
     private val tortuosityTask = TortuosityTaskTest()
 
     @BeforeEach
-    fun setUp()
-    {
+    fun setUp() {
     }
 
     @AfterEach
-    fun tearDown()
-    {
+    fun tearDown() {
     }
 
     @Test
-    fun execute()
-    {
+    fun execute() {
         val evaluated = tortuosityTask.execute()
         Assert.assertEquals("status does not match", RetipyEvaluationStatus.Error, evaluated.status)
     }

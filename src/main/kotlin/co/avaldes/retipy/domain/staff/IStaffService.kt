@@ -24,8 +24,7 @@ import co.avaldes.retipy.domain.common.Person
 /**
  * Interface that exposes operations to handle extra data related with the users.
  */
-interface IStaffService
-{
+interface IStaffService {
     /**
      * Gets the list of residents that are assigned to the given doctor.
      */

@@ -21,10 +21,8 @@ package co.avaldes.retipy.rest.dto
 
 import co.avaldes.retipy.domain.common.roi.Roi
 
-data class RoiDTO (val x: List<Int>, val y: List<Int>, val notes: String, val color: String)
-{
-    companion object
-    {
+data class RoiDTO(val x: List<Int>, val y: List<Int>, val notes: String, val color: String) {
+    companion object {
         fun fromDomain(roi: Roi) = RoiDTO(roi.x, roi.y, roi.notes, roi.color)
 
         fun toDomain(roiDTO: RoiDTO) = Roi(

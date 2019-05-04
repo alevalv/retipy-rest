@@ -34,43 +34,35 @@ import org.springframework.stereotype.Service
 @Service
 internal class UserService(
     private val userRepository: IUserRepository,
-    private val passwordEncoder: PasswordEncoder) : IUserService
-{
+    private val passwordEncoder: PasswordEncoder
+) : IUserService {
     private val passwordValidator = NoOpPasswordValidator()
 
-    override fun find(id: Long): User?
-    {
+    override fun find(id: Long): User? {
         val bean = userRepository.findById(id)
-        var user : User? = null
+        var user: User? = null
         if (bean.isPresent)
             user = User.fromPersistence(bean.get())
         return user
-
     }
 
-    override fun findByUsername(username: String): User?
-    {
+    override fun findByUsername(username: String): User? {
         var user: User? = null
-        if (!username.isBlank())
-        {
+        if (!username.isBlank()) {
             val bean = userRepository.findByUsername(username)
-            if (bean != null)
-            {
+            if (bean != null) {
                 user = User.fromPersistence(bean)
             }
         }
         return user
     }
 
-    override fun delete(obj: User)
-    {
+    override fun delete(obj: User) {
         userRepository.delete(User.toPersistence(obj))
     }
 
-    override fun createUser(user: User): User
-    {
-        if (user.id != 0L || this.findByUsername(user.username) != null)
-        {
+    override fun createUser(user: User): User {
+        if (user.id != 0L || this.findByUsername(user.username) != null) {
             throw IncorrectInputException("New user is invalid")
         }
         passwordValidator.validatePassword(user.password)
@@ -88,8 +80,7 @@ internal class UserService(
         return save(newUser)
     }
 
-    override fun updatePassword(user: User, newPassword: String): User
-    {
+    override fun updatePassword(user: User, newPassword: String): User {
         val storedUser = get(user.id)
         passwordValidator.validatePassword(newPassword)
         return save(User(
@@ -104,8 +95,7 @@ internal class UserService(
             false))
     }
 
-    override fun updateName(user: User, name: String): User
-    {
+    override fun updateName(user: User, name: String): User {
         val storedUser = get(user.id)
         return save(User(
             storedUser.id,
@@ -119,23 +109,20 @@ internal class UserService(
             false))
     }
 
-    override fun login(username: String, password: String): User?
-    {
-        var login : User? = null
+    override fun login(username: String, password: String): User? {
+        var login: User? = null
         val persistedUser = findByUsername(username)
-        if (persistedUser != null
-            && persistedUser.enabled
-            && !persistedUser.expired
-            && !persistedUser.locked
-            && passwordEncoder.matches(password, persistedUser.password))
-        {
+        if (persistedUser != null &&
+            persistedUser.enabled &&
+            !persistedUser.expired &&
+            !persistedUser.locked &&
+            passwordEncoder.matches(password, persistedUser.password)) {
             login = persistedUser
         }
         return login
     }
 
-    override fun save(obj: User): User
-    {
+    override fun save(obj: User): User {
         val savedBean = userRepository.save(User.toPersistence(obj))
         return User.fromPersistence(savedBean)
     }
@@ -143,19 +130,16 @@ internal class UserService(
     override fun get(id: Long): User =
         find(id) ?: throw IncorrectInputException("User with id $id not found")
 
-    override fun delete(id: Long)
-    {
+    override fun delete(id: Long) {
         userRepository.deleteById(id)
     }
 
-    override fun getUsersByRole(role: Role): List<Person>
-    {
+    override fun getUsersByRole(role: Role): List<Person> {
         val beans = userRepository.findByRolesContaining(role.toString())
         return beans.map { Person(it.id, it.identity, it.name) }
     }
 
-    override fun getCurrentAuthenticatedUser(): User?
-    {
+    override fun getCurrentAuthenticatedUser(): User? {
         val authentication = SecurityContextHolder.getContext().authentication
         return findByUsername(authentication.name)
     }

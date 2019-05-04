@@ -19,8 +19,7 @@
 
 package co.avaldes.retipy.domain.diagnostic
 
-interface IDiagnosticService
-{
+interface IDiagnosticService {
     fun find(id: Long): Diagnostic?
 
     fun get(id: Long): Diagnostic

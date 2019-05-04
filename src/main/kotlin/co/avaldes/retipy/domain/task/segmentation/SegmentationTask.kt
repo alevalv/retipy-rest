@@ -31,24 +31,22 @@ import org.springframework.web.reactive.function.BodyInserters
 class SegmentationTask(
     retipyUri: String,
     configuration: Map<String, String> = mapOf(),
-    private val retipyEvaluation: RetipyEvaluation)
-    : AbstractRESTTask<RetipyEvaluation>(
+    private val retipyEvaluation: RetipyEvaluation
+) : AbstractRESTTask<RetipyEvaluation>(
         RetipyTask.Segmentation.name,
         "/segmentation",
         retipyUri,
         mapOf(PROPERTY_ALGORITHM to "double_segmentation")
-    )
-{
+    ) {
     private data class SegmentationTaskRequest(val image: String)
     private data class SegmentationTaskResponse(val segmentation: String)
 
     private val logger: Logger = LoggerFactory.getLogger(SegmentationTask::class.java)
     private val parameters = addMissingProperties(configuration)
 
-    override fun execute(): RetipyEvaluation
-    {
+    override fun execute(): RetipyEvaluation {
         logger.info("Starting task")
-        val requestWithBody =  getRequest(
+        val requestWithBody = getRequest(
             HttpMethod.POST, uri = this.uri + "/" + parameters[PROPERTY_ALGORITHM])
             .body(BodyInserters.fromObject(SegmentationTaskRequest(retipyEvaluation.image)))
 
@@ -59,9 +57,7 @@ class SegmentationTask(
             retipyEvaluation.image = response.segmentation
             retipyEvaluation.status = RetipyEvaluationStatus.Complete
             logger.info("Completed")
-        }
-        catch (e: Exception)
-        {
+        } catch (e: Exception) {
             retipyEvaluation.status = RetipyEvaluationStatus.Error
             logger.info("Failed $e")
         }
@@ -69,8 +65,7 @@ class SegmentationTask(
         return retipyEvaluation
     }
 
-    companion object
-    {
+    companion object {
         const val PROPERTY_ALGORITHM = "algorithm"
     }
 }

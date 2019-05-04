@@ -19,7 +19,6 @@
 
 package co.avaldes.retipy.rest
 
-import co.avaldes.retipy.domain.diagnostic.IDiagnosticService
 import co.avaldes.retipy.domain.evaluation.automated.IRetipyEvaluationService
 import co.avaldes.retipy.domain.evaluation.automated.RetipyTask
 import co.avaldes.retipy.persistence.evaluation.retinal.RetipyEvaluationStatus
@@ -47,10 +46,13 @@ import javax.validation.Valid
 @CrossOrigin
 @RestController
 internal class RetipyEvaluationEndpoint(
-    private val retipyEvaluationService: IRetipyEvaluationService)
-{
+    private val retipyEvaluationService: IRetipyEvaluationService
+) {
     data class RetipyEvaluationBasicDTO(
-        val id: Long, val name: String, val status: RetipyEvaluationStatus)
+        val id: Long,
+        val name: String,
+        val status: RetipyEvaluationStatus
+    )
     data class RetipyEvaluationListDTO(val evaluationList: List<RetipyEvaluationBasicDTO>)
 
     @GetMapping("/retipy/evaluation/{id}")
@@ -68,32 +70,25 @@ internal class RetipyEvaluationEndpoint(
             .findByDiagnostic(id)
             .map { RetipyEvaluationBasicDTO(it.id, it.name.name, it.status) })
 
-
     @PostMapping("/retipy/diagnostic/{id}/evaluation")
-    fun createNewEvaluation(@PathVariable id: Long, @RequestBody name: String)
-    {
-        try
-        {
+    fun createNewEvaluation(@PathVariable id: Long, @RequestBody name: String) {
+        try {
             retipyEvaluationService.fromDiagnostic(id, RetipyTask.valueOf(name))
-        }
-        catch (illegalArgumentException: IllegalArgumentException)
-        {
+        } catch (illegalArgumentException: IllegalArgumentException) {
             throw IncorrectInputException("cannot process request")
         }
     }
 
     @Secured(ROLE_WORKER)
     @PostMapping("/retipy/evaluation")
-    fun saveEvaluation(@Valid @RequestBody evaluationDTO: RetipyEvaluationDTO): RetipyEvaluationDTO
-    {
+    fun saveEvaluation(@Valid @RequestBody evaluationDTO: RetipyEvaluationDTO): RetipyEvaluationDTO {
         return RetipyEvaluationDTO.fromDomain(
             retipyEvaluationService.save(RetipyEvaluationDTO.toDomain(evaluationDTO)))
     }
 
     @Secured(ROLE_DOCTOR, ROLE_ADMINISTRATOR)
     @DeleteMapping("/retipy/evaluation/{id}")
-    fun deleteEvaluation(@PathVariable id: Long)
-    {
+    fun deleteEvaluation(@PathVariable id: Long) {
         retipyEvaluationService.delete(id)
     }
 }

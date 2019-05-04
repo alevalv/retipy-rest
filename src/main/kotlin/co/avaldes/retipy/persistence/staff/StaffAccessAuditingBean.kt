@@ -19,7 +19,7 @@
 
 package co.avaldes.retipy.persistence.staff
 
-import java.util.*
+import java.util.Date
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType

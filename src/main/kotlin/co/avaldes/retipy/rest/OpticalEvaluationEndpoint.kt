@@ -37,22 +37,20 @@ import org.springframework.web.bind.annotation.RestController
 class OpticalEvaluationEndpoint(
     private val opticalEvaluationService: IOpticalEvaluationService,
     private val auditingService: IStaffAuditingService,
-    private val opticalEvaluationDTOMapper: OpticalEvaluationDTOMapper)
-{
+    private val opticalEvaluationDTOMapper: OpticalEvaluationDTOMapper
+) {
     data class SimpleDiagnosticDTO(val id: Long, val name: String, val date: String)
     data class DiagnosticList(val diagnosticList: List<SimpleDiagnosticDTO>)
 
     @GetMapping("/retipy/opticalevaluation/{id}")
-    fun getOpticalEvaluation(@PathVariable id: Long): OpticalEvaluationDTO
-    {
+    fun getOpticalEvaluation(@PathVariable id: Long): OpticalEvaluationDTO {
         val opticalEvaluation = opticalEvaluationDTOMapper.fromDomain(opticalEvaluationService.get(id))
         auditingService.audit(opticalEvaluation.id, AuditingOperation.OpticalEvaluationRead)
         return opticalEvaluation
     }
 
     @GetMapping("/retipy/opticalevaluation/{id}/diagnostics")
-    fun getDiagnosticsByOpticalEvaluationId(@PathVariable id: Long): DiagnosticList
-    {
+    fun getDiagnosticsByOpticalEvaluationId(@PathVariable id: Long): DiagnosticList {
         val opticalEvaluation = opticalEvaluationService.get(id)
         return DiagnosticList(opticalEvaluation.getDiagnostics().map {
             SimpleDiagnosticDTO(it.id, it.diagnostic, it.creationDate.toString()) })

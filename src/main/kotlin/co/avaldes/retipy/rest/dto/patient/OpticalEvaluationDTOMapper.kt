@@ -24,15 +24,15 @@ import co.avaldes.retipy.domain.evaluation.optical.IOpticalEvaluationService
 import co.avaldes.retipy.domain.evaluation.optical.OpticalEvaluation
 import co.avaldes.retipy.rest.common.IDTOMapper
 import org.springframework.stereotype.Component
-import java.util.*
+import java.util.Date
 
 /**
  * Mapper class to connect rest layer to domain layer of [OpticalEvaluation].
  */
 @Component
-class OpticalEvaluationDTOMapper(private val opticalEvaluationService: IOpticalEvaluationService)
-    : IDTOMapper<OpticalEvaluation, OpticalEvaluationDTO>
-{
+class OpticalEvaluationDTOMapper(
+    private val opticalEvaluationService: IOpticalEvaluationService
+) : IDTOMapper<OpticalEvaluation, OpticalEvaluationDTO> {
     /**
      * Converts the given [OpticalEvaluation] into its DTO counterpart [OpticalEvaluationDTO]
      */
@@ -60,11 +60,9 @@ class OpticalEvaluationDTOMapper(private val opticalEvaluationService: IOpticalE
      * Converts the DTO [OpticalEvaluationDTO] to its domain counterpart [OpticalEvaluation]
      * Will throw exception if the given DTO has an id of an object that does not exist.
      */
-    override fun toDomain(dto: OpticalEvaluationDTO): OpticalEvaluation
-    {
+    override fun toDomain(dto: OpticalEvaluationDTO): OpticalEvaluation {
         var diagnostics: List<Diagnostic> = emptyList()
-        if (dto.id != 0L)
-        {
+        if (dto.id != 0L) {
             val opticalEvaluation = opticalEvaluationService.get(dto.id)
             diagnostics = opticalEvaluation.getDiagnostics()
         }

@@ -26,8 +26,7 @@ import co.avaldes.retipy.security.persistence.user.Role
 /**
  * Interface that defines operations related to the domain object [User].
  */
-interface IUserService: ICRUDService<User>
-{
+interface IUserService : ICRUDService<User> {
     /**
      * Gets a [User] by its username, returns null if no user is found.
      *

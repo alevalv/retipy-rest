@@ -19,13 +19,11 @@
 
 package co.avaldes.retipy.domain.image
 
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-import org.junit.jupiter.api.Assertions.*
-
-internal class ImageServiceTest
-{
+internal class ImageServiceTest {
     val image = "iVBORw0KGgoAAAANSUhEUgAAAD8AAAA+CAIAAAATYVQtAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAc" +
         "9UlEQVRogZ16aZBd13He133OXd7+Zh8As2CwUgB3iuAqkhAtSrIl2bIt2uVFXuKUE7vipCo/4nJS" +
         "lSqn/MNLqpzkRxKXsziVxLFjx4llO5K1kiJpkQIlgABBYh/ss799ufee050f980QEFW2K6em3sy8" +
@@ -162,21 +160,18 @@ internal class ImageServiceTest
     private lateinit var imageService: ImageService
 
     @BeforeEach
-    fun setUp()
-    {
+    fun setUp() {
         imageService = ImageService()
     }
 
     @Test
-    fun toJPG()
-    {
+    fun toJPG() {
         assertTrue(
-            imageService.toJPG(image).isNotBlank(),"an image shuold have been returned")
+            imageService.toJPG(image).isNotBlank(), "an image shuold have been returned")
     }
 
     @Test
-    fun toPNG()
-    {
+    fun toPNG() {
         assertTrue(
             imageService.toPNG(image).isNotBlank(), "an image should have been returned")
     }

@@ -31,16 +31,14 @@ import org.springframework.stereotype.Service
  */
 @Service
 internal class TortuosityService(
-    @Value("\${retipy.python.backend.url}") private val retipyUrl: String)
-    : ITortuosityService
-{
+    @Value("\${retipy.python.backend.url}") private val retipyUrl: String
+) : ITortuosityService {
     private final val endpoint: String = retipyUrl.trim() + "tortuosity/"
 
     private data class TortuosityRequest(val image: String)
     data class Density(val uri: String, val data: List<Roi>)
 
-    override fun getDensity(evaluation: RetipyEvaluation): RetipyEvaluation
-    {
+    override fun getDensity(evaluation: RetipyEvaluation): RetipyEvaluation {
         TODO("this class will be removed, refactored into a name")
 //        val inputImage = evaluation.results.getResult("original")!!.image
 //        val template = RestTemplate()
@@ -58,8 +56,7 @@ internal class TortuosityService(
 //        return evaluation
     }
 
-    override fun getFractal(evaluation: RetipyEvaluation): RetipyEvaluation
-    {
+    override fun getFractal(evaluation: RetipyEvaluation): RetipyEvaluation {
         TODO("this class will be removed, refactored into a name")
 //        val inputImage = evaluation.results.getResult("original")!!.image
 //        val template = RestTemplate()

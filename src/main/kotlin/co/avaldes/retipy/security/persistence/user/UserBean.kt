@@ -36,6 +36,5 @@ data class UserBean(
     val roles: String,
     val enabled: Boolean,
     val locked: Boolean,
-    val expired: Boolean)
-{
-}
+    val expired: Boolean
+)

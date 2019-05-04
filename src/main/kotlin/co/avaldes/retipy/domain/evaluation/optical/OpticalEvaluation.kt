@@ -21,8 +21,7 @@ package co.avaldes.retipy.domain.evaluation.optical
 
 import co.avaldes.retipy.domain.diagnostic.Diagnostic
 import co.avaldes.retipy.persistence.evaluation.optical.OpticalEvaluationBean
-import java.util.*
-import kotlin.collections.HashMap
+import java.util.Date
 
 data class OpticalEvaluation(
     var id: Long = 0,
@@ -41,20 +40,17 @@ data class OpticalEvaluation(
     var pupilRightEyeDPA: Int = 1,
     var biomicroscopy: MutableMap<String, String> = emptyMap<String, String>().toMutableMap(),
     var ocularIntraPressure: Int = 10,
-    private var diagnostics: List<Diagnostic> = emptyList())
-{
+    private var diagnostics: List<Diagnostic> = emptyList()
+) {
     private val diagnosticMap: MutableMap<Long, Diagnostic> = HashMap()
 
-    init
-    {
+    init {
         // remove all biomicroscopy fields that have no value associated with it
         biomicroscopy = biomicroscopy.filterNot { key -> key.value.isBlank() }.toMutableMap()
 
         // assert that the biomicroscopy contains the obligatory fields:
-        for (biomicroscopyField in BIOMICROSCOPY_REQUIRED)
-        {
-            if (biomicroscopy[biomicroscopyField] == null)
-            {
+        for (biomicroscopyField in BIOMICROSCOPY_REQUIRED) {
+            if (biomicroscopy[biomicroscopyField] == null) {
                 biomicroscopy[biomicroscopyField] = ""
             }
         }
@@ -62,29 +58,25 @@ data class OpticalEvaluation(
         this.diagnostics.forEach { diagnosticMap[it.id] = it }
     }
 
-    fun getDiagnostics() : List<Diagnostic> = diagnosticMap.values.toList().sortedBy { record -> record.id }
+    fun getDiagnostics(): List<Diagnostic> = diagnosticMap.values.toList().sortedBy { record -> record.id }
 
-    fun getDiagnostic(id: Long) : Diagnostic? = diagnosticMap[id]
+    fun getDiagnostic(id: Long): Diagnostic? = diagnosticMap[id]
 
-    fun addDiagnostic(diagnostic: Diagnostic)
-    {
+    fun addDiagnostic(diagnostic: Diagnostic) {
         diagnosticMap[diagnostic.id] = diagnostic
     }
 
-    companion object
-    {
+    companion object {
         val BIOMICROSCOPY_REQUIRED: List<String> = listOf("Cornea", "Iris", "Cristalino", "Camara Anterior")
 
         private const val BIOMICROSCOPY_SEPARATOR = "#"
 
         private const val BIOMICROSCOPY_TUPLE_SEPARATOR = "|"
 
-        private fun parseBiomicroscopy(string: String): MutableMap<String, String>
-        {
+        private fun parseBiomicroscopy(string: String): MutableMap<String, String> {
             val output = HashMap<String, String>()
-            if (string.isNotBlank())
-            {
-                string.split(BIOMICROSCOPY_SEPARATOR).forEach{
+            if (string.isNotBlank()) {
+                string.split(BIOMICROSCOPY_SEPARATOR).forEach {
                     val current = it.split(BIOMICROSCOPY_TUPLE_SEPARATOR)
                     output[current[0]] = current[1]
                 }
@@ -92,12 +84,10 @@ data class OpticalEvaluation(
             return output
         }
 
-        private fun biomicroscopyToString(biomicroscopy: Map<String, String>): String
-        {
+        private fun biomicroscopyToString(biomicroscopy: Map<String, String>): String {
             val builder = StringBuilder()
-            if (biomicroscopy.entries.isNotEmpty())
-            {
-                biomicroscopy.entries.forEach{
+            if (biomicroscopy.entries.isNotEmpty()) {
+                biomicroscopy.entries.forEach {
                     builder.append(it.key)
                     builder.append(BIOMICROSCOPY_TUPLE_SEPARATOR)
                     builder.append(it.value)
@@ -147,4 +137,3 @@ data class OpticalEvaluation(
             opticalEvaluation.getDiagnostics().map { Diagnostic.toPersistence(it) })
     }
 }
-

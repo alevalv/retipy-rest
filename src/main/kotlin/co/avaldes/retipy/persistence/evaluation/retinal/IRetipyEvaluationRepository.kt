@@ -25,8 +25,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface IRetipyEvaluationRepository :
-    PagingAndSortingRepository<RetipyEvaluationBean, Long>, JpaSpecificationExecutor<RetipyEvaluationBean>
-{
+    PagingAndSortingRepository<RetipyEvaluationBean, Long>, JpaSpecificationExecutor<RetipyEvaluationBean> {
     fun findByDiagnosticId(diagnosticId: Long): Collection<RetipyEvaluationBean>
 
     fun findByStatus(status: RetipyEvaluationStatus): Collection<RetipyEvaluationBean>

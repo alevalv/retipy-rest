@@ -22,13 +22,10 @@ package co.avaldes.retipy.domain.image
 import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import java.io.InputStream
-import java.util.*
+import java.util.Base64
 import javax.imageio.ImageIO
-import javax.imageio.stream.ImageInputStream
 
-class ImageService
-{
+class ImageService {
     fun toPNG(image: String) = to(image, "png")
 
     fun toJPG(image: String) = to(image, "jpg")
@@ -36,8 +33,7 @@ class ImageService
     /**
      * Opens a base 64 [image], returning a [BufferedImage].
      */
-    private fun open(image: String): BufferedImage
-    {
+    private fun open(image: String): BufferedImage {
         val imageBytes = Base64.getDecoder().decode(image)
         val inputStream = ByteArrayInputStream(imageBytes)
         return inputStream.use { ImageIO.read(inputStream) }
@@ -46,11 +42,10 @@ class ImageService
     /**
      * Converts the given [image] to the given [format].
      */
-    private fun to(image: String, format: String): String
-    {
-        val image = open(image)
+    private fun to(image: String, format: String): String {
+        val bufferedImage = open(image)
         val outputStream = ByteArrayOutputStream()
-        ImageIO.write(image, format, outputStream)
+        ImageIO.write(bufferedImage, format, outputStream)
         return Base64.getEncoder().encodeToString(outputStream.toByteArray())
     }
 }

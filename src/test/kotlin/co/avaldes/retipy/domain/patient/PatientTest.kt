@@ -25,20 +25,18 @@ import co.avaldes.retipy.domain.evaluation.optical.OpticalEvaluation
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.util.*
+import java.util.Date
 
-internal class PatientTest
-{
+internal class PatientTest {
     private val opticalEvaluation1 =
         OpticalEvaluation(1, 1, Date(), Date(), "", "", "", "", 0, 0, 0, 0, 0, 0, emptyMap<String, String>().toMutableMap(), 10, emptyList())
     private val opticalEvaluation2 =
         OpticalEvaluation(2, 3, Date(), Date(), "", "", "", "", 0, 0, 0, 0, 0, 0, emptyMap<String, String>().toMutableMap(), 10, emptyList())
 
-    private lateinit var testInstance : Patient
+    private lateinit var testInstance: Patient
 
     @BeforeEach
-    fun setUp()
-    {
+    fun setUp() {
         testInstance = Patient(
             1,
             "111",
@@ -57,8 +55,7 @@ internal class PatientTest
     }
 
     @Test
-    fun getMedicalRecords()
-    {
+    fun getMedicalRecords() {
         Assertions.assertTrue(testInstance.getOpticalEvaluations().isEmpty())
         testInstance.addOpticalEvaluation(opticalEvaluation1)
         Assertions.assertFalse(testInstance.getOpticalEvaluations().isEmpty())
@@ -66,8 +63,7 @@ internal class PatientTest
     }
 
     @Test
-    fun addMedicalRecord()
-    {
+    fun addMedicalRecord() {
         testInstance.addOpticalEvaluation(opticalEvaluation1)
         Assertions.assertEquals(1, testInstance.opticalEvaluationCount())
         testInstance.addOpticalEvaluation(opticalEvaluation2)
@@ -75,16 +71,14 @@ internal class PatientTest
     }
 
     @Test
-    fun getMedicalRecord()
-    {
+    fun getMedicalRecord() {
         testInstance.addOpticalEvaluation(opticalEvaluation1)
         Assertions.assertEquals(opticalEvaluation1, testInstance.getOpticalEvaluation(1))
         Assertions.assertNull(testInstance.getOpticalEvaluation(1111))
     }
 
     @Test
-    fun getMedicalRecord_Order()
-    {
+    fun getMedicalRecord_Order() {
         testInstance.addOpticalEvaluation(opticalEvaluation1)
         testInstance.addOpticalEvaluation(opticalEvaluation2)
         Assertions.assertEquals(

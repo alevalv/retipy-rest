@@ -19,13 +19,13 @@
 
 package co.avaldes.retipy.domain.staff
 
-import co.avaldes.retipy.persistence.staff.IStaffAccessAuditingRepository
 import co.avaldes.retipy.persistence.staff.AuditingOperation
+import co.avaldes.retipy.persistence.staff.IStaffAccessAuditingRepository
 import co.avaldes.retipy.persistence.staff.StaffAccessAuditingBean
 import co.avaldes.retipy.rest.common.IncorrectInputException
 import co.avaldes.retipy.security.domain.user.IUserService
 import org.springframework.stereotype.Service
-import java.util.*
+import java.util.Date
 
 /**
  * Service that allow registering the access of users to certain operations and data, for auditing
@@ -35,29 +35,28 @@ import java.util.*
 internal class StaffAuditingService(
     private val staffAccessAuditingRepository: IStaffAccessAuditingRepository,
     private val userService: IUserService
-) : IStaffAuditingService
-{
+) : IStaffAuditingService {
     override fun audit(
-        resourceId: Long, auditingOperation: AuditingOperation, userId: Long, username: String)
-    {
+        resourceId: Long,
+        auditingOperation: AuditingOperation,
+        userId: Long,
+        username: String
+    ) {
         val bean = StaffAccessAuditingBean(0, resourceId, auditingOperation, userId, username, Date())
         staffAccessAuditingRepository.save(bean)
     }
 
-    override fun audit(resourceId: Long, auditingOperation: AuditingOperation)
-    {
+    override fun audit(resourceId: Long, auditingOperation: AuditingOperation) {
         val user = userService.getCurrentAuthenticatedUser()
             ?: throw IncorrectInputException("User must be authenticated to be logged")
         audit(resourceId, auditingOperation, user.id, user.username)
     }
 
-    override fun getLogsByResource(resourceId: Long): List<String>
-    {
+    override fun getLogsByResource(resourceId: Long): List<String> {
         return staffAccessAuditingRepository.findByResourceId(resourceId).map { logBeanToString(it) }
     }
 
-    override fun getLogsByUser(userId: Long): List<String>
-    {
+    override fun getLogsByUser(userId: Long): List<String> {
         return staffAccessAuditingRepository.findByUserId(userId).map { logBeanToString(it) }
     }
 

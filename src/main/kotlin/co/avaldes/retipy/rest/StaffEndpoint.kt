@@ -43,37 +43,33 @@ import org.springframework.web.bind.annotation.RestController
 internal class StaffEndpoint(
     private val userService: IUserService,
     private val staffService: IStaffService,
-    private val auditingService: IStaffAuditingService)
-{
+    private val auditingService: IStaffAuditingService
+) {
     data class ResidentListDTO(val residents: List<Long>)
 
     @GetMapping("/retipy/staff/doctor")
-    fun getDoctors(): List<PersonDTO>
-    {
+    fun getDoctors(): List<PersonDTO> {
         return userService.getUsersByRole(Role.Doctor).map { PersonDTO.fromDomain(it) }
     }
 
     @GetMapping("/retipy/staff/resident")
-    fun getResidents(): List<PersonDTO>
-    {
+    fun getResidents(): List<PersonDTO> {
         return userService.getUsersByRole(Role.Resident).map { PersonDTO.fromDomain(it) }
     }
 
     @Secured(ROLE_DOCTOR)
     @GetMapping("/retipy/staff/doctor/residents")
-    fun getDoctorAssignedResidents() : ResidentListDTO
-    {
-        val user = userService.getCurrentAuthenticatedUser() ?:
-            throw IncorrectInputException("User must be authenticated")
+    fun getDoctorAssignedResidents(): ResidentListDTO {
+        val user = userService.getCurrentAuthenticatedUser()
+            ?: throw IncorrectInputException("User must be authenticated")
         return ResidentListDTO(staffService.getDoctorAssignedResidents(user.id).map { it.id })
     }
 
     @Secured(ROLE_DOCTOR)
     @PostMapping("/retipy/staff/doctor/residents")
-    fun setDoctorAsssignedResidents(@RequestBody residentListDTO: ResidentListDTO)
-    {
-        val user = userService.getCurrentAuthenticatedUser() ?:
-            throw IncorrectInputException("User must be authenticated")
+    fun setDoctorAsssignedResidents(@RequestBody residentListDTO: ResidentListDTO) {
+        val user = userService.getCurrentAuthenticatedUser()
+            ?: throw IncorrectInputException("User must be authenticated")
         staffService.setDoctorAssignedResidents(user.id, residentListDTO.residents)
     }
 
@@ -81,15 +77,13 @@ internal class StaffEndpoint(
 
     @Secured(ROLE_DOCTOR, ROLE_ADMINISTRATOR)
     @GetMapping("/retipy/audit/resource/{id}")
-    fun getLogsForResource(@PathVariable id: Long): LogDTO
-    {
+    fun getLogsForResource(@PathVariable id: Long): LogDTO {
         return LogDTO(auditingService.getLogsByResource(id))
     }
 
     @Secured(ROLE_DOCTOR, ROLE_ADMINISTRATOR)
     @GetMapping("/retipy/audit/user/{id}")
-    fun getLogsForUser(@PathVariable id: Long): LogDTO
-    {
+    fun getLogsForUser(@PathVariable id: Long): LogDTO {
         return LogDTO(auditingService.getLogsByUser(id))
     }
 }

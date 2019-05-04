@@ -19,33 +19,28 @@
 
 package co.avaldes.retipy.domain.diagnostic
 
-import co.avaldes.retipy.domain.evaluation.automated.IRetipyEvaluationService
 import co.avaldes.retipy.persistence.diagnostic.IDiagnosticRepository
 import co.avaldes.retipy.rest.common.IncorrectInputException
 import org.springframework.stereotype.Service
 
 @Service
 internal class DiagnosticService(
-    private val diagnosticRepository: IDiagnosticRepository) : IDiagnosticService
-{
-    override fun find(id: Long): Diagnostic?
-    {
+    private val diagnosticRepository: IDiagnosticRepository
+) : IDiagnosticService {
+    override fun find(id: Long): Diagnostic? {
         var diagnostic: Diagnostic? = null
         val bean = diagnosticRepository.findById(id)
-        if (bean.isPresent)
-        {
+        if (bean.isPresent) {
             diagnostic = Diagnostic.fromPersistence(bean.get())
         }
         return diagnostic
     }
 
-    override fun get(id: Long): Diagnostic
-    {
+    override fun get(id: Long): Diagnostic {
         return find(id) ?: throw IncorrectInputException("diagnostic with id $id not found")
     }
 
-    override fun delete(id: Long)
-    {
+    override fun delete(id: Long) {
         diagnosticRepository.deleteById(id)
     }
 }

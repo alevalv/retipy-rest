@@ -19,8 +19,7 @@
 
 package co.avaldes.retipy.common
 
-enum class Sex
-{
+enum class Sex {
     Male,
     Female
 }

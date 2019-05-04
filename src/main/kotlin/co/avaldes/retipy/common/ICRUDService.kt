@@ -19,8 +19,7 @@
 
 package co.avaldes.retipy.common
 
-interface ICRUDService<T>
-{
+interface ICRUDService<T> {
     fun find(id: Long): T?
 
     fun get(id: Long): T

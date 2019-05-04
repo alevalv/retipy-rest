@@ -19,8 +19,7 @@
 
 package co.avaldes.retipy.domain.evaluation.automated
 
-enum class RetipyTask
-{
+enum class RetipyTask {
     TortuosityDensity,
     TortuosityFractal,
     LandmarksClassification,

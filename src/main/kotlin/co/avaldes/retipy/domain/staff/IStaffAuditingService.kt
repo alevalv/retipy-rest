@@ -24,8 +24,7 @@ import co.avaldes.retipy.persistence.staff.AuditingOperation
 /**
  * Interface that implements logging operations for auditing purposes of retipy.
  */
-interface IStaffAuditingService
-{
+interface IStaffAuditingService {
     /**
      * Logs an operation for the given [userId] and [username].
      */

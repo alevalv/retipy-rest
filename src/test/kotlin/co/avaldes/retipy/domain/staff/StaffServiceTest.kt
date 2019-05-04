@@ -34,13 +34,12 @@ import org.junit.Assert
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.util.*
+import java.util.Optional
 
 /**
  * Test class for [StaffService].
  */
-internal class StaffServiceTest
-{
+internal class StaffServiceTest {
     private val doctorId = 90173L
     private val resident1Id = 9123L
     private val resident1Name = "a1 name"
@@ -53,21 +52,20 @@ internal class StaffServiceTest
     private val resident1 = User(resident1Id, resident1Identity, resident1Name, "anjd", "1j9la")
     private val resident2 = User(resident2Id, resident2Identity, resident2Name, "anjd", "1j9la")
 
-    private val mockIDoctorAssignedResidentsRepository : IDoctorAssignedResidentsRepository =
+    private val mockIDoctorAssignedResidentsRepository: IDoctorAssignedResidentsRepository =
         mockk(relaxed = true)
     private val mockIUserService: IUserService = mockk(relaxed = true)
 
     private val slot = slot<DoctorAssignedResidentsBean>()
 
-    private lateinit var staffService : StaffService
+    private lateinit var staffService: StaffService
     @BeforeEach
-    fun setUp()
-    {
+    fun setUp() {
         clearMocks(
             mockIDoctorAssignedResidentsRepository,
             mockIUserService)
         every { mockIUserService.find(any()) } returns null
-        every { mockIUserService.find(resident1Id)} returns resident1
+        every { mockIUserService.find(resident1Id) } returns resident1
         every { mockIUserService.find(resident2Id) } returns resident2
         every { mockIUserService.get(doctorId) } returns doctor
         every { mockIDoctorAssignedResidentsRepository.save(capture(slot)) } returns
@@ -82,8 +80,7 @@ internal class StaffServiceTest
     }
 
     @Test
-    fun getDoctorAssignedResidents_empty()
-    {
+    fun getDoctorAssignedResidents_empty() {
         val residents = staffService.getDoctorAssignedResidents(doctorId)
         Assert.assertTrue(residents.isEmpty())
         every { mockIDoctorAssignedResidentsRepository.findById(doctorId) } returns
@@ -91,8 +88,7 @@ internal class StaffServiceTest
     }
 
     @Test
-    fun getDoctorAssignedResidents_two()
-    {
+    fun getDoctorAssignedResidents_two() {
         every { mockIDoctorAssignedResidentsRepository.findById(doctorId) } returns
             Optional.of(DoctorAssignedResidentsBean(
                 doctorId,
@@ -106,8 +102,7 @@ internal class StaffServiceTest
     }
 
     @Test
-    fun getDoctorAssignedResidents_one_empty()
-    {
+    fun getDoctorAssignedResidents_one_empty() {
         every { mockIDoctorAssignedResidentsRepository.findById(doctorId) } returns
             Optional.of(DoctorAssignedResidentsBean(doctorId, listOf(6)))
         val residents = staffService.getDoctorAssignedResidents(doctorId)
@@ -115,8 +110,7 @@ internal class StaffServiceTest
     }
 
     @Test
-    fun setDoctorAssignedResidents()
-    {
+    fun setDoctorAssignedResidents() {
         staffService.setDoctorAssignedResidents(doctorId, listOf())
         verify(exactly = 1) {
             mockIDoctorAssignedResidentsRepository.save(allAny<DoctorAssignedResidentsBean>()) }
@@ -125,8 +119,7 @@ internal class StaffServiceTest
     }
 
     @Test
-    fun setDoctorAssignedResidents_two()
-    {
+    fun setDoctorAssignedResidents_two() {
         staffService.setDoctorAssignedResidents(doctorId, listOf(resident1Id, resident2Id))
         verify(exactly = 1) {
             mockIDoctorAssignedResidentsRepository.save(allAny<DoctorAssignedResidentsBean>()) }
@@ -138,8 +131,7 @@ internal class StaffServiceTest
     }
 
     @Test
-    fun setDoctorAssignedResidents_one()
-    {
+    fun setDoctorAssignedResidents_one() {
         staffService.setDoctorAssignedResidents(doctorId, listOf(resident1Id))
         verify(exactly = 1) {
             mockIDoctorAssignedResidentsRepository.save(allAny<DoctorAssignedResidentsBean>()) }
