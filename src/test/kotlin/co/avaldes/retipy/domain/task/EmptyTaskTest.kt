@@ -1,6 +1,7 @@
 package co.avaldes.retipy.domain.task
 
 import co.avaldes.retipy.domain.task.system.EmptyTask
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 
 internal class EmptyTaskTest {
@@ -8,6 +9,6 @@ internal class EmptyTaskTest {
 
     @Test
     fun execute() {
-        emptyTask.execute() // nothing should happen
+        assertNull(emptyTask.execute(), "execute should return null")
     }
 }

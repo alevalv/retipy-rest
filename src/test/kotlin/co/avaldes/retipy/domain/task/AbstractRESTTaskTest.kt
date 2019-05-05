@@ -1,7 +1,9 @@
 package co.avaldes.retipy.domain.task
 
-import org.junit.Assert
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpMethod
@@ -50,26 +52,31 @@ internal class AbstractRESTTaskTest {
 
     @Test
     fun getRequest() {
-        Assert.assertNotNull(
-            "a request should have been returned", restTask.getRequestTestAccess(HttpMethod.GET))
+        assertNotNull(
+            restTask.getRequestTestAccess(HttpMethod.GET), "a request should have been returned")
     }
 
     @Test
     fun test_addMissingProperties() {
         val propertiesWithDefault = restTask.addMissingPropertiesTestAccess(mapOf())
-        Assert.assertEquals(
-            "default properties does not match", defaultProperties, propertiesWithDefault)
+        assertEquals(
+            defaultProperties, propertiesWithDefault, "default properties does not match")
     }
 
     @Test
     fun test_addMissingProperties_withValue() {
         val properties = mapOf("property" to "anothervalue")
         val propertiesWithDefault = restTask.addMissingPropertiesTestAccess(properties)
-        Assert.assertEquals("properties does not match", properties, propertiesWithDefault)
+        assertEquals(properties, propertiesWithDefault, "properties does not match")
+    }
+
+    @Test
+    fun test_getTaskName() {
+        assertEquals("RESTTask", restTask.taskName)
     }
 
     @Test
     fun execute() {
-        Assert.assertTrue(restTask.execute()!!)
+        assertTrue(restTask.execute()!!)
     }
 }
