@@ -35,7 +35,7 @@ internal class AbstractRESTTaskTest {
 
     val get = RouterFunctions.route(
         RequestPredicates.GET(endpointUri),
-        HandlerFunction { _ -> ServerResponse.ok().build() })
+        HandlerFunction { ServerResponse.ok().build() })
     private val testClient = WebTestClient.bindToServer().baseUrl(serverUri).build()
     private val restTask = RESTTask()
 

@@ -46,6 +46,7 @@ apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'jacoco'
+apply plugin: 'idea'
 
 ext {
     junitVersion = '5.4.2'
@@ -89,9 +90,9 @@ dependencies {
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('org.springframework.restdocs:spring-restdocs-mockmvc')
     testCompile('org.springframework.security:spring-security-test')
-    testCompile("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
-    testCompile("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
     testCompile("io.mockk:mockk:1.9.3")
+    testImplementation("com.squareup.okhttp3:mockwebserver:3.14.1")
+    testImplementation("org.junit.jupiter:junit-jupiter:${junitVersion}")
 }
 
 ktlint {
@@ -105,10 +106,14 @@ check {
 build {
     dependsOn check
 }
-
-test {
+tasks.withType(Test) {
+    mustRunAfter ktlintCheck
     useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
 }
+
 jacoco {
     toolVersion = "${jacocoVersion}"
 }

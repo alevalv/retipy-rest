@@ -34,7 +34,7 @@ class ClassificationTask(
     private val retipyEvaluation: RetipyEvaluation
 ) : AbstractRESTTask<RetipyEvaluation>(
     RetipyTask.LandmarksClassification.name,
-    "/landmarks/classification",
+    CLASSIFICATION_URL,
     retipyUri,
     emptyMap()) {
     private data class ClassificationTaskRequest(val image: String)
@@ -88,5 +88,9 @@ class ClassificationTask(
             logger.info("Failed $exception")
         }
         return retipyEvaluation
+    }
+
+    companion object {
+        const val CLASSIFICATION_URL = "/landmarks/classification"
     }
 }
