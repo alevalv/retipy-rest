@@ -108,4 +108,17 @@ internal class VesselsClassificationTaskTest {
             resultEvaluation.status,
             "evaluation should be marked with error")
     }
+
+    @Test
+    fun execute_requestNullError() {
+        testInstance = VesselsClassificationTask(
+                serverURL, retipyEvaluation = retipyEvaluation, segmentedRetipyEvaluation = null)
+        val resultEvaluation = testInstance.execute()
+        assertEquals(retipyEvaluation.id, resultEvaluation.id, "evaluation id does not match")
+        assertEquals(retipyEvaluation.image, resultEvaluation.image, "image should have not changed")
+        assertEquals(
+                RetipyEvaluationStatus.Error,
+                resultEvaluation.status,
+                "evaluation should be marked with error")
+    }
 }
