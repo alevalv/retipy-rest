@@ -9,6 +9,7 @@ import co.avaldes.retipy.domain.task.system.EmptyTask
 import co.avaldes.retipy.domain.task.system.StatusTask
 import co.avaldes.retipy.domain.task.tortuosity.TortuosityDensityTask
 import co.avaldes.retipy.domain.task.tortuosity.TortuosityFractalTask
+import co.avaldes.retipy.domain.task.vessels.VesselsClassificationTask
 import co.avaldes.retipy.persistence.evaluation.retinal.RetipyEvaluationStatus
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -62,6 +63,11 @@ internal class ScheduledTaskRunnerService(
             RetipyTask.TortuosityFractal -> TortuosityFractalTask(retipyUri, retipyEvaluation)
             RetipyTask.LandmarksClassification -> ClassificationTask(retipyUri, retipyEvaluation)
             RetipyTask.Segmentation -> SegmentationTask(retipyUri, retipyEvaluation = retipyEvaluation)
+            RetipyTask.VesselsClassification -> VesselsClassificationTask(
+                    retipyUri,
+                    retipyEvaluation = retipyEvaluation,
+                    segmentedRetipyEvaluation = retipyEvaluationService.findByDiagnosticIdAndTask(
+                            retipyEvaluation.diagnosticId, RetipyTask.Segmentation))
             else -> {
                 EmptyTask()
             }

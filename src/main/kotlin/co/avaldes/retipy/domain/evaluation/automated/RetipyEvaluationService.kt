@@ -94,7 +94,8 @@ internal class RetipyEvaluationService(
         val image: String =
             if (task == RetipyTask.LandmarksClassification ||
                 task == RetipyTask.TortuosityFractal ||
-                task == RetipyTask.TortuosityDensity) {
+                task == RetipyTask.TortuosityDensity ||
+                task == RetipyTask.VesselsClassification) {
                 val segmentation = retipyEvaluationRepository.findByDiagnosticIdAndName(
                     diagnosticId, RetipyTask.Segmentation.name)
                 if (segmentation.isEmpty() ||
@@ -113,5 +114,14 @@ internal class RetipyEvaluationService(
 
     override fun deleteByDiagnostic(diagnosticId: Long) {
         retipyEvaluationRepository.deleteByDiagnosticId(diagnosticId)
+    }
+
+    override fun findByDiagnosticIdAndTask(diagnosticId: Long, task: RetipyTask): RetipyEvaluation? {
+        val evaluations = retipyEvaluationRepository.findByDiagnosticIdAndName(diagnosticId, task.name)
+        return if (evaluations.isNotEmpty()) {
+            RetipyEvaluation.fromPersistence(evaluations.first())
+        } else {
+            null
+        }
     }
 }
