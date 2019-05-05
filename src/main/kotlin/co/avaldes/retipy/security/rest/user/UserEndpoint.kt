@@ -123,8 +123,8 @@ internal class UserEndpoint(
         val user = userService.getCurrentAuthenticatedUser()
         if (user != null) {
             if (userService.login(user.username, passwordChangeRequestDTO.oldPassword) != null) {
-                userService.updatePassword(user, passwordChangeRequestDTO.newPassword);
-                return "{\"message\": \"Password updated successfully\"}";
+                userService.updatePassword(user, passwordChangeRequestDTO.newPassword)
+                return "{\"message\": \"Password updated successfully\"}"
             } else {
                 throw IncorrectInputException("Old password does not match")
             }
