@@ -17,7 +17,7 @@
  * along with retipy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package co.avaldes.retipy.domain.task.landmarks
+package co.avaldes.retipy.domain.task.segmentation
 
 import co.avaldes.retipy.domain.evaluation.automated.RetipyEvaluation
 import co.avaldes.retipy.domain.evaluation.automated.RetipyTask
@@ -27,14 +27,13 @@ import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
 import org.junit.jupiter.api.AfterAll
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeAll
 import java.nio.charset.Charset
 
-public class ClassificationTaskTest {
-    private val serverURL = "http://localhost:12497"
+internal class SegmentationTaskTest {
+    private val serverURL = "http://localhost:12597"
 
     private val retipyEvaluation = RetipyEvaluation(
         123,
@@ -45,11 +44,11 @@ public class ClassificationTaskTest {
 
     private val server: MockWebServer = MockWebServer()
 
-    private lateinit var testInstance: ClassificationTask
+    private lateinit var testInstance: SegmentationTask
 
     @BeforeAll
     fun setupAll() {
-        server.start(12497)
+        server.start(12597)
         server.dispatcher = object : Dispatcher() {
             override fun dispatch(request: RecordedRequest?): MockResponse {
                 val body = request!!.body.readString(Charset.defaultCharset())
@@ -57,7 +56,7 @@ public class ClassificationTaskTest {
                     return MockResponse()
                         .setHeader("content-type", "application/json")
                         .setResponseCode(200)
-                        .setBody("{ \"bifurcations\": [[1, 2, 3, 4]], \"crossings\": [[5, 6, 7, 8]] }")
+                        .setBody("{\"segmentation\": \"newImage123\" }")
                 }
                 return MockResponse().setResponseCode(400)
             }
@@ -71,25 +70,16 @@ public class ClassificationTaskTest {
 
     @Test
     fun execute() {
-        testInstance = ClassificationTask(serverURL, retipyEvaluation)
-
-        val evaluation = testInstance.execute()
-        assertEquals(retipyEvaluation.id, evaluation.id, "evaluation id does not match")
+        testInstance = SegmentationTask(serverURL, retipyEvaluation = retipyEvaluation)
+        val segmentationResult = testInstance.execute()
         assertEquals(
             RetipyEvaluationStatus.Complete,
-            evaluation.status,
-            "evaluation should be marked as completed")
-        assertTrue(evaluation.rois.isNotEmpty(), "roi should be added")
-        val bifurcation = evaluation.rois[0]
-        assertEquals("Bifurcation", bifurcation.notes, "roi name does not match")
-        assertEquals("red", bifurcation.color, "color does not match")
-        assertEquals(listOf(1, 1, 3, 3), bifurcation.x, "x coordinates does not match")
-        assertEquals(listOf(2, 4, 4, 2), bifurcation.y, "y coordinates does not match")
-        val crossing = evaluation.rois[1]
-        assertEquals("Crossing", crossing.notes, "roi name does not match")
-        assertEquals("blue", crossing.color, "color does not match")
-        assertEquals(listOf(5, 5, 7, 7), crossing.x, "x coordinates does not match")
-        assertEquals(listOf(6, 8, 8, 6), crossing.y, "y coordinates does not match")
+            segmentationResult.status,
+            "status should be completed")
+        assertEquals(
+            "newImage123",
+            segmentationResult.image,
+            "new image does not match")
     }
 
     @Test
@@ -100,14 +90,13 @@ public class ClassificationTaskTest {
             RetipyTask.LandmarksClassification,
             "",
             listOf())
-        testInstance = ClassificationTask(serverURL, evaluation)
-
+        testInstance = SegmentationTask(serverURL, retipyEvaluation = evaluation)
         val resultEvaluation = testInstance.execute()
         assertEquals(evaluation.id, resultEvaluation.id, "evaluation id does not match")
+        assertEquals(evaluation.image, resultEvaluation.image, "image should have not changed")
         assertEquals(
             RetipyEvaluationStatus.Error,
             resultEvaluation.status,
             "evaluation should be marked with error")
-        assertTrue(evaluation.rois.isEmpty(), "no roi should be added")
     }
 }
