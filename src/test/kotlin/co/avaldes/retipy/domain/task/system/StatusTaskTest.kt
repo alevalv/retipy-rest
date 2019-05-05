@@ -61,7 +61,12 @@ internal class StatusTaskTest {
     }
 
     @Test
-    fun execute_error() {
+    fun execute_error_wrongStatus() {
+        assertFalse(statusTask.execute(), "should return false")
+    }
+
+    @Test
+    fun execute_error_noServer() {
         server.shutdown()
         assertFalse(statusTask.execute(), "should return false")
     }
