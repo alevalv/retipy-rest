@@ -1,28 +1,20 @@
 language: java
-branches:
- #Don't build tags
- except:
- - /^[\d|\.]+/
+sudo: false
+
 before_script:
  - export VERSION=$(cat gradle.properties | sed -n '/version =/p' | cut -d '=' -f2 | cut -d ' ' -f2)
 script:
- - ./gradlew build jar --info
+ - ./gradlew build bootJar
 after_success:
  - bash <(curl -s https://codecov.io/bash)
-before_deploy:
- - git config --local user.name "Alejandro Valdes"
- - git config --local user.email "alejandrovaldes@live.com"
- - git tag -f $VERSION
- - git remote add gh https://${TRAVIS_REPO_SLUG%/*}:${GITHUB_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git
- - git push -f gh $VERSION
 deploy:
  provider: releases
  api_key: $GITHUB_TOKEN
  file_glob: true
  file: "build/libs/retipy-rest-${VERSION}.jar"
  skip_cleanup: true
- prerelease: true
  overwrite: true
  on:
+  repo: alevalv/retipy-rest
    branch: master
-   condition: "$VERSION =~ .*SNAPSHOT"
+   tags: true
