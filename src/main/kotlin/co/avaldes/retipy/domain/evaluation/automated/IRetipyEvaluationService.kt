@@ -26,6 +26,11 @@ interface IRetipyEvaluationService : ICRUDService<RetipyEvaluation> {
     fun findByDiagnostic(diagnosticId: Long): List<RetipyEvaluation>
 
     /**
+     * Finds a [RetipyEvaluation] given a diagnosticId and a task. Can return null.
+     */
+    fun findByDiagnosticIdAndTask(diagnosticId: Long, task: RetipyTask): RetipyEvaluation?
+
+    /**
      * Creates a new Pending evaluation for the given diagnostic for the given name.
      */
     fun fromDiagnostic(diagnosticId: Long, task: RetipyTask): RetipyEvaluation
