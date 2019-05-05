@@ -2,7 +2,6 @@ package co.avaldes.retipy.domain.task.system
 
 import co.avaldes.retipy.domain.task.AbstractRESTTask
 import org.springframework.http.HttpMethod
-import org.springframework.http.HttpStatus
 
 /**
  * Task to verify if the retipy server is running.
@@ -13,7 +12,7 @@ class StatusTask(
     override fun execute(): Boolean {
         var isRunning: Boolean = false
         try {
-            getRequest(HttpMethod.GET).exchange().doOnSuccess { isRunning = it.statusCode() == HttpStatus.OK }.block()
+            getRequest(HttpMethod.GET).exchange().doOnSuccess { isRunning = true }.block()
         } catch (webClientException: Exception) {
             isRunning = false
         }
