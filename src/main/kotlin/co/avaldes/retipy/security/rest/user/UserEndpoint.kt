@@ -116,19 +116,20 @@ internal class UserEndpoint(
     }
 
     @PostMapping("/retipy/user/password")
-    fun updatePassword(@RequestBody passwordChangeRequestDTO: PasswordChangeRequestDTO) {
+    fun updatePassword(@RequestBody passwordChangeRequestDTO: PasswordChangeRequestDTO): String {
         if (passwordChangeRequestDTO.newPassword.length > 54) {
-            throw IncorrectInputException("Password lenght must be less than 54 characters")
+            throw IncorrectInputException("Password length must be less than 54 characters")
         }
         val user = userService.getCurrentAuthenticatedUser()
         if (user != null) {
             if (userService.login(user.username, passwordChangeRequestDTO.oldPassword) != null) {
-                userService.updatePassword(user, passwordChangeRequestDTO.newPassword)
+                userService.updatePassword(user, passwordChangeRequestDTO.newPassword);
+                return "{\"message\": \"Password updated successfully\"}";
             } else {
-                throw IncorrectInputException("old password does not match")
+                throw IncorrectInputException("Old password does not match")
             }
         } else {
-            throw IncorrectInputException("username not found")
+            throw IncorrectInputException("User not found")
         }
     }
 }
