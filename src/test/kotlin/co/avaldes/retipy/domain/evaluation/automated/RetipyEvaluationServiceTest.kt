@@ -140,7 +140,9 @@ internal class RetipyEvaluationServiceTest {
     }
 
     @Test
-    fun findByDiagnosticIdAndTask(){
+    fun findByDiagnosticIdAndTask() {
+        every { mockRetipyRepository.findByDiagnosticIdAndName(
+                diagnosticId, RetipyTask.Segmentation.name) } returns listOf(retipyEvaluationBean)
         Assert.assertEquals(
             "evaluation does not match",
             RetipyEvaluation.fromPersistence(retipyEvaluationBean),
@@ -148,8 +150,9 @@ internal class RetipyEvaluationServiceTest {
     }
 
     @Test
-    fun findByDiagnosticIdAndTask_null(){
+    fun findByDiagnosticIdAndTask_null() {
+        every { mockRetipyRepository.findByDiagnosticIdAndName(
+                diagnosticId, RetipyTask.Segmentation.name) } returns listOf()
         Assert.assertNull(retipyEvaluationService.findByDiagnosticIdAndTask(diagnosticId, RetipyTask.Segmentation))
     }
-
 }
