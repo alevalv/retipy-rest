@@ -35,7 +35,7 @@ class VesselsClassificationTask(
     private val segmentedRetipyEvaluation: RetipyEvaluation?
 ) : AbstractRESTTask<RetipyEvaluation>(
         RetipyTask.VesselsClassification.name,
-        "/vessel_classification",
+        "/vessel_classification/classification",
         retipyUri,
         mapOf()
     ) {

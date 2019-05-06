@@ -89,7 +89,7 @@ internal class RetipyEvaluationService(
         if (existingEvaluations.isNotEmpty() &&
             existingEvaluations.filterNot { it.status == RetipyEvaluationStatus.Error }.isNotEmpty()) {
             throw IncorrectInputException(
-                "A task with $task type cannot be created for this diagnostic")
+                "A task with ${task.name} type cannot be created for this diagnostic")
         }
         val image: String =
             if (task == RetipyTask.LandmarksClassification ||
@@ -103,7 +103,11 @@ internal class RetipyEvaluationService(
                     throw IncorrectInputException(
                         "A segmentation must exist to add a new $task for this diagnostic")
                 }
-                segmentation.first().image
+                if (task != RetipyTask.VesselsClassification) {
+                    segmentation.first().image
+                } else {
+                    diagnostic.image
+                }
             } else {
                 diagnostic.image
             }
