@@ -122,6 +122,31 @@ internal class RetipyEvaluationServiceTest {
     }
 
     @Test
+    fun fromDiagnostic_existingRunning() {
+        val task = RetipyTask.Segmentation
+        every { mockRetipyRepository.findByDiagnosticIdAndName(diagnosticId, task.name) } returns
+            listOf(RetipyEvaluation.toPersistence(
+                RetipyEvaluation(
+                    diagnosticId = diagnosticId, status = RetipyEvaluationStatus.Running, name = RetipyTask.Segmentation)))
+        val ex = Assertions.assertThrows(IncorrectInputException::class.java) {
+            retipyEvaluationService.fromDiagnostic(diagnosticId, RetipyTask.TortuosityFractal) }
+        Assertions.assertEquals(
+            "A segmentation must exist to add a new ${RetipyTask.TortuosityFractal} for this diagnostic",
+            ex.message)
+    }
+
+    @Test
+    fun fromDiagnostic_tortuosityFractal() {
+        val task = RetipyTask.Segmentation
+        every { mockRetipyRepository.findByDiagnosticIdAndName(diagnosticId, task.name) } returns
+            listOf(RetipyEvaluation.toPersistence(
+                RetipyEvaluation(
+                    diagnosticId = diagnosticId, status = RetipyEvaluationStatus.Complete, name = RetipyTask.Segmentation)))
+        retipyEvaluationService.fromDiagnostic(diagnosticId, RetipyTask.TortuosityFractal)
+        verify { mockRetipyRepository.save(any<RetipyEvaluationBean>()) }
+    }
+
+    @Test
     fun fromDiagnostic_noSegmentation() {
         every { mockRetipyRepository.findByDiagnosticIdAndName(
             diagnosticId, RetipyTask.Segmentation.name) } returns listOf()
@@ -131,6 +156,19 @@ internal class RetipyEvaluationServiceTest {
     @Test
     fun fromDiagnostic() {
         retipyEvaluationService.fromDiagnostic(diagnosticId, RetipyTask.Segmentation)
+        verify { mockRetipyRepository.save(any<RetipyEvaluationBean>()) }
+    }
+
+    @Test
+    fun fromDiagnostic_VesselClassification() {
+        every { mockRetipyRepository.findByDiagnosticIdAndName(
+            diagnosticId, RetipyTask.Segmentation.name) } returns listOf(
+            RetipyEvaluation.toPersistence(
+                RetipyEvaluation(
+                    diagnosticId = diagnosticId,
+                    status = RetipyEvaluationStatus.Complete,
+                    image = "something")))
+        retipyEvaluationService.fromDiagnostic(diagnosticId, RetipyTask.VesselsClassification)
     }
 
     @Test
